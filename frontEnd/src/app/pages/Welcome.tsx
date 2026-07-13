@@ -14,7 +14,7 @@ export function Welcome() {
       <div className="relative z-10 text-center max-w-2xl w-full">
         {/* Titre */}
         <h1 className="text-5xl font-semibold text-white mb-4 drop-shadow-lg">
-          Bienvenue sur FevOneROLL
+          Bienvenue sur FevOneRoll
         </h1>
 
         {/* Sous-titre */}

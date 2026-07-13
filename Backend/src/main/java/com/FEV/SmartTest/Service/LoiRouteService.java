@@ -34,8 +34,8 @@ public class LoiRouteService {
         lr.setNorme(dto.getNorme());
         lr.setInertieKg(dto.getInertieKg());
         lr.setMasseEssaiKg(dto.getMasseEssaiKg());
-        lr.setInertieRotativeTNRKg(dto.getInertieRotativeTNRKg());
-        lr.setInertieRotativeDeuxTrainsKg(dto.getInertieRotativeDeuxTrainsKg());
+        lr.setModeConduite(dto.getModeConduite());
+
         lr.setF0(dto.getF0());
         lr.setF1(dto.getF1());
         lr.setF2(dto.getF2());
@@ -66,8 +66,7 @@ public class LoiRouteService {
             lr.setNorme(dto.getNorme());
             lr.setInertieKg(dto.getInertieKg());
             lr.setMasseEssaiKg(dto.getMasseEssaiKg());
-            lr.setInertieRotativeTNRKg(dto.getInertieRotativeTNRKg());
-            lr.setInertieRotativeDeuxTrainsKg(dto.getInertieRotativeDeuxTrainsKg());
+            lr.setModeConduite(dto.getModeConduite());
             lr.setF0(dto.getF0());
             lr.setF1(dto.getF1());
             lr.setF2(dto.getF2());

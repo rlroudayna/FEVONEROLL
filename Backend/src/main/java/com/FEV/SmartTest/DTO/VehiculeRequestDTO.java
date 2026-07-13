@@ -27,13 +27,13 @@ public class VehiculeRequestDTO {
     private TypeCarburant carburant;
     private String modeConduite;
     private String dimensionsPneus;
-    private Float pressionPneus;
     private Float puissance;
-    private Float densite;
     private Float empattement;
     private String couleur;
-    private String familleVehicule;
 
     private String typeCatalyseur;
+    private String commentaire;
+    private String plateformeVehicule;
+    private String architectureElectrique;
 
 }

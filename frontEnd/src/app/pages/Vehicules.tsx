@@ -27,19 +27,14 @@ export enum Localisation {
   OZ004 = "OZ004",
 }
 export enum TypeCarburant {
-  E10 = "E10",
-  E3 = "E3",
-  BPVR = "BPVR",
+  ESSENCE = "ESSENCE",
+  DIESEL = "DIESEL",
+  GNV = "GNV",
 }
 export enum ModeConduite {
   TRACTION = "TRACTION",
   QUATRE_X_QUATRE = "QUATRE_X_QUATRE",
   AUTRE = "AUTRE",
-}
-export enum Type_catalyseur {
-  SCR = "SCR",
-  FAP = "FAP",
-  DOC = "DOC",
 }
 
 interface Vehicle {
@@ -54,11 +49,8 @@ interface Vehicle {
   moteur: string;
   boiteVitesse: string;
   couleur: string;
-  familleVehicule: string;
   dimensionsPneus: string;
-  pressionPneus: number;
   puissance: number;
-  densite: number;
   empattement: Number;
   localisation: Localisation;
   clientId: number;
@@ -66,7 +58,9 @@ interface Vehicle {
   motorisation: TypeMotorisation;
   carburant: TypeCarburant;
   modeConduite: ModeConduite;
-  typeCatalyseur: Type_catalyseur;
+  commentaire: string;
+  plateformeVehicule: string;
+  architectureElectrique: string;
 }
 
 const motorisationStyles: Record<string, string> = {
@@ -75,7 +69,7 @@ const motorisationStyles: Record<string, string> = {
   BEV: "bg-green-100 text-green-700",
   PHEV: "bg-blue-100 text-blue-700",
 };
-const numberFields = ["pressionPneus", "puissance", "densite", "empattement"];
+const numberFields = ["puissance", "empattement"];
 export function Vehicules() {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -89,7 +83,6 @@ export function Vehicules() {
   const [clientFilter, setClientFilter] = useState("Tous");
   const canEdit = role?.includes("ADMIN") || role?.includes("CHARGE_ESSAI");
   const [filterLocalisation, setFilterLocalisation] = useState("Tous");
-  const [filterCatalyseur, setFilterCatalyseur] = useState("Tous");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userClient, setUserClient] = useState<string>("");
@@ -170,16 +163,11 @@ export function Vehicules() {
 
     const matchesClient =
       clientFilter === "Tous" || v.client?.id === Number(clientFilter);
-    const matchMoto =
-      filterMotorisation === "Tous" || v.motorisation === filterMotorisation;
 
     const matchLoc =
       filterLocalisation === "Tous" || v.localisation === filterLocalisation;
 
-    const matchCata =
-      filterCatalyseur === "Tous" || v.typeCatalyseur === filterCatalyseur;
-
-    return matchSearch && matchesClient && matchMoto && matchLoc && matchCata;
+    return matchSearch && matchesClient && matchLoc;
   });
 
   // Initial fetch
@@ -244,8 +232,6 @@ export function Vehicules() {
       ...data,
       clientId: Number(data.clientId),
       puissance: Number(data.puissance) || 0,
-      pressionPneus: Number(data.pressionPneus) || 0,
-      densite: Number(data.densite) || 0,
       empattement: Number(data.empattement) || 0,
       dimensionsPneus: Number(data.dimensionsPneus) || 0,
     };
@@ -308,7 +294,7 @@ export function Vehicules() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-600 transition-colors group-focus-within:text-[#E30613]" />
             <input
               type="text"
-              placeholder="nom, identificateur, immatriculation, marque"
+              placeholder="Recherche par nom, identificateur, immatriculation, marque"
               className="w-full h-11 pl-10 pr-8 bg-background text-foreground border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -318,7 +304,7 @@ export function Vehicules() {
           {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) => role?.includes(r)) && (
             <select
               className="
-  w-full sm:w-48 h-12 px-4
+  w-full sm:w-60 h-12 px-4
   bg-background
   text-foreground
   border border-border
@@ -337,26 +323,12 @@ export function Vehicules() {
                 </option>
               ))}
             </select>
-          )}
-          {/* Filtre motorisation */}
-          <select
-            className="w-full sm:w-48 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-ring transition"
-            value={filterMotorisation}
-            onChange={(e) => setFilterMotorisation(e.target.value)}
-          >
-            <option value="Tous">Motorisation (Tous)</option>
-
-            {["ICE", "HEV", "PHEV", "BEV"].map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
-          </select>
+          )}        
 
           {/* Filtre localisation */}
           <select
             className="
-  w-full sm:w-48 h-12 px-4
+  w-full sm:w-60 h-12 px-4
   bg-background
   text-foreground
   border border-border
@@ -367,28 +339,9 @@ export function Vehicules() {
             onChange={(e) => setFilterLocalisation(e.target.value)}
           >
             <option value="Tous">Localisation (Toutes)</option>
-            <option value="OZ001">OZ001</option>
-            <option value="OZ002">OZ002</option>
-            <option value="OZ003">OZ003</option>
-            <option value="OZ004">OZ004</option>
-          </select>
-
-          {/* Filtre catalyseur */}
-          <select
-            className="
-  w-full sm:w-48 h-12 px-4
-  bg-background
-  text-foreground
-  border border-border
-  rounded-lg shadow-sm text-sm
-  focus:outline-none focus:ring-2 focus:ring-ring
-  transition
-"
-            onChange={(e) => setFilterCatalyseur(e.target.value)}
-          >
-            <option value="Tous">Catalyseur (Tous)</option>
-            <option value="SCR">SCR</option>
-            <option value="FAP">FAP</option>
+            <option value="PARK_FEV_CA">Park FEV CA</option>
+            <option value="BAR">BAR</option>
+            <option value="HORS_FEV">Hors FEV</option>
           </select>
         </div>
       </div>
@@ -412,14 +365,9 @@ export function Vehicules() {
                 <th className="px-6 py-5 font-semibold text-white">Marque</th>
 
                 <th className="px-6 py-5 font-semibold text-white">
-                  Motorisation
-                </th>
-                <th className="px-6 py-5 font-semibold text-white">
                   Localisation
                 </th>
-                <th className="px-4 py-5 font-semibold text-white">
-                  Catalyseur
-                </th>
+
                 <th className="px-6 py-5 font-semibold text-white">Actions</th>
               </tr>
             </thead>
@@ -442,51 +390,38 @@ export function Vehicules() {
                     className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                   >
                     {/* Véhicule */}
-                    <td className="px-2 py-4 font-bold text-muted-foreground-800">
+                    <td className="px-4 py-4 font-bold text-muted-foreground-800">
                       {v.nomAppliImmat}
                     </td>
 
                     {/* Identificateur  */}
-                    <td className="px-8 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {v.identificateur}
                     </td>
                     {/* Client  */}
-                    <td className="px-4 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {v.client?.nom}
                     </td>
 
                     {/* Immatriculation */}
-                    <td className="px-5 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {v.immatriculation}
                     </td>
                     {/* Marque  */}
-                    <td className="px-4 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {v.marque}
                     </td>
 
-                    {/* Motorisation */}
-                    <td className="px-10 py-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${motorisationStyles[v.motorisation]}`}
-                      >
-                        {v.motorisation}
-                      </span>
-                    </td>
-
+          
                     {/* Localisation */}
-                    <td className="px-8 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {v.localisation}
                     </td>
 
                     {/* Catalyseur */}
-                    <td className="px-8 py-4">
-                      <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
-                        {v.typeCatalyseur}
-                      </span>
-                    </td>
 
                     {/* Actions */}
-                    <td className="px-0 py-4">
+                    <td className="px-1 py-4">
                       <div className="flex items-center gap-2">
                         {/* Actions réservées */}
                         {canEdit && (
@@ -642,7 +577,7 @@ export function Vehicules() {
                   },
                 ].map((field) => (
                   <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-muted-foreground">
+                    <label className="text-xs font-medium text-muted-foreground-500">
                       {field.label}
                       {field.required && (
                         <span className="text-red-500 ml-1">*</span>
@@ -668,7 +603,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                 {/* Client */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-xs font-medium text-muted-foreground-500">
                     Client <span className="text-red-500 ml-1">*</span>
                   </label>
                   <select
@@ -709,7 +644,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       Sélectionner
                     </option>
 
-                    {["OZ001", "OZ002", "OZ003", "OZ004"].map((s) => (
+                    {["HORS_FEV", "BAR", " PARC_FEV_CA"].map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
@@ -726,7 +661,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-xs font-medium text-muted-foreground-500">
                     Type moteur
                     <span className="text-red-500 ml-1">*</span>
                   </label>
@@ -752,7 +687,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-xs font-medium text-muted-foreground-500">
                     Carburant
                     <span className="text-red-500 ml-1">*</span>
                   </label>
@@ -769,7 +704,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       Sélectionner
                     </option>
 
-                    {["E10", "E3", "BPVR"].map((opt) => (
+                    {["ESSENCE", "DIESEL", "GNV"].map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
                       </option>
@@ -822,36 +757,32 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                 {[
                   {
-                    label: "Pneus",
+                    label: "dimensions de pneus (mm)",
                     key: "dimensionsPneus",
                     required: true,
                   },
+
+                  { required: true, label: "Puissance (kW)", key: "puissance" },
                   {
-                    required: true,
-                    label: "Pression pneus",
-                    key: "pressionPneus",
-                  },
-                  { required: true, label: "Puissance", key: "puissance" },
-                  { required: true, label: "Densité", key: "densite" },
-                  {
-                    label: "Empattement",
+                    label: "Empattement (mm)",
                     key: "empattement",
                     required: true,
                   },
                   { label: "Couleur", key: "couleur", required: true },
                   {
-                    label: "Famille",
-                    key: "familleVehicule",
-                    required: true,
+                    label: "Plateforme véhicule",
+                    key: "plateformeVehicule",
+                    required: false,
                   },
                   {
-                    label: "Catalyseur",
-                    key: "typeCatalyseur",
-                    required: true,
+                    label: "Architecture électrique",
+                    key: "architectureElectrique",
+                    required: false,
                   },
+                  
                 ].map((field) => (
                   <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-xs text-muted-foreground">
+                    <label className="text-xs text-muted-foreground-500">
                       {field.label}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -869,9 +800,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
  focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
-                        <option value="">Sélectionner</option>
-                        <option value="SCR">SCR</option>
-                        <option value="FAP">FAP</option>
+                        
                       </select>
                     ) : (
                       <input
@@ -893,6 +822,21 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="mt-5 flex flex-col gap-1 w-full">
+              <label className="text-xs font-medium text-muted-foreground-500">
+                Commentaire
+              </label>
+
+              <textarea
+                name="commentaire"
+                rows={4}
+                defaultValue={selectedVehicle?.commentaire ?? ""}
+                disabled={modalMode === "view"}
+                className="w-full px-3 py-3 rounded-lg border border-border bg-background text-foreground
+    focus:outline-none focus:ring-2 focus:ring-ring transition resize-y"
+                placeholder="Saisir un commentaire..."
+              />
             </div>
             {/* FOOTER */}
             {modalMode !== "view" && (

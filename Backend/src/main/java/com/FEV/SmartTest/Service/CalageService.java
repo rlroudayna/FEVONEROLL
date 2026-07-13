@@ -51,7 +51,9 @@ public class CalageService {
         c.setA(dto.getA());
         c.setB(dto.getB());
         c.setC(dto.getC());
-        c.setDescription(dto.getDescription());
+        c.setCommenatire(dto.getCommenatire());
+
+
 
         // CLIENT
         if (currentUser.getRole() == Role.EXTERNE) {
@@ -110,7 +112,9 @@ public class CalageService {
             c.setA(dto.getA());
             c.setB(dto.getB());
             c.setC(dto.getC());
-            c.setDescription(dto.getDescription());
+            c.setCommenatire(dto.getCommenatire());
+
+
 
             // CLIENT
             if (currentUser.getRole() == Role.EXTERNE) {

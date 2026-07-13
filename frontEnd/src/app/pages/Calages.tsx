@@ -347,23 +347,14 @@ export function Calages() {
             placeholder="Rechercher par nom..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
+            className="w-full h-12 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
           />
         </div>
 
-        {/* Filtre véhicule */}
-        {/*<select
-className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"          value={clientFilter}
-          onChange={(e) => setClientFilter(e.target.value)}
-        >
-          <option value="Tous">Client (Tous)</option>
-          <option value="RENAULT">RENAULT</option>
-          <option value="STELLANTIS">STELLANTIS</option>
-          <option value="FEV">FEV</option>
-        </select>*/}
+       
         {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) => role?.includes(r)) && (
           <select
-            className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
+            className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
             value={clientFilter}
             onChange={(e) =>
               setClientFilter(
@@ -383,7 +374,7 @@ className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-l
         <select
           value={filterVehicule}
           onChange={(e) => setFilterVehicule(e.target.value)}
-          className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+          className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
         >
           <option value="Tous">Tous les véhicules</option>
 
@@ -398,9 +389,9 @@ className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-l
         <select
           value={filterLoi}
           onChange={(e) => setFilterLoi(e.target.value)}
-          className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+          className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
         >
-          <option value="Tous">Toutes les lois</option>
+          <option value="Tous">Lois de route (Tous)</option>
 
           {loisRoutes.map((l) => (
             <option key={l.id} value={l.id}>
@@ -456,7 +447,7 @@ className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-l
                   Client
                 </th>
                 <th className="px-3 py-5 font-semibold text-white">Véhicule</th>
-                <th className="px-12 py-5 text-left font-semibold text-white">
+                <th className="px-8 py-5 text-left font-semibold text-white">
                   Loi de route
                 </th>
                 <th className="px-1 py-5 font-semibold text-white">
@@ -490,39 +481,39 @@ className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-l
                   className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                 >
                   {/* Nom */}
-                  <td className="px-5 py-3 font-bold text-muted-foreground-800">
+                  <td className="px-4 py-4 font-bold text-muted-foreground-800">
                     {calages.nom}
                   </td>
                   {/* client */}
-                  <td className="px-4 py-3 text-muted-foreground-800">
+                  <td className="px-4 py-4 text-muted-foreground-800">
                     {calages.client?.nom || ""}{" "}
                   </td>
 
-                  <td className="px-5 py-3 text-muted-foreground-800">
+                  <td className="px-4 py-4 text-muted-foreground-800">
                     {calages.vehiculeAssocie?.identificateur}
                   </td>
 
-                  <td className="px-8 py-3 text-muted-foreground-800">
+                  <td className="px-4 py-4 text-muted-foreground-800">
                     {calages.loiRouteAssocie?.nom}{" "}
                   </td>
 
                   {/* Mode */}
-                  <td className="px-12 py-3 text-muted-foreground-800">
+                  <td className="px-6 py-4 text-muted-foreground-800">
                     {calages.temperature}
                   </td>
 
                   {/* A */}
-                  <td className="px-6 py-3 text-muted-foreground-800">
+                  <td className="px-6 py-4 text-muted-foreground-800">
                     {calages.a}
                   </td>
 
                   {/* B */}
-                  <td className="px-9 py-3 text-muted-foreground-800">
+                  <td className="px-6 py-4 text-muted-foreground-800">
                     {calages.b}
                   </td>
 
                   {/* C */}
-                  <td className="px-12 py-3 text-muted-foreground-800">
+                  <td className="px-6 py-4 text-muted-foreground-800">
                     {calages.c}
                   </td>
 
@@ -594,7 +585,7 @@ className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-l
       {/* Modal formulaire */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[500px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+          <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="flex justify-between items-center py-3.5 px-6 border-b border-border bg-card">
               <h2 className="text-xl font-bold text-foreground">
@@ -839,7 +830,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               {/* SECTION 4 : Description */}
               <section>
                 <label className="text-xs font-medium text-muted-foreground-900 block mb-2">
-                  Description
+                  Commentaire
                 </label>
 
                 <textarea

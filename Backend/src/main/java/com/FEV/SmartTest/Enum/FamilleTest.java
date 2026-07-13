@@ -1,6 +1,7 @@
 package com.FEV.SmartTest.Enum;
 
 public enum FamilleTest {
-    WLTC,
-    RDE
+    CYCLE_NORMEE,
+    RDE,
+    CONCEPTION_SPECIFIQUE
 }

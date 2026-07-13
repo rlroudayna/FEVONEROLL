@@ -178,8 +178,8 @@ export function Clients() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher client..."
-            className="w-full h-11 pl-19 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
+            placeholder="Recherche par nom"
+            className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
           />
         </div>
 
@@ -187,7 +187,7 @@ export function Clients() {
         <select
           value={filterActif}
           onChange={(e) => setFilterActif(e.target.value as any)}
-          className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
+          className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
         >
           <option value="TOUS">Statut (Tous)</option>
           <option value="ACTIF">Actifs</option>

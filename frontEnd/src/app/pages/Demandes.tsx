@@ -54,8 +54,8 @@ interface Client {
   nom: string;
 }
 export enum StatutDemande {
-  EN_CREATION = "En_creation",
-  VALIDE = "VALIDE",
+  En_cours = "En_cours",
+  Fait = "Fait",
 }
 export const StatutGlobalOptions = ["EN_COURS", "FAIT", "PAS_FAIT"] as const;
 
@@ -229,7 +229,6 @@ export function Demandes() {
     calage?: { id: number };
     loi?: { id: number };
 
-    typeProjet?: string;
     client?: { id: number; nom: string };
 
     demandeur?: string;
@@ -241,6 +240,7 @@ export function Demandes() {
 
     besoinMaceration?: boolean;
     temperatureMaceration?: number;
+    pressionAmbiante?: number;
     temperatureEau?: number;
     hygrometrieEssai?: number;
     activationSTT?: boolean;
@@ -360,7 +360,6 @@ export function Demandes() {
     loiId: undefined,
 
     // ===== PROJET =====
-    typeProjet: "",
     clientId: undefined,
     demandeur: "",
     technicienId: undefined,
@@ -372,6 +371,7 @@ export function Demandes() {
     // ===== CONDITIONS ESSAI =====
     besoinMaceration: false,
     temperatureMaceration: 0,
+    pressionAmbiante: 0,
     temperatureEau: 0,
     hygrometrieEssai: 0,
     activationSTT: false,
@@ -477,7 +477,6 @@ export function Demandes() {
         loiId: undefined,
         technicienId: demande?.technicienId,
 
-        typeProjet: "",
         client: undefined,
         demandeur: "",
         banc: "BANC_1",
@@ -487,6 +486,7 @@ export function Demandes() {
         besoinMaceration: false,
         temperatureMaceration: 0,
         temperatureEau: 0,
+        pressionAmbiante: 0,
         hygrometrieEssai: 0,
         activationSTT: false,
         temperatureEssai: 0,
@@ -923,7 +923,6 @@ export function Demandes() {
   useEffect(() => {
     if (
       (modalMode !== "add" && modalMode !== "edit") ||
-      !form.typeProjet ||
       !form.demandeur ||
       !form.vehiculeId ||
       !form.cycleId ||
@@ -952,7 +951,7 @@ export function Demandes() {
     const cycleClean = cycleNom.replace(/\s+/g, "_");
     const demandeurClean = form.demandeur.replace(/\s+/g, "_");
 
-    const prefix = `${form.typeProjet}_${demandeurClean}_${vehiculeClean}_${cycleClean}`;
+    const prefix = `${demandeurClean}_${vehiculeClean}_${cycleClean}`;
 
     const demandesSimilaires = demandes.filter((d) =>
       d.nomAuto?.includes(prefix),
@@ -978,7 +977,6 @@ export function Demandes() {
       }));
     }
   }, [
-    form.typeProjet,
     form.vehiculeId,
     form.cycleId,
     form.demandeur,
@@ -1130,7 +1128,6 @@ export function Demandes() {
         statutGlobal: form.statutGlobal,
         statutDemande: form.statutDemande,
 
-        typeProjet: form.typeProjet,
         demandeur: form.demandeur,
 
         banc: form.banc,
@@ -1140,6 +1137,7 @@ export function Demandes() {
         // conditions essai
         besoinMaceration: form.besoinMaceration,
         temperatureMaceration: form.temperatureMaceration,
+        pressionAmbiante: form.pressionAmbiante,
         temperatureEau: form.temperatureEau,
         hygrometrieEssai: form.hygrometrieEssai,
         activationSTT: form.activationSTT,
@@ -1408,7 +1406,6 @@ export function Demandes() {
           </button>
         )}
       </div>
-      {/* --- BARRE DE FILTRES MULTIPLES AMÉLIORÉE --- */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-card p-4 rounded-xl shadow-md">
         {/* Recherche par nom */}
@@ -1453,28 +1450,15 @@ export function Demandes() {
           onChange={(e) => setFilterProjet(e.target.value)}
         />
 
-        {/* Filtre Statut */}
-        <select
-          className="bg-background border border-border rounded-lg px-3 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition"
-          value={filterStatutGlobal}
-          onChange={(e) => setFilterStatutGlobal(e.target.value)}
-        >
-          <option value="">Tous les statuts</option>
-
-          <option value="EN_COURS">En cours</option>
-          <option value="FAIT">Fait</option>
-          <option value="PAS_FAIT">Pas fait</option>
-        </select>
-
         {/* Filtre Validation */}
         <select
           className="bg-background border border-border rounded-lg px-3 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition"
           value={filterValidation}
           onChange={(e) => setFilterValidation(e.target.value)}
         >
-          <option value="">Validation (Tous)</option>
-          <option value={StatutDemande.EN_CREATION}>En création</option>
-          <option value={StatutDemande.VALIDE}>Validé</option>
+          <option value="">Statut (Tous)</option>
+          <option value={StatutDemande.En_cours}>En cours</option>
+          <option value={StatutDemande.Fait}>Fait</option>
         </select>
 
         {/* Filtre Date */}
@@ -1503,7 +1487,6 @@ export function Demandes() {
               </th>
               <th className="px-5 py-5 font-semibold text-white">Client</th>
               <th className="px-4 py-5 font-semibold text-white">Demandeur</th>
-              <th className="px-3 py-5 font-semibold text-white">Validation</th>
               <th className="px-5 py-5 font-semibold text-white">Statut</th>
               <th className="px-3 py-5 font-semibold text-white">Date</th>
               <th className="px-5 py-5 font-semibold text-white">Shift</th>
@@ -1586,16 +1569,6 @@ export function Demandes() {
                     <div className="flex items-center gap-2">{d.demandeur}</div>
                   </td>
 
-                  <td>
-                    <span
-                      className={`px-1 py-1 rounded-lg font-bold shadow-sm ${getStatutStyle(
-                        d?.statutGlobal,
-                      )}`}
-                    >
-                      {d.statutGlobal}
-                    </span>
-                  </td>
-
                   <td className="px-3 py-4 text-muted-foreground-800">
                     <div className="flex items-center gap-2">
                       {d.statutDemande}
@@ -1664,7 +1637,7 @@ export function Demandes() {
 
       {showModal && (
         <div className="fixed inset-0 bg-foreground/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[700px] max-h-[95vh] overflow-hidden rounded-xl flex flex-col shadow-2xl">
+          <div className="bg-card w-full max-w-[850px] max-h-[95vh] overflow-hidden rounded-xl flex flex-col shadow-2xl">
             <div className="flex justify-between items-center p-6 border-b bg-card">
               <h2 className="text-xl font-bold text-foreground">
                 {modalMode === "view"
@@ -1812,24 +1785,6 @@ export function Demandes() {
                         </select>
                       </div>
 
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-muted-foreground-700">
-                          Type de projet
-                          <span className="text-red-500 ml-1">*</span>
-                        </label>
-                        <select
-                          name="typeProjet"
-                          value={form.typeProjet ?? ""}
-                          required
-                          disabled={isView}
-                          onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
-                        >
-                          <option value="">Sélectionner</option>
-                          <option value="COP">COP</option>
-                          <option value="ISC">ISC</option>
-                        </select>
-                      </div>
                       {/* Nom (auto-généré) */}
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-muted-foreground-700">
@@ -1861,11 +1816,11 @@ export function Demandes() {
                           className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner statut</option>
-                          <option value={StatutDemande.VALIDE}>VALIDE</option>
-
-                          <option value={StatutDemande.EN_CREATION}>
-                            En création
+                          <option value={StatutDemande.En_cours}>
+                            En cours
                           </option>
+
+                          <option value={StatutDemande.Fait}>Fait</option>
                         </select>
                       </div>
 
@@ -1935,6 +1890,21 @@ export function Demandes() {
                           ))}
                         </select>
                       </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-xs font-medium text-muted-foreground">
+                          N° Projet <span className="text-red-500">*</span>
+                        </label>
+
+                        <input
+                          type="number"
+                          name="numeroProjet"
+                          disabled={isView}
+                          value={form.numeroProjet ?? ""}
+                          onChange={handleChange}
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          required
+                        />
+                      </div>
 
                       {/* Banc */}
                       <div className="space-y-2">
@@ -1955,21 +1925,6 @@ export function Demandes() {
                         <p className="text-xs text-muted-foreground-500">
                           Un seul banc disponible actuellement
                         </p>
-                      </div>
-                      <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground">
-                          N° Projet <span className="text-red-500">*</span>
-                        </label>
-
-                        <input
-                          type="number"
-                          name="numeroProjet"
-                          disabled={isView}
-                          value={form.numeroProjet ?? ""}
-                          onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
-                          required
-                        />
                       </div>
                     </div>
                     {/* Section Date et Shift (transition vers onglet suivant) */}
@@ -2035,7 +1990,7 @@ export function Demandes() {
                             Besoin macération
                           </label>
                           {form.besoinMaceration && (
-                            <div className="space-y-3 pl-6 animate-in zoom-in-95">
+                            <div className="space-y-3 pl-3 animate-in zoom-in-95">
                               <div>
                                 <label className="text-xs text-muted-foreground-600">
                                   Température macération (°C)
@@ -2066,13 +2021,23 @@ export function Demandes() {
                             value={form.temperatureEau}
                             onChange={handleChange}
                             className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
-                            placeholder="Ex: 90"
+                          />
+                          <label className="flex items-center gap-2 font-bold text-xs  mt-2">
+                            Pression ambiante (mbar, hpa)
+                          </label>
+                          <input
+                            name="pressionAmbiante"
+                            type="number"
+                            disabled={isView}
+                            value={form.pressionAmbiante}
+                            onChange={handleChange}
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           />
                         </div>
 
                         {/* Température et Hygrométrie */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs">
+                          <label className="flex items-center gap-2 font-bold text-xs ">
                             Température ambiante (°C)
                           </label>
                           <input
@@ -2216,13 +2181,11 @@ export function Demandes() {
                           >
                             <option value="">Sélectionner</option>
 
-                            <option value="TIRE_MACERATION">
-                              TIRE_MACERATION
-                            </option>
-                            <option value="PRECON">PRECON</option>
-                            <option value="CALAGE">CALAGE</option>
-                            <option value="TIR_CHAUD">TIR_CHAUD</option>
-                            <option value="ROULAGE">ROULAGE</option>
+                            <option value="TM">TM (tir macéré)</option>
+                            <option value="TC">TC (Tir chaud)</option>
+                            <option value="RL">RL (roulage)</option>
+                            <option value="CL">CL (Calage)</option>
+                            <option value="PR">PR (Précon)</option>
                           </select>
                         </div>
 
@@ -2240,7 +2203,7 @@ export function Demandes() {
                             Vérification Coast Down
                           </label>
                           {form.verificationCoastDown && (
-                            <div className="mt-2">
+                            <div className="">
                               <label className="text-xs text-muted-foreground-600">
                                 Nombre de décélérations
                               </label>
@@ -2608,7 +2571,7 @@ export function Demandes() {
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {[
                             {
                               label: "Nom du véhicule",
@@ -2656,7 +2619,7 @@ export function Demandes() {
                           "Informations générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {[
                             { label: "Nom", value: loiDetails.nom },
                             {
@@ -2669,15 +2632,6 @@ export function Demandes() {
                             {
                               label: "Inertie (kg)",
                               value: (loiDetails as any).inertieKg,
-                            },
-                            {
-                              label: "Inertie Rot. TNR (kg)",
-                              value: (loiDetails as any).inertieRotativeTNRKg,
-                            },
-                            {
-                              label: "Inertie Rot. 2T (kg)",
-                              value: (loiDetails as any)
-                                .inertieRotativeDeuxTrainsKg,
                             },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
@@ -2759,7 +2713,7 @@ export function Demandes() {
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {[
                             { label: "Nom du cycle", value: cycleDetails.nom },
                             {
@@ -2767,12 +2721,8 @@ export function Demandes() {
                               value: cycleDetails.familleTest,
                             },
                             {
-                              label: "Durée",
+                              label: "Durée(s)",
                               value: (cycleDetails as any).duree,
-                            },
-                            {
-                              label: "Unité",
-                              value: (cycleDetails as any).dureeUnit,
                             },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">

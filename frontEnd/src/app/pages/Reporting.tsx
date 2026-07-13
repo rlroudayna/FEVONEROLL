@@ -300,7 +300,7 @@ export function Reporting() {
         <div>
           <h1 className="text-2xl font-semibold mb-2">Reporting</h1>
           <p className="text-muted-foreground">
-            Analyses et rapports d'activité
+            Analyse et rapports d'activité
           </p>
         </div>
 
@@ -319,7 +319,7 @@ export function Reporting() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Rechercher par titre"
+            placeholder="Recherche par titre"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full h-11 pl-10 pr-4 bg-background text-foreground border border-border rounded-lg  text-foreground outline-none focus:ring-2 focus:ring-ring appearance-none transition"
@@ -328,7 +328,7 @@ export function Reporting() {
         <select
           value={clientFilter}
           onChange={(e) => setClientFilter(e.target.value)}
-          className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted"
+          className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted"
         >
           <option value="Tous">Tous les clients</option>
 
@@ -340,7 +340,7 @@ export function Reporting() {
         </select>
 
         <div
-          className="w-48 h-11 px-3 border border-border rounded-lg flex items-center gap-2 bg-background
+          className="w-70 h-11 px-3 border border-border rounded-lg flex items-center gap-2 bg-background
                  text-foreground outline-none focus:ring-2 focus:ring-ring appearance-none transition"
         >
           {" "}
@@ -401,14 +401,14 @@ export function Reporting() {
             {/* Header */}
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
-                <th className="px-8 py-5 font-semibold text-white">
+                <th className="px-4 py-5 font-semibold text-white">
                   Titre de rapport
                 </th>
-                <th className="px-8 py-5 font-semibold text-white">
+                <th className="px-4 py-5 font-semibold text-white">
                   Nom de demande
                 </th>
-                <th className="px-8 py-5 font-semibold text-white">Client</th>
-                <th className="px-5 py-5 font-semibold text-white">
+                <th className="px-4 py-5 font-semibold text-white">Client</th>
+                <th className="px-4 py-5 font-semibold text-white">
                   Date d'essai
                 </th>
                 <th className="px-4 py-5 font-semibold text-white">déposant</th>
@@ -434,11 +434,11 @@ export function Reporting() {
                     key={report.id}
                     className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                   >
-                    <td className="px-3 py-4 font-bold text-muted-foreground-800">
+                    <td className="px-4 py-4 font-bold text-muted-foreground-800">
                       {report.title}
                     </td>
 
-                    <td className="px-3 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {report.demandeNomAuto}
                     </td>
 
@@ -455,7 +455,7 @@ export function Reporting() {
                     </td>
 
                     {/* Nouvelle cellule rapport */}
-                    <td className="px-8 py-4 text-muted-foreground-800">
+                    <td className="px-10 py-4 text-muted-foreground-800">
                       <button
                         onClick={() =>
                           window.open(

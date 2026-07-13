@@ -51,165 +51,6 @@ public class DemandeEssaiService {
         this.loiRepository = loiRepository;
     }
 
-    {/*public DemandeEssai create(DemandeEssaiRequest dto) {
-
-        DemandeEssai demande = new DemandeEssai();
-
-        demande.setVehicule(
-                vehiculeRepository.findById(dto.getVehiculeId())
-                        .orElseThrow(() -> new RuntimeException("Vehicule introuvable"))
-        );
-
-        demande.setCalage(
-                calageRepository.findById(dto.getCalageId())
-                        .orElseThrow(() -> new RuntimeException("Calage introuvable"))
-        );
-
-        demande.setCycle(
-                cycleRepository.findById(dto.getCycleId())
-                        .orElseThrow(() -> new RuntimeException("Cycle introuvable"))
-        );
-        demande.setLoi(
-                loiRepository.findById(dto.getLoiId())
-                        .orElseThrow(() -> new RuntimeException("Loi introuvable"))
-        );
-
-        demande.setNomAuto(dto.getNomAuto());
-        demande.setNumeroProjet(dto.getNumeroProjet());
-        demande.setDemandeur(dto.getDemandeur());
-        demande.setTechnicienId(dto.getTechnicienId());
-
-
-        if (dto.getStatutDemande() != null)
-            demande.setStatutDemande((dto.getStatutDemande()));
-
-        if (dto.getStatutGlobal() != null)
-            demande.setStatutGlobal((dto.getStatutGlobal()));
-
-        if (dto.getTypeProjet() != null)
-            demande.setTypeProjet((dto.getTypeProjet()));
-
-
-        if (dto.getClientId() != null) {
-            Client client = clientRepository.findById(dto.getClientId())
-                    .orElseThrow(() -> new RuntimeException("Client introuvable"));
-
-            demande.setClient(client);
-        }
-
-        if (dto.getBanc() != null)
-            demande.setBanc((dto.getBanc()));
-
-        if (dto.getShift() != null)
-            demande.setShift((dto.getShift()));
-
-        if (dto.getTypeEssai() != null)
-            demande.setTypeEssai((dto.getTypeEssai()));
-
-        if (dto.getCapot() != null)
-            demande.setCapot((dto.getCapot()));
-
-        if (dto.getSoufflante() != null)
-            demande.setSoufflante((dto.getSoufflante()));
-
-        if (dto.getGestionBatterie12V() != null)
-            demande.setGestionBatterie12V((dto.getGestionBatterie12V()));
-
-        demande.setDatePlanification(dto.getDatePlanification());
-
-
-        demande.setBesoinMaceration(dto.getBesoinMaceration());
-        demande.setTemperatureMaceration(dto.getTemperatureMaceration());
-        demande.setTemperatureEau(dto.getTemperatureEau());
-        demande.setHygrometrieEssai(dto.getHygrometrieEssai());
-        demande.setActivationSTT(dto.getActivationSTT());
-        demande.setTemperatureEssai(dto.getTemperatureEssai());
-
-        demande.setSocDepart12V(dto.getSocDepart12V());
-        demande.setActivationClim(dto.getActivationClim());
-        demande.setTemperatureRegulationClim(dto.getTemperatureRegulationClim());
-        demande.setChauffageHabitable(dto.getChauffageHabitable());
-        demande.setVerificationCoastDown(dto.getVerificationCoastDown());
-        demande.setNombreDecelerations(dto.getNombreDecelerations());
-        demande.setCommentaire(dto.getCommentaire());
-
-        demande.setPm(dto.getPm());
-        demande.setDebitPrelevement(dto.getDebitPrelevement());
-        demande.setPn10Nano(dto.getPn10Nano());
-        demande.setFacteurDilutionPN10(dto.getFacteurDilutionPN10());
-        demande.setPn23Nano(dto.getPn23Nano());
-        demande.setFacteurDilutionPN23(dto.getFacteurDilutionPN23());
-
-        demande.setLigne1(dto.getLigne1());
-        demande.setPointPrelevementL1(dto.getPointPrelevementL1());
-
-        demande.setLigne2(dto.getLigne2());
-        demande.setPointPrelevementL2(dto.getPointPrelevementL2());
-
-        demande.setLigne3(dto.getLigne3());
-        demande.setPointPrelevementL3(dto.getPointPrelevementL3());
-
-        demande.setMicrosot(dto.getMicrosot());
-        demande.setPointPrelevementMicrosot(dto.getPointPrelevementMicrosot());
-
-        demande.setQcl1(dto.getQcl1());
-        demande.setPointPrelevementQCL1(dto.getPointPrelevementQCL1());
-
-        demande.setQcl2(dto.getQcl2());
-        demande.setPointPrelevementQCL2(dto.getPointPrelevementQCL2());
-
-        demande.setPointPrelevementFITR(dto.getPointPrelevementFITR());
-        demande.setEgr(dto.getEgr());
-        demande.setAcquisitionEOBD(dto.getAcquisitionEOBD());
-        demande.setTypeAcquisition(dto.getTypeAcquisition());
-        demande.setCarflow(dto.getCarflow());
-        demande.setMesureCourant(dto.getMesureCourant());
-        demande.setMesureTension(dto.getMesureTension());
-        demande.setThermocouples(dto.getThermocouples());
-        demande.setSondeLambdaLA4(dto.getSondeLambdaLA4());
-
-        demande.setXcu1(dto.getXcu1());
-        demande.setSoftware1(dto.getSoftware1());
-        demande.setCalibration1(dto.getCalibration1());
-        demande.setExperiment1(dto.getExperiment1());
-
-
-        demande.setMesureSAC(dto.getMesureSAC());
-        demande.setDebitCVsPhase1(dto.getDebitCVsPhase1());
-        demande.setDebitCVsPhase2(dto.getDebitCVsPhase2());
-        demande.setDebitCVsPhase3(dto.getDebitCVsPhase3());
-        demande.setDebitCVsPhase4(dto.getDebitCVsPhase4());
-        demande.setDebitCVsPhase5(dto.getDebitCVsPhase5());
-        demande.setDebitCVsPhase6(dto.getDebitCVsPhase6());
-        demande.setDebitCVsPhase7(dto.getDebitCVsPhase7());
-        demande.setDebitCVsPhase8(dto.getDebitCVsPhase8());
-        demande.setDebitCVsPhase9(dto.getDebitCVsPhase9());
-        demande.setDebitCVsPhase10(dto.getDebitCVsPhase10());
-        demande.setQcvs(dto.getQcvs());
-        demande.setFitr(dto.getFitr());
-
-        if (dto.getMesures() != null) {
-
-            List<Mesure> mesures = dto.getMesures().stream().map(m -> {
-                Mesure mesure = new Mesure();
-
-                mesure.setType(m.getType());
-                mesure.setIndice(m.getIndice());
-                mesure.setNumero(m.getNumero());
-                mesure.setSousType(m.getSousType());
-
-                // 🔥 IMPORTANT FIX
-                mesure.setDemande(demande);
-
-                return mesure;
-            }).collect(Collectors.toList());
-
-            demande.setMesures(mesures);
-        }
-
-        return demandRepository.save(demande);
-    }    */}
-
     public DemandeEssai create(DemandeEssaiRequest dto,
                                MultipartFile software1,
                                MultipartFile calibration1,
@@ -255,7 +96,6 @@ public class DemandeEssaiService {
         demande.setTechnicienId(dto.getTechnicienId());
         demande.setStatutDemande(dto.getStatutDemande());
         demande.setStatutGlobal(dto.getStatutGlobal());
-        demande.setTypeProjet(dto.getTypeProjet());
         demande.setBanc(dto.getBanc());
         demande.setShift(dto.getShift());
         demande.setTypeEssai(dto.getTypeEssai());
@@ -269,6 +109,7 @@ public class DemandeEssaiService {
         demande.setHygrometrieEssai(dto.getHygrometrieEssai());
         demande.setActivationSTT(dto.getActivationSTT());
         demande.setTemperatureEssai(dto.getTemperatureEssai());
+        demande.setPressionAmbiante(dto.getPressionAmbiante());
         demande.setSocDepart12V(dto.getSocDepart12V());
         demande.setActivationClim(dto.getActivationClim());
         demande.setTemperatureRegulationClim(dto.getTemperatureRegulationClim());
@@ -455,7 +296,6 @@ public class DemandeEssaiService {
             d.setDatePlanification(updated.getDatePlanification());
             d.setShift(updated.getShift());
             d.setBanc(updated.getBanc());
-            d.setTypeProjet(updated.getTypeProjet());
 
             // Conditions essai
             d.setBesoinMaceration(updated.getBesoinMaceration());
@@ -471,6 +311,8 @@ public class DemandeEssaiService {
             d.setActivationClim(updated.getActivationClim());
             d.setTemperatureRegulationClim(updated.getTemperatureRegulationClim());
             d.setChauffageHabitable(updated.getChauffageHabitable());
+            d.setPressionAmbiante((updated.getPressionAmbiante()));
+
 
             // Type essai
             d.setTypeEssai(updated.getTypeEssai());

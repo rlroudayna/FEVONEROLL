@@ -23,7 +23,6 @@ public class DemandeEssaiRequest {
 
     private StatutDemande statutDemande;
 
-    private TypeProjet typeProjet;
     private Long clientId;
 
     private String demandeur;
@@ -37,6 +36,7 @@ public class DemandeEssaiRequest {
     private Float temperatureMaceration;
     private Float temperatureEau;
     private Float hygrometrieEssai;
+    private Float pressionAmbiante;
     private Boolean activationSTT;
     private Float temperatureEssai;
 

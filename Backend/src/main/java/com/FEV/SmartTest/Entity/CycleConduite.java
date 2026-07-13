@@ -26,9 +26,9 @@ public class CycleConduite {
     private FamilleTest familleTest;
 
     private Integer duree;
-    private String dureeUnit;
     private Integer nombrePhase;
     private Integer nombreStabilises;
+    private String commentaire;
 
     private String traceFilePath;
     private String traceFileName;

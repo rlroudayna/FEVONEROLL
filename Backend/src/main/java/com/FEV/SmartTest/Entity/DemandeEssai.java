@@ -49,10 +49,6 @@ public class DemandeEssai {
     @JoinColumn(name = "loi_id")
     private LoiRoute loi;
 
-
-    @Enumerated(EnumType.STRING)
-    private TypeProjet typeProjet;
-
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
@@ -67,6 +63,7 @@ public class DemandeEssai {
     private Boolean besoinMaceration;
     private Float temperatureMaceration;
     private Float temperatureEau;
+    private Float pressionAmbiante;
     private Float hygrometrieEssai;
     private Boolean activationSTT;
     private Float temperatureEssai;

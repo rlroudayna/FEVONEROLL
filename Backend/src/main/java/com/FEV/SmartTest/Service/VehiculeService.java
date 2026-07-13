@@ -40,12 +40,12 @@ public class VehiculeService {
         v.setMoteur(dto.getMoteur());
         v.setBoiteVitesse(dto.getBoiteVitesse());
         v.setCouleur(dto.getCouleur());
-        v.setFamilleVehicule(dto.getFamilleVehicule());
+        v.setCommentaire(dto.getCommentaire());
+        v.setPlateformeVehicule(dto.getPlateformeVehicule());
+        v.setArchitectureElectrique(dto.getArchitectureElectrique());
 
         v.setDimensionsPneus(dto.getDimensionsPneus());
-        v.setPressionPneus(dto.getPressionPneus());
         v.setPuissance(dto.getPuissance());
-        v.setDensite(dto.getDensite());
         v.setEmpattement(dto.getEmpattement());
 
         // ENUMS
@@ -60,9 +60,7 @@ public class VehiculeService {
             v.setModeConduite(ModeConduite.valueOf(dto.getModeConduite()));
         }
 
-        if (dto.getTypeCatalyseur() != null && !dto.getTypeCatalyseur().isBlank()) {
-            v.setTypeCatalyseur(Type_catalyseur.valueOf(dto.getTypeCatalyseur()));
-        }
+
 
         // 🔥 CLIENT (IMPORTANT)
         if (dto.getClientId() != null) {
@@ -98,14 +96,13 @@ public class VehiculeService {
             v.setMoteur(dto.getMoteur());
             v.setBoiteVitesse(dto.getBoiteVitesse());
             v.setCouleur(dto.getCouleur());
-            v.setFamilleVehicule(dto.getFamilleVehicule());
 
             v.setDimensionsPneus(dto.getDimensionsPneus());
-            v.setPressionPneus(dto.getPressionPneus());
             v.setPuissance(dto.getPuissance());
-            v.setDensite(dto.getDensite());
             v.setEmpattement(dto.getEmpattement());
-
+            v.setCommentaire(dto.getCommentaire());
+            v.setPlateformeVehicule(dto.getPlateformeVehicule());
+            v.setArchitectureElectrique(dto.getArchitectureElectrique());
             v.setCarburant(dto.getCarburant());
 
             if (dto.getLocalisation() != null) {
@@ -120,9 +117,6 @@ public class VehiculeService {
                 v.setModeConduite(ModeConduite.valueOf(dto.getModeConduite()));
             }
 
-            if (dto.getTypeCatalyseur() != null) {
-                v.setTypeCatalyseur(Type_catalyseur.valueOf(dto.getTypeCatalyseur()));
-            }
 
             // 🔥 CLIENT FIX
             if (dto.getClientId() != null) {

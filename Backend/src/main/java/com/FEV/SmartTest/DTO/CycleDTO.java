@@ -14,7 +14,7 @@ public class CycleDTO {
     private FamilleTest familleTest;
 
     private Integer duree;
-    private String dureeUnit;
+    private String commentaire;
 
     private Integer nombrePhase;
     private Integer nombreStabilises;

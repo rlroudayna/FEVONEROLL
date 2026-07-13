@@ -40,7 +40,7 @@ public class CycleService {
         cycle.setNom(dto.getNom());
         cycle.setFamilleTest(dto.getFamilleTest());
         cycle.setDuree(dto.getDuree());
-        cycle.setDureeUnit(dto.getDureeUnit());
+        cycle.setCommentaire(dto.getCommentaire());
         cycle.setNombrePhase(dto.getNombrePhase());
         cycle.setNombreStabilises(dto.getNombreStabilises());
 
@@ -97,7 +97,7 @@ public class CycleService {
             cycle.setNom(dto.getNom());
             cycle.setFamilleTest(dto.getFamilleTest());
             cycle.setDuree(dto.getDuree());
-            cycle.setDureeUnit(dto.getDureeUnit());
+            cycle.setCommentaire(dto.getCommentaire());
             cycle.setNombrePhase(dto.getNombrePhase());
             cycle.setNombreStabilises(dto.getNombreStabilises());
 

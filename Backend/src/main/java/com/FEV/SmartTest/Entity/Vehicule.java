@@ -20,7 +20,6 @@ public class Vehicule {
     private Long id;
 
     private String nomAppliImmat;
-
     private String identificateur;
     private String immatriculation;
     private String marque ;
@@ -37,26 +36,21 @@ public class Vehicule {
 
     @Enumerated(EnumType.STRING)
     private TypeMotorisation motorisation;
-
     private String moteur;
     private String boiteVitesse;
-
     @Enumerated(EnumType.STRING)
     private TypeCarburant carburant;
-
 
     @Enumerated(EnumType.STRING)
     private ModeConduite modeConduite;
 
     private String dimensionsPneus;
-    private Float pressionPneus;
     private Float puissance;
-    private Float densite;
+
     private Float empattement;
     private String couleur;
-    private String familleVehicule;
 
-    @Enumerated(EnumType.STRING)
-    private Type_catalyseur typeCatalyseur;
-
+    private String commentaire;
+    private String plateformeVehicule;
+    private String architectureElectrique;
 }

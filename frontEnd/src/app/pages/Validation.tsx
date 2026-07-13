@@ -434,17 +434,17 @@ export function Validation() {
 
         <div className="w-full p-5 bg-card rounded-xl border border-border shadow-sm flex items-center gap-4 ">
           {" "}
-            <div className="flex gap-4 items-center w-full">
+          <div className="flex gap-4 items-center w-full">
             {/* Recherche */}
             <div className="relative flex-1 min-w-[220px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
 
               <input
                 type="text"
-                placeholder="Rechercher par nom de demande..."
+                placeholder="Recherche par nom de demande"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-12 pl-12 pr-4 bg-background text-foreground border border-border rounded-lg shadow-sm placeholder:text-muted-foreground"
+                className="w-full h-12 pl-12 pr-4 bg-background text-foreground border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
             {/* Filtre client */}
@@ -477,7 +477,7 @@ export function Validation() {
             <select
               value={filterVehicule}
               onChange={(e) => setFilterVehicule(e.target.value)}
-              className="w-full sm:w-48 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
+              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
             >
               <option value="Tous">Tous les véhicules</option>
 
@@ -493,7 +493,7 @@ export function Validation() {
               placeholder="N° de projet"
               value={filterProjet}
               onChange={(e) => setFilterProjet(e.target.value)}
-              className="w-full sm:w-48 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
+              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
             />
             {/* Filtre date */}
             <div className="relative w-full sm:w-48">
@@ -527,7 +527,7 @@ export function Validation() {
                   <th className="px-5 py-5 font-semibold text-white">
                     Demande d'essai
                   </th>
-                  <th className="px-3 py-5 font-semibold text-white">Date</th>
+                  <th className="px-6 py-5 font-semibold text-white">Date</th>
                   <th className="px-4 py-5 font-semibold text-white">
                     N°_Projet
                   </th>
@@ -571,23 +571,23 @@ export function Validation() {
                         key={row.id}
                         className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                       >
-                        <td className="px-5 py-4 text-muted-foreground-800 font-bold ">
+                        <td className="px-4 py-4 text-muted-foreground-800 font-bold ">
                           {row.nomAuto}
                         </td>
 
-                        <td className="px-2 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.datePlanification}
                         </td>
-                        <td className="px-3 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.numeroProjet}
                         </td>
-                        <td className="px-2 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.client?.nom ?? "-"}
                         </td>
-                        <td className="px-4 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.vehicule?.identificateur ?? "-"}
                         </td>
-                        <td className="px-4 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.validationTechnicien?.decision && (
                             <span
                               className={`px-3 py-1 rounded-full text-xs ${getValidationStyle(
@@ -598,7 +598,7 @@ export function Validation() {
                             </span>
                           )}
                         </td>
-                        <td className="px-2 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           {row.validationCharge?.validation && (
                             <span
                               className={`px-2 py-1 rounded-full text-xs ${getValidationStyle(
@@ -610,7 +610,7 @@ export function Validation() {
                           )}
                         </td>
 
-                        <td className="px-1 py-4 text-muted-foreground-800">
+                        <td className="px-6 py-4 text-muted-foreground-800">
                           <span
                             className={`px-1 py-1 rounded-lg font-bold shadow-sm ${getStatusStyle(globalStatus)}`}
                           >

@@ -19,8 +19,9 @@ import {
 import { toast } from "sonner";
 
 export enum FamilleTest {
-  WLTC = "WLTC",
+  CYCLE_NORMEE = "CYCLE_NORMEE",
   RDE = "RDE",
+  CONCEPTION_SPECIFIQUE = "CONCEPTION_SPECIFIQUE",
 }
 interface Client {
   id?: number;
@@ -33,15 +34,16 @@ interface cycle {
   clientId: number;
   client?: Client;
   duree: number | null;
-  dureeUnit: string;
   nombrePhase: number | null;
   nombreStabilises: number | null;
   traceFilePath: string;
+  commentaire: string;
 }
 
 const familleColors: { [key: string]: string } = {
-  WLTC: "bg-[#E3F2FD] text-[#1565C0]",
+  CONCEPTION_SPECIFIQUE: "bg-[#E3F2FD] text-[#1565C0]",
   RDE: "bg-[#E8F5E9] text-[#2E7D32]",
+CYCLE_NORMEE: "bg-[#FFF3E0] text-[#EF6C00]",
 };
 
 export function Cycles() {
@@ -75,10 +77,9 @@ export function Cycles() {
   type CycleForm = {
     nom: string;
     clientId: number | null;
-
+    commentaire: string;
     famille: FamilleTest | null;
     duree: string;
-    dureeUnit: string;
     nombrePhase: string;
     nombreStabilite: string;
     traceFilePath: string;
@@ -88,9 +89,9 @@ export function Cycles() {
     clientId: null as number | null,
     famille: null as FamilleTest | null,
     duree: "",
-    dureeUnit: "",
     nombrePhase: "",
     nombreStabilite: "",
+    commentaire: "",
     traceFilePath: "",
   });
   const resetForm = () => {
@@ -103,10 +104,10 @@ export function Cycles() {
       clientId: null as number | null,
       famille: familleFilter as FamilleTest,
       duree: "",
-      dureeUnit: "",
       nombrePhase: "",
       nombreStabilite: "",
       traceFilePath: "",
+      commentaire: "",
     });
   };
   // ================= LOAD =================
@@ -155,10 +156,10 @@ export function Cycles() {
         clientId: null as number | null,
         famille: familleFilter as FamilleTest,
         duree: "",
-        dureeUnit: "",
         nombrePhase: "",
         nombreStabilite: "",
         traceFilePath: "",
+        commentaire: "",
       });
     }
     // 2. ensuite seulement edit/view
@@ -169,12 +170,12 @@ export function Cycles() {
       setForm({
         nom: cycle.nom ?? "",
         clientId: cycle.client?.id ?? null,
-        famille: cycle.familleTest ?? FamilleTest.WLTC,
+        famille: cycle.familleTest ?? FamilleTest.RDE,
         duree: cycle.duree?.toString() ?? "",
-        dureeUnit: cycle.dureeUnit ?? "",
         nombrePhase: cycle.nombrePhase?.toString() ?? "",
         nombreStabilite: cycle.nombreStabilises?.toString() ?? "",
         traceFilePath: cycle.traceFilePath?.toString() ?? "",
+        commentaire: cycle.commentaire ?? "",
       });
 
       setExistingTraceFilePath(cycle.traceFilePath ?? null);
@@ -198,9 +199,9 @@ export function Cycles() {
       clientId: form.clientId,
       familleTest: form.famille,
       duree: Number(form.duree),
-      dureeUnit: form.dureeUnit,
       nombrePhase: Number(form.nombrePhase),
       nombreStabilises: Number(form.nombreStabilite),
+      commentaire: form.commentaire,
     };
 
     formData.append(
@@ -235,10 +236,10 @@ export function Cycles() {
       clientId: form.clientId,
       familleTest: form.famille,
       duree: Number(form.duree),
-      dureeUnit: form.dureeUnit,
       nombrePhase: Number(form.nombrePhase),
       nombreStabilises: Number(form.nombreStabilite),
       traceFile: String(form.traceFilePath),
+      commentaire: form.commentaire,
     };
 
     formData.append(
@@ -262,7 +263,7 @@ export function Cycles() {
     );
 
     setShowModal(false);
-    toast.success("Cycle modifié");
+    toast.success("Cycle modifié avec succès");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -279,7 +280,7 @@ export function Cycles() {
     try {
       await authFetch(`/cycles/${id}`, { method: "DELETE" });
       setCycles((prev) => prev.filter((c) => c.id !== id));
-      toast.success("Cycle supprimé");
+      toast.success("Cycle supprimé avec succès");
     } catch (err: any) {
       const message =
         err?.message?.includes("constraint") ||
@@ -456,27 +457,35 @@ export function Cycles() {
             {/* Header */}
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
-                {[
-                  "Nom du cycle",
-                  "Client",
-                  "Famille",
-                  "Durée",
-                  "Unité",
-                  "Nombre de phase",
-                  "Nombre de stabilité",
-                  "Trace ",
-                  "Actions",
-                ].map((title) => (
-                  <th
-                    key={title}
-                    className="px-4 py-5 text-left font-semibold text-white"
-                  >
-                    {title}
-                  </th>
-                ))}
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Nom du cycle
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Client
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Famille
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Durée (s)
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Nombre de phases
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Trace
+                </th>
+
+                <th className="px-6 py-5 text-left font-semibold text-white">
+                  Actions
+                </th>
               </tr>
             </thead>
-
             {/* Body */}
             <tbody>
               {filteredCycles.length === 0 ? (
@@ -500,12 +509,12 @@ export function Cycles() {
                     </td>
 
                     {/* Client */}
-                    <td className="px-2 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {c.client?.nom}
                     </td>
 
                     {/* Famille */}
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${
                           familleColors[c.familleTest]
@@ -516,26 +525,17 @@ export function Cycles() {
                     </td>
 
                     {/* Durée */}
-                    <td className="px-5 py-4 text-muted-foreground-800">
+                    <td className="px-6 py-4 text-muted-foreground-800">
                       {c.duree}
-                    </td>
-
-                    <td className="px-5 py-4 text-muted-foreground-800">
-                      {c.dureeUnit}
                     </td>
 
                     {/* nombrePhase */}
                     <td className="px-16 py-4 text-muted-foreground-800">
                       {c.nombrePhase}
                     </td>
-                    <td className="px-16 py-4 text-muted-foreground-800">
-                      {c.nombreStabilises}
-                    </td>
 
                     {/* traceFilePath */}
-
-                    {/* traceFilePath */}
-                    <td className="px-5 py-4">
+                    <td className="px-6 py-4">
                       {c.traceFilePath ? (
                         <div className="flex items-center gap-2 text-muted-foreground-800 max-w-[200px]">
                           <FileSpreadsheet className="w-4 h-4 flex-shrink-0" />
@@ -555,7 +555,7 @@ export function Cycles() {
                     </td>
 
                     {/* Actions */}
-                    <td className="px-4 py-4 text-right">
+                    <td className="px-6 py-4 text-right">
                       <div className="flex items-center gap-2 justify-end">
                         {/* Voir */}
 
@@ -606,7 +606,7 @@ export function Cycles() {
       {/* MODAL OPTIMISÉ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[500px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+          <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
               <h2 className="text-xl font-semibold text-muted-foreground-800">
@@ -717,11 +717,11 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   Caractéristiques
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Durée */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-medium text-muted-foreground-900">
-                      Durée <span className="text-red-500 ml-1">*</span>
+                      Durée(s) <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="number"
@@ -734,28 +734,6 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
-                  </div>
-
-                  {/* Unité */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
-                      Unité <span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <select
-                      value={form.dureeUnit}
-                      disabled={modalMode === "view"}
-                      required
-                      onChange={(e) =>
-                        setForm({ ...form, dureeUnit: e.target.value })
-                      }
-                      className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
-        focus:outline-none focus:ring-2 focus:ring-ring transition"
-                    >
-                      <option value="">Sélectionner une unité</option>
-                      <option value="Seconde">Seconde</option>
-                      <option value="Minute">Minute</option>
-                      <option value="Heure">Heure</option>
-                    </select>
                   </div>
 
                   {/* Nombre de phases */}
@@ -792,20 +770,20 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
-                  <div className="md:col-span-2">
-                    <h4 className="text-xs font-medium text-muted-foreground-900">
+                  <div className="md:col-span-4">
+                    <h4 className="text-xs font-medium text-muted-foreground-900 mb-2">
                       Données de trace{" "}
                       <span className="text-red-500 ml-1">*</span>
                     </h4>
 
                     {existingTraceFilePath && (
-                      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-6">
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
                         <FileSpreadsheet className="w-4 h-4" />
                         <a
                           href={`http://localhost:8080/uploads/${existingTraceFilePath}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-600 underline"
+                          className="text-blue-600 underline mt-2"
                         >
                           Voir le fichier actuel
                         </a>
@@ -828,7 +806,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                             type="file"
                             className="hidden"
                             id="file-upload"
-                            accept="*/*"
+                            accept=".xls,.xlsx,.csv"
                             onChange={(e) => {
                               setTraceFile(e.target.files?.[0] || null);
                               setFileError(false);
@@ -873,8 +851,27 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
                 </div>
               </section>
+              <section>
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-2">
+                  Commentaire
+                </h3>
 
-              <div className="flex justify-end gap-38 mt-8">
+                <textarea
+                  value={form.commentaire}
+                  disabled={modalMode === "view"}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      commentaire: e.target.value,
+                    })
+                  }
+                  placeholder="Informations complémentaires..."
+                  className="w-full h-28 p-4 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
+                />
+              </section>
+
+              <div className="flex justify-end gap-38 mt-2">
                 {modalMode !== "view" && (
                   <div className="flex justify-end gap-3 pt-1">
                     <button

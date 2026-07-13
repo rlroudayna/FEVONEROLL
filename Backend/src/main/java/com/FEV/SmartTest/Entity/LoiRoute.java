@@ -1,5 +1,7 @@
 package com.FEV.SmartTest.Entity;
 
+import com.FEV.SmartTest.Enum.ModeBanc;
+import com.FEV.SmartTest.Enum.ModeConduite;
 import com.FEV.SmartTest.Enum.Norme;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,8 +28,8 @@ public class LoiRoute {
     private Norme norme;
     private Float inertieKg;
     private Float masseEssaiKg;
-    private Float inertieRotativeTNRKg;
-    private Float inertieRotativeDeuxTrainsKg;
+    @Enumerated(EnumType.STRING)
+    private ModeConduite modeConduite;
     private Float f0;
     private Float f1;
     private Float f2;

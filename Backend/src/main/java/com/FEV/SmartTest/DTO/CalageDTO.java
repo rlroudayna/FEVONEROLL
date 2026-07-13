@@ -22,6 +22,5 @@ public class CalageDTO {
     private Double a;
     private Double b;
     private Double c;
-
-    private String description;
+    private String commenatire;
 }

@@ -18,7 +18,11 @@ interface Client {
   id?: number;
   nom: string;
 }
-
+export enum ModeConduite {
+  TRACTION = "TRACTION",
+  QUATRE_X_QUATRE = "QUATRE_X_QUATRE",
+  PROPULSION = "PROPULSION",
+}
 interface Lois {
   id?: number;
   nom: string;
@@ -29,8 +33,7 @@ interface Lois {
   norme: Norme | "";
   inertieKg: number | null;
   masseEssaiKg: number | null;
-  inertieRotativeTNRKg: number | null;
-  inertieRotativeDeuxTrainsKg: number | null;
+  modeConduite: ModeConduite | "";
   f0: number | null;
   f1: number | null;
   f2: number | null;
@@ -43,8 +46,7 @@ const INITIAL_LOIS: Lois = {
   norme: "",
   inertieKg: null,
   masseEssaiKg: null,
-  inertieRotativeTNRKg: null,
-  inertieRotativeDeuxTrainsKg: null,
+  modeConduite: "",
   f0: null,
   f1: null,
   f2: null,
@@ -54,7 +56,6 @@ export function LoisDeRoute() {
   const [lois, setLois] = useState<any[]>([]);
   const [LoisToDelete, setVehicleToDelete] = useState<Lois | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
-
   const [modalMode, setModalMode] = useState<"view" | "edit" | "add">("add");
   const [selectedLois, setSelectedLois] = useState<Lois | null>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -65,7 +66,9 @@ export function LoisDeRoute() {
   const [searchInertie, setSearchInertie] = useState("");
   const [clientFilter, setClientFilter] = useState("Tous");
   const [normeFilter, setNormeFilter] = useState("Tous");
-   const [activeClients, setActiveClients] = useState<
+  const [normeModeConduite, setNormeModeConduite] = useState("Tous");
+
+  const [activeClients, setActiveClients] = useState<
     { id: number; nom: string }[]
   >([]);
   const [allClients, setAllClients] = useState<{ id: number; nom: string }[]>(
@@ -88,8 +91,16 @@ export function LoisDeRoute() {
       searchInertie === "" || loi.inertieKg?.toString().includes(searchInertie);
 
     const matchNorme = normeFilter === "Tous" || loi.norme === normeFilter;
+    const matchModeConduite =
+      normeModeConduite === "Tous" || loi.modeConduite === normeModeConduite;
 
-    return matchNom && matchesClient && matchInertie && matchNorme;
+    return (
+      matchNom &&
+      matchesClient &&
+      matchInertie &&
+      matchNorme &&
+      matchModeConduite
+    );
   });
 
   useEffect(() => {
@@ -107,7 +118,7 @@ export function LoisDeRoute() {
     fetchActiveClients();
     fetchAllClients();
   }, []);
-   const fetchActiveClients = async () => {
+  const fetchActiveClients = async () => {
     try {
       const data = await authFetch("/clients/actifs/dto");
       setActiveClients(data ?? []);
@@ -224,8 +235,7 @@ export function LoisDeRoute() {
     norme: Norme.WLTP,
     inertieKg: 0,
     masseEssaiKg: 0,
-    inertieRotativeTNRKg: 0,
-    inertieRotativeDeuxTrainsKg: 0,
+    modeConduite: "",
     f0: 0,
     f1: 0,
     f2: 0,
@@ -252,10 +262,10 @@ export function LoisDeRoute() {
   }, []);
 
   useEffect(() => {
-    if (modalMode === "view") return; 
-    if (!newLois.client || !newLois.norme) return;
+    if (modalMode === "view") return;
+    if (!newLois.client || !newLois.norme || !newLois.masseEssaiKg) return;
 
-    const prefix = `Loi_${newLois.client.nom}_${newLois.norme}`;
+    const prefix = `LDR_${newLois.client.nom}_${newLois.norme}_${newLois.masseEssaiKg}Kg`;
     const regex = new RegExp(`^${prefix}_(\\d{4})$`);
     const numbers = lois
       .map((l) => {
@@ -266,7 +276,7 @@ export function LoisDeRoute() {
     const next = (Math.max(0, ...numbers) + 1).toString().padStart(4, "0");
 
     setNewLois((prev) => ({ ...prev, nom: `${prefix}_${next}` }));
-  }, [newLois.client, newLois.norme, modalMode, lois]);
+  }, [newLois.client, newLois.norme, newLois.masseEssaiKg, modalMode, lois]);
 
   const fetchClients = async () => {
     try {
@@ -280,6 +290,36 @@ export function LoisDeRoute() {
     fetchClients();
   }, []);
 
+  const getNormeStyle = (norme: Norme | string) => {
+    switch (norme) {
+      case Norme.WLTP:
+        return "bg-green-100 text-green-700";
+
+      case Norme.NEDC:
+        return "bg-blue-100 text-blue-700";
+
+      case Norme.RDE:
+        return "bg-orange-100 text-orange-700";
+
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+  const getModeConduiteStyle = (mode: ModeConduite | string) => {
+    switch (mode) {
+      case ModeConduite.TRACTION:
+        return "bg-blue-100 text-blue-800";
+
+      case ModeConduite.PROPULSION:
+        return "bg-purple-100 text-purple-800";
+
+      case ModeConduite.QUATRE_X_QUATRE:
+        return "bg-emerald-100 text-emerald-800";
+
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
   return (
     <div className="space-y-5  p-3">
       <div className="flex justify-between items-end">
@@ -312,7 +352,7 @@ export function LoisDeRoute() {
       <div className="p-5 bg-card rounded-xl border border-border shadow-sm flex items-center gap-4">
         {/* Recherche nom */}
         <div className="flex-1 relative ">
-          <Search className="absolute  bg-card left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-400" />
+          <Search className="absolute  bg-background left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-500" />
 
           <input
             type="text"
@@ -326,7 +366,7 @@ export function LoisDeRoute() {
         {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) => role?.includes(r)) && (
           <select
             className="
-  w-full sm:w-48 h-12 px-4
+  w-full sm:w-50 h-12 px-4
   bg-background
   text-foreground
   border border-border
@@ -351,10 +391,21 @@ export function LoisDeRoute() {
           value={normeFilter}
           onChange={(e) => setNormeFilter(e.target.value)}
         >
-          <option value="Tous">Norme (Toutes)</option>
+          <option value="Tous">Norme (Tous)</option>
           <option value={Norme.WLTP}>WLTP</option>
           <option value={Norme.NEDC}>NEDC</option>
           <option value={Norme.RDE}>RDE</option>
+        </select>
+
+        <select
+          className="w-full sm:w-52 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-ring transition"
+          value={normeModeConduite}
+          onChange={(e) => setNormeModeConduite(e.target.value)}
+        >
+          <option value="Tous">Mode de conduite (Tous)</option>
+          <option value={ModeConduite.TRACTION}>Traction</option>
+          <option value={ModeConduite.QUATRE_X_QUATRE}>4X4</option>
+          <option value={ModeConduite.PROPULSION}>Propulsion</option>
         </select>
         {/* Recherche inertie */}
         <div className="w-64 relative">
@@ -390,6 +441,9 @@ export function LoisDeRoute() {
                 <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
                   Norme
                 </th>
+                <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
+                  Mode de conduite
+                </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
@@ -408,20 +462,6 @@ export function LoisDeRoute() {
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>Masse d’essai</span>
-                    <span className="text-xs font-normal opacity-80">(kg)</span>
-                  </div>
-                </th>
-
-                <th className="px-2 py-3 font-semibold text-white text-center">
-                  <div className="flex flex-col leading-tight">
-                    <span>Inertie TNR</span>
-                    <span className="text-xs font-normal opacity-80">(kg)</span>
-                  </div>
-                </th>
-
-                <th className="px-1 py-3 font-semibold text-white text-center">
-                  <div className="flex flex-col leading-tight">
-                    <span>Inertie 2T</span>
                     <span className="text-xs font-normal opacity-80">(kg)</span>
                   </div>
                 </th>
@@ -472,8 +512,21 @@ export function LoisDeRoute() {
                   </td>
 
                   <td className="px-4 py-3S">
-                    <span className="px-2 py-2 bg-[#E8F5E9] text-[#2E7D32] rounded-full text-[10px] font-bold uppercase tracking-wider">
+                    <span
+                      className={`px-2 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider ${getNormeStyle(loi.norme)}`}
+                    >
                       {loi.norme}
+                    </span>
+                  </td>
+
+                  <td className="px-4 py-3S">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
+                        loi.modeConduite,
+                      )}`}
+                    >
+                      {" "}
+                      {loi.modeConduite}
                     </span>
                   </td>
 
@@ -488,12 +541,7 @@ export function LoisDeRoute() {
                   <td className="px-12 py-3 text-muted-foreground-800">
                     {loi.masseEssaiKg}
                   </td>
-                  <td className="px-12 py-3 text-muted-foreground-800">
-                    {loi.inertieRotativeTNRKg}
-                  </td>
-                  <td className="px-8 py-3 text-muted-foreground-800">
-                    {loi.inertieRotativeDeuxTrainsKg}
-                  </td>
+
                   <td className="px-6 py-3 text-muted-foreground-800">
                     {loi.f0}
                   </td>
@@ -507,10 +555,6 @@ export function LoisDeRoute() {
                   {/* Actions */}
                   <td className="px-2 py-3">
                     <div className="flex items-center gap-2">
-                      {/* Voir : tout le monde */}
-
-                      {/* Actions seulement ADMIN ou CHARGE_ESSAI */}
-                      
                       {canEdit && (
                         <>
                           <button
@@ -524,7 +568,6 @@ export function LoisDeRoute() {
                           >
                             <Edit className="w-4 h-4 text-green-700" />
                           </button>
-
                           <button
                             onClick={() => {
                               setLoisToDelete(loi);
@@ -603,7 +646,7 @@ export function LoisDeRoute() {
 
         {showModal && (
           <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card w-full max-w-[500px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+            <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
               {/* HEADER */}
               <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
                 <h2 className="text-xl font-semibold text-muted-foreground-800">
@@ -681,6 +724,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
                       </div>
                     ))}
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-xs font-medium text-muted-foreground-900">
                         Client <span className="text-red-500 ml-1">*</span>
@@ -733,6 +778,35 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         <option>RDE</option>
                       </select>
                     </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-medium text-muted-foreground-900">
+                        Mode de conduite
+                        <span className="text-red-500 ml-1">*</span>
+                      </label>
+
+                      <select
+                        value={newLois.modeConduite}
+                        disabled={isReadOnly}
+                        required
+                        onChange={(e) =>
+                          handleChange(
+                            "modeConduite",
+                            e.target.value as ModeConduite,
+                          )
+                        }
+                        className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+    focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      >
+                        <option value="">Sélectionner</option>
+                        <option value={ModeConduite.TRACTION}>Traction</option>
+                        <option value={ModeConduite.QUATRE_X_QUATRE}>
+                          4×4
+                        </option>
+                        <option value={ModeConduite.PROPULSION}>
+                          Propulsion
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </section>
                 {/* SECTION 2: Paramètres d'inertie */}
@@ -747,14 +821,6 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     {[
                       { label: "Inertie (kg)", field: "inertieKg" },
                       { label: "Masse d'essai (kg)", field: "masseEssaiKg" },
-                      {
-                        label: "Inertie Rot. (1 train)",
-                        field: "inertieRotativeTNRKg",
-                      },
-                      {
-                        label: "Inertie Rot. (2 trains)",
-                        field: "inertieRotativeDeuxTrainsKg",
-                      },
                     ].map((item, i) => (
                       <div key={i} className="flex flex-col gap-1.5">
                         <label className="text-xs font-medium text-muted-foreground-530">
@@ -821,7 +887,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 {/* SECTION 4: Commentaires */}
                 <section className="">
                   <label className="text-xs font-medium text-muted-foreground-900 block mb-2">
-                    Commentaires
+                    Commentaire
                   </label>
 
                   <textarea

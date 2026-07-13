@@ -200,7 +200,6 @@ export function Users() {
       setShowModal(false);
       resetForm();
       fetchUsers();
-     
     } catch (err: any) {
       const message = err?.message || "Erreur opération utilisateur";
 
@@ -292,7 +291,7 @@ export function Users() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-400" />
           <input
             type="text"
-            placeholder="Rechercher par nom ,email"
+            placeholder="Recherche par nom ,email"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -302,7 +301,7 @@ export function Users() {
         <select
           value={clientFilter}
           onChange={(e) => setClientFilter(e.target.value)}
-          className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted"
+          className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted"
         >
           <option value="Tous">Tous les clients</option>
 
@@ -314,7 +313,7 @@ export function Users() {
         </select>
 
         <select
-          className="w-full sm:w-48 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
+          className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
         >
@@ -339,7 +338,7 @@ export function Users() {
                 <th className="px-9 py-5 font-semibold text-white">Rôle</th>
                 <th className="px-4 py-5 font-semibold text-white">Client</th>
                 <th className="px-8 py-5 font-semibold text-white">Email</th>
-                <th className="px-8 py-5 font-semibold text-white">
+                <th className="px-10 py-5 font-semibold text-white">
                   Téléphone
                 </th>
                 <th className="px-8 py-5 text-right font-semibold text-white">
@@ -626,12 +625,19 @@ export function Users() {
                   disabled={modalMode === "view"}
                   onChange={(e) => {
                     const role = e.target.value as Role;
-                    const isInternal = INTERNAL_ROLES.includes(role as Role);
+                    const isInternal = INTERNAL_ROLES.includes(role);
+
+                    const fevClient = activeClients.find(
+                      (c) =>
+                        c.nom.trim().toLowerCase() ===
+                        FEV_CLIENT_NAME.toLowerCase(),
+                    );
 
                     setFormData((prev) => ({
                       ...prev,
                       role,
-                      clientId: isInternal ? prev.clientId : "", // vider seulement si EXTERNE
+                      clientId:
+                        isInternal && fevClient ? String(fevClient.id) : "",
                     }));
                   }}
                   className="h-11 px-3 rounded-lg border border-border bg-background text-foreground

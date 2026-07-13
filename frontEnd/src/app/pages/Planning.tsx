@@ -11,7 +11,7 @@ interface DemandeEssai {
   nomAuto?: string;
   numeroProjet?: number;
 
-  statutGlobal?: "EN_COURS" | "FAIT" | "REJETEE";
+  statutGlobal?: "EN_COURS" | "FAIT";
   statutDemande?: "EN_CREATION" | "VALIDEE";
 
   // =====================
@@ -452,8 +452,8 @@ export function Planning() {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <div className="flex items-center gap-2 bg-background px-3 py-2 rounded-lg border border-border">
-            <Calendar className="w-4 h-4 text-muted-foreground" />
+          <div className="flex items-center gap-2 bg-background px-6 py-2 rounded-lg border border-border">
+            <Calendar className="w-6 h-8 text-muted-foreground" />
             <span className="text-sm font-medium">Semaine du {monday}</span>
           </div>
           <button
@@ -466,13 +466,12 @@ export function Planning() {
 
         <button
           onClick={() => setWeekOffset(0)}
-          className="h-12 px-6 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm"
+          className="h-12 px-10 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm"
         >
           Aujourd'hui
         </button>
 
-        <div className="flex flex-wrap gap-3 items-center w-full">
-          <input
+<div className="flex flex-1 flex-wrap gap-3 items-center">          <input
             type="text"
             placeholder="Projet"
             value={numeroProjetFilter}
@@ -483,7 +482,7 @@ export function Planning() {
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none w-full sm:w-[160px] transition"
+            className="h-12 px-6 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none w-full sm:w-[160px] transition"
           />
           <select
             value={selectedTechnicienId}
@@ -492,7 +491,7 @@ export function Planning() {
                 e.target.value ? Number(e.target.value) : "",
               )
             }
-            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm"
+            className="h-12 px-6 bg-background text-foreground border border-border rounded-lg text-sm"
           >
             <option value="">Tous techniciens</option>
             {techniciens.map((t) => (
@@ -505,7 +504,7 @@ export function Planning() {
             onClick={() =>
               setViewMode(viewMode === "calendar" ? "list" : "calendar")
             }
-            className="h-12 px-8 bg-background text-foreground border border-border rounded-lg flex items-center gap-2 hover:bg-muted transition"
+            className="h-12 px-10 bg-background text-foreground border border-border rounded-lg flex items-center gap-2 hover:bg-muted transition"
           >
             <List className="w-4 h-4" />
             <span className="text-sm capitalize">{viewMode}</span>

@@ -184,7 +184,7 @@ export function Profile() {
     }
   };
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* TITLE */}
       <div>
         <h1 className="text-2xl font-bold">Mon Profil</h1>
@@ -329,7 +329,7 @@ export function Profile() {
       {/* PASSWORD MODAL */}
       {isChangingPassword && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-card p-5 rounded-xl w-[400px] space-y-3">
+          <div className="bg-card p-5 rounded-xl w-[500px] space-y-3">
             <h2 className="font-bold text-lg">Changer mot de passe</h2>
 
             {/* ancien mot de passe */}
@@ -441,7 +441,7 @@ export function Profile() {
           <div className="bg-card p-4 rounded-xl border space-y-3 w-[400px]">
             <h2 className="font-bold text-lg">Changer photo de profil</h2>
 
-            <label className="cursor-pointer flex items-center justify-center w-full border p-2 rounded bg-gray-50 hover:bg-gray-100">
+            <label className="bg-card cursor-pointer flex items-center justify-center w-full border  p-2 rounded  hover:bg-card-100">
               {newImageFile ? newImageFile.name : "Sélectionner une image"}
 
               <input
