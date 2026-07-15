@@ -516,7 +516,7 @@ export function Cycles() {
                     {/* Famille */}
                     <td className="px-6 py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        className={`px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider ${
                           familleColors[c.familleTest]
                         }`}
                       >

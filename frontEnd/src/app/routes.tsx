@@ -24,6 +24,7 @@ import {
   ForgotPassword,
   NotFound,
   Clients,
+  Carburants
 } from "./pages";
 import { ResetPassword } from "./pages/ResetPassword";
 
@@ -90,7 +91,8 @@ export const router = createBrowserRouter([
   children: [
     { path: "reporting", element: <Reporting /> },
   ],
-},          { path: "profile", element: <Profile /> },
+},
+{ path: "carburants", element: <Carburants /> },          { path: "profile", element: <Profile /> },
         ],
       },
     ],

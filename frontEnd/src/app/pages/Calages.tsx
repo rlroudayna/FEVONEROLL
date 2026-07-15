@@ -21,10 +21,16 @@ interface Client {
   id?: number;
   nom: string;
 }
+export enum ModeConduite {
+  TRACTION = "TRACTION",
+  QUATRE_X_QUATRE = "QUATRE_X_QUATRE",
+  PROPULSION = "PROPULSION",
+}
 export interface Calage {
   id?: number;
   nom: string;
   client?: Client;
+  modeConduite: ModeConduite | "";
   clientId: number;
   temperature: number;
   vehiculeId?: number;
@@ -86,6 +92,7 @@ export function Calages() {
     temperature: 0,
     vehiculeAssocie: undefined,
     loiRouteAssocie: undefined,
+    modeConduite: "",
     a: 0,
     b: 0,
     c: 0,
@@ -98,6 +105,8 @@ export function Calages() {
     temperature: 0,
     vehiculeAssocie: undefined,
     loiRouteAssocie: undefined,
+    modeConduite: "",
+
     a: 0,
     b: 0,
     c: 0,
@@ -175,7 +184,7 @@ export function Calages() {
         b: newCalage.b,
         c: newCalage.c,
         description: newCalage.description,
-
+        modeConduite: newCalage.modeConduite,
         //  IMPORTANT : mapping correct vers backend
         vehiculeId: newCalage.vehiculeAssocie?.id,
         loiRouteId: newCalage.loiRouteAssocie?.id,
@@ -306,6 +315,21 @@ export function Calages() {
     modalMode,
     calages,
   ]);
+  const getModeConduiteStyle = (mode: ModeConduite | string) => {
+    switch (mode) {
+      case ModeConduite.TRACTION:
+        return "bg-blue-100 text-blue-800";
+
+      case ModeConduite.PROPULSION:
+        return "bg-purple-100 text-purple-800";
+
+      case ModeConduite.QUATRE_X_QUATRE:
+        return "bg-emerald-100 text-emerald-800";
+
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
 
   return (
     <div className="space-y-5  p-3">
@@ -351,7 +375,6 @@ export function Calages() {
           />
         </div>
 
-       
         {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) => role?.includes(r)) && (
           <select
             className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
@@ -447,29 +470,33 @@ export function Calages() {
                   Client
                 </th>
                 <th className="px-3 py-5 font-semibold text-white">Véhicule</th>
-                <th className="px-8 py-5 text-left font-semibold text-white">
+                <th className="px-6 py-5 text-left font-semibold text-white">
                   Loi de route
+                </th>
+                <th className="px-2 py-3 font-semibold text-white whitespace-nowrap">
+                  Mode de conduite
                 </th>
                 <th className="px-1 py-5 font-semibold text-white">
                   Température
                   <span className="text-xs font-normal opacity-80">(°C)</span>
                 </th>
-                <th className="px-4 py-5 font-semibold text-white">
+
+                <th className="px-2 py-5 font-semibold text-white">
                   A<span className="text-xs font-normal opacity-80">(N)</span>
                 </th>
-                <th className="px-4 py5 font-semibold text-white">
+                <th className="px-2 py5 font-semibold text-white">
                   B
                   <span className="text-xs font-normal opacity-80">
                     (N/km/h)
                   </span>
                 </th>
-                <th className="px-5 py-5 font-semibold text-white">
+                <th className="px-2 py-5 font-semibold text-white">
                   C
                   <span className="text-xs font-normal opacity-80">
                     (N/(km/h)²)
                   </span>
                 </th>
-                <th className="px-4 py-5 font-semibold text-white">Actions</th>
+                <th className="px-2 py-5 font-semibold text-white">Actions</th>
               </tr>
             </thead>
 
@@ -485,35 +512,44 @@ export function Calages() {
                     {calages.nom}
                   </td>
                   {/* client */}
-                  <td className="px-4 py-4 text-muted-foreground-800">
+                  <td className="px-8 py-4 text-muted-foreground-800">
                     {calages.client?.nom || ""}{" "}
                   </td>
 
-                  <td className="px-4 py-4 text-muted-foreground-800">
+                  <td className="px-2 py-4 text-muted-foreground-800">
                     {calages.vehiculeAssocie?.identificateur}
                   </td>
 
-                  <td className="px-4 py-4 text-muted-foreground-800">
+                  <td className="px-3 py-4 text-muted-foreground-800">
                     {calages.loiRouteAssocie?.nom}{" "}
                   </td>
-
+                  <td className="px-4 py-3S">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
+                        calages.modeConduite,
+                      )}`}
+                    >
+                      {" "}
+                      {calages.modeConduite}
+                    </span>
+                  </td>
                   {/* Mode */}
-                  <td className="px-6 py-4 text-muted-foreground-800">
+                  <td className="px-10 py-4 text-muted-foreground-800">
                     {calages.temperature}
                   </td>
 
                   {/* A */}
-                  <td className="px-6 py-4 text-muted-foreground-800">
+                  <td className="px-4 py-4 text-muted-foreground-800">
                     {calages.a}
                   </td>
 
                   {/* B */}
-                  <td className="px-6 py-4 text-muted-foreground-800">
+                  <td className="px-8 py-4 text-muted-foreground-800">
                     {calages.b}
                   </td>
 
                   {/* C */}
-                  <td className="px-6 py-4 text-muted-foreground-800">
+                  <td className="px-8 py-4 text-muted-foreground-800">
                     {calages.c}
                   </td>
 
@@ -690,6 +726,32 @@ export function Calages() {
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-medium text-muted-foreground-900">
+                      Mode de conduite
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+
+                    <select
+                      value={newCalage.modeConduite}
+                      required
+                      onChange={(e) =>
+                        handleChange(
+                          "modeConduite",
+                          e.target.value as ModeConduite,
+                        )
+                      }
+                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+                      focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="">Sélectionner</option>
+                      <option value={ModeConduite.TRACTION}>Traction</option>
+                      <option value={ModeConduite.QUATRE_X_QUATRE}>4×4</option>
+                      <option value={ModeConduite.PROPULSION}>
+                        Propulsion
+                      </option>
+                    </select>
                   </div>
                 </div>
               </section>

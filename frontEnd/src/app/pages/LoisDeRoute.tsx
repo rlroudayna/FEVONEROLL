@@ -513,7 +513,7 @@ export function LoisDeRoute() {
 
                   <td className="px-4 py-3S">
                     <span
-                      className={`px-2 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider ${getNormeStyle(loi.norme)}`}
+                      className={`px-2 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider ${getNormeStyle(loi.norme)}`}
                     >
                       {loi.norme}
                     </span>
@@ -521,7 +521,7 @@ export function LoisDeRoute() {
 
                   <td className="px-4 py-3S">
                     <span
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
                         loi.modeConduite,
                       )}`}
                     >

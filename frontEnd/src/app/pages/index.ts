@@ -18,3 +18,4 @@ export { ValidationDetail } from "./ValidationDetail";
 export { Reporting } from "./Reporting";
 export { Profile } from "./Profile";
 export { NotFound } from "./NotFound";
+export { Carburants } from "./Carburants";

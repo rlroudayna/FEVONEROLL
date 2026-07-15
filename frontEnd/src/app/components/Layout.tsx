@@ -19,6 +19,7 @@ import {
   ChevronRight,
   Power,
   Building2,
+  Fuel,
 } from "lucide-react";
 import { toggleTheme } from "../../styles/theme";
 import { Moon, Sun } from "lucide-react";
@@ -85,6 +86,11 @@ const navigation = [
     icon: TrendingUp,
     roles: [Role.ADMIN, Role.CHARGE_ESSAI],
   },
+  {
+  name: "Carburants",
+  path: "/app/carburants",
+  icon: Fuel,
+},
 ];
 
 export function Layout() {
