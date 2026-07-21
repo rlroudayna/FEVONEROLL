@@ -448,35 +448,35 @@ export function LoisDeRoute() {
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>Température</span>
-                    <span className="text-xs font-normal opacity-80">(°C)</span>
+                    <span className="text-sm font-normal opacity-80">(°C)</span>
                   </div>
                 </th>
 
                 <th className="px-1 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>Inertie</span>
-                    <span className="text-xs font-normal opacity-80">(kg)</span>
+                    <span className="text-sm font-normal opacity-80">(kg)</span>
                   </div>
                 </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>Masse d’essai</span>
-                    <span className="text-xs font-normal opacity-80">(kg)</span>
+                    <span className="text-sm font-normal opacity-80">(kg)</span>
                   </div>
                 </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>F0</span>
-                    <span className="text-xs font-normal opacity-80">(N)</span>
+                    <span className="text-sm font-normal opacity-80">(N)</span>
                   </div>
                 </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>F1</span>
-                    <span className="text-xs font-normal opacity-80">
+                    <span className="text-sm font-normal opacity-80">
                       (N/km/h)
                     </span>
                   </div>
@@ -485,7 +485,7 @@ export function LoisDeRoute() {
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>F2</span>
-                    <span className="text-xs font-normal opacity-80">
+                    <span className="text-sm font-normal opacity-80">
                       (N/(km/h)²)
                     </span>
                   </div>
@@ -570,6 +570,7 @@ export function LoisDeRoute() {
                           </button>
                           <button
                             onClick={() => {
+                              setSelectedLois(loi); 
                               setLoisToDelete(loi);
                               setShowConfirmDelete(true);
                             }}
@@ -618,9 +619,10 @@ export function LoisDeRoute() {
               <DialogTitle>Confirmation de suppression</DialogTitle>
             </DialogHeader>
             <p className="py-4 text-muted-foreground-700">
-              Voulez-vous vraiment supprimer le véhicule{" "}
+              Voulez-vous vraiment supprimer la lois de route{" "}
               <span className="font-bold">{selectedLois?.nom}</span> ?
             </p>
+
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setShowConfirmDelete(false)}
@@ -646,10 +648,11 @@ export function LoisDeRoute() {
 
         {showModal && (
           <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+            <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+              {" "}
               {/* HEADER */}
               <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
-                <h2 className="text-xl font-semibold text-muted-foreground-800">
+                <h2 className="text-xl font-semibold text-muted-foreground-800 px-2">
                   {modalMode === "add" && "Ajouter une loi de route"}
                   {modalMode === "edit" && "Modifier la loi de route"}
                   {modalMode === "view" && "Détails de la loi de route"}
@@ -662,12 +665,10 @@ export function LoisDeRoute() {
                   ✕
                 </button>
               </div>
-
               {/* BODY */}
-
               <form
                 onSubmit={handleSubmit}
-                className="overflow-y-auto p-6 space-y-6 bg-card"
+                className="overflow-y-auto p-6 space-y-6 bg-card px-10"
               >
                 {" "}
                 {/* SECTION 1: Identification */}
@@ -679,7 +680,7 @@ export function LoisDeRoute() {
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     {[
                       {
                         label: "Nom de la loi",
@@ -698,7 +699,7 @@ export function LoisDeRoute() {
                       },
                     ].map((field, i) => (
                       <div key={i} className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground-530">
+                        <label className="text-sm font-medium text-muted-foreground-530">
                           {field.label}
                           {field.required && (
                             <span className="text-red-500 ml-1">*</span>
@@ -727,7 +728,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Client <span className="text-red-500 ml-1">*</span>
                       </label>
                       <select
@@ -757,7 +758,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       </select>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Norme
                         <span className="text-red-500 ml-1">*</span>
                       </label>
@@ -779,7 +780,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       </select>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Mode de conduite
                         <span className="text-red-500 ml-1">*</span>
                       </label>
@@ -817,13 +818,13 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-12">
                     {[
                       { label: "Inertie (kg)", field: "inertieKg" },
                       { label: "Masse d'essai (kg)", field: "masseEssaiKg" },
                     ].map((item, i) => (
                       <div key={i} className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground-530">
+                        <label className="text-sm font-medium text-muted-foreground-530">
                           {item.label}
                           <span className="text-red-500 ml-1">*</span>
                         </label>
@@ -861,7 +862,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       { label: "F2 (N/(km/h)²)", field: "f2" },
                     ].map((item, i) => (
                       <div key={i} className="flex flex-col gap-1.5">
-                        <label className="text-xs font-medium text-muted-foreground-530">
+                        <label className="text-sm font-medium text-muted-foreground-530">
                           {item.label}
                           <span className="text-red-500 ml-1">*</span>
                         </label>
@@ -886,7 +887,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 </section>
                 {/* SECTION 4: Commentaires */}
                 <section className="">
-                  <label className="text-xs font-medium text-muted-foreground-900 block mb-2">
+                  <label className="text-sm font-medium text-muted-foreground-900 block mb-2">
                     Commentaire
                   </label>
 

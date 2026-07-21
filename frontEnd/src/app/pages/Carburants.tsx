@@ -13,13 +13,10 @@ import { toast } from "sonner";
 
 export enum Composition {
   MassRatio = "MassRatio",
-  MoleFraction = "MoleFraction",
 }
 
 export enum FuelStatus {
   Draft = "Draft",
-  PUBLISHED = "PUBLISHED",
-  ARCHIVED = "ARCHIVED",
 }
 
 /* ================= INTERFACES ================= */
@@ -40,6 +37,7 @@ interface Carburant {
   ethanolContent: number | null;
   nhv: number | null;
   status: FuelStatus;
+  commentaire: string;
 }
 
 type CarburantForm = {
@@ -57,6 +55,7 @@ type CarburantForm = {
   ethanolContent: string;
   nhv: string;
   status: FuelStatus;
+  commentaire: string;
 };
 
 const INITIAL_FORM_STATE: CarburantForm = {
@@ -74,6 +73,7 @@ const INITIAL_FORM_STATE: CarburantForm = {
   ethanolContent: "",
   nhv: "",
   status: FuelStatus.Draft,
+  commentaire: "",
 };
 
 /* ================= COMPONENT ================= */
@@ -143,6 +143,7 @@ export function Carburants() {
         ethanolContent: String(carburant.ethanolContent ?? ""),
         nhv: String(carburant.nhv ?? ""),
         status: carburant.status,
+        commentaire: carburant.commentaire ?? "",
       });
     }
     setModalMode(mode);
@@ -173,6 +174,7 @@ export function Carburants() {
           ethanolContent: Number(form.ethanolContent),
           nhv: Number(form.nhv),
           status: form.status,
+          commentaire: form.commentaire,
         }),
       });
 
@@ -206,6 +208,7 @@ export function Carburants() {
           ethanolContent: Number(form.ethanolContent),
           nhv: Number(form.nhv),
           status: form.status,
+          commentaire: form.commentaire,
         }),
       });
 
@@ -401,7 +404,7 @@ export function Carburants() {
       {/* ================= MODAL ================= */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden border border-border">
+          <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="px-6 py-4 border-b flex justify-between items-center">
               <h2 className="text-xl font-semibold">
@@ -444,10 +447,11 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Density (kg/m³)
+                      Density (kg/m³)<span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
+                      required
                       value={form.density}
                       disabled={modalMode === "view"}
                       onChange={(e) =>
@@ -458,10 +462,12 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                     Température de référence (°C)
+                      Température de référence (°C)
+                      <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
+                      required
                       value={form.referenceTemperature}
                       disabled={modalMode === "view"}
                       onChange={(e) =>
@@ -475,10 +481,11 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Composition
+                      Composition <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={form.composition}
+                      required
                       disabled={modalMode === "view"}
                       onChange={(e) =>
                         handleInputChange("composition", e.target.value)
@@ -516,6 +523,7 @@ export function Carburants() {
                       </label>
                       <input
                         type="number"
+                        required
                         value={form[field]}
                         disabled={modalMode === "view"}
                         onChange={(e) =>
@@ -551,6 +559,7 @@ export function Carburants() {
                       </label>
                       <input
                         type="number"
+                        required
                         value={form[field]}
                         disabled={modalMode === "view"}
                         onChange={(e) =>
@@ -568,18 +577,42 @@ export function Carburants() {
                 <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
                   État
                 </h3>
-                <select
-                  value={form.status}
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <select
+                      value={form.status}
+                      required
+                      disabled={modalMode === "view"}
+                      onChange={(e) =>
+                        handleInputChange("status", e.target.value)
+                      }
+                      className="w-full h-11 border rounded-lg px-3 bg-background"
+                    >
+                      {Object.values(FuelStatus).map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </section>
+              {/* ================= COMMENTAIRE ================= */}
+              <section>
+                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
+                  Commentaire
+                </h3>
+
+                <textarea
+                  value={form.commentaire}
                   disabled={modalMode === "view"}
-                  onChange={(e) => handleInputChange("status", e.target.value)}
-                  className="w-full md:w-72 h-11 border rounded-lg px-3 bg-background"
-                >
-                  {Object.values(FuelStatus).map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(e) =>
+                    handleInputChange("commentaire", e.target.value)
+                  }
+                  className="w-full min-h-[120px] border rounded-lg px-3 py-2 bg-background resize-none"
+                  placeholder="Ajouter un commentaire..."
+                />
               </section>
 
               {/* ================= FOOTER ================= */}
@@ -591,13 +624,13 @@ export function Carburants() {
                       setShowModal(false);
                       resetForm();
                     }}
-                    className="px-6 py-2 border rounded-lg hover:bg-accent transition-colors"
+                    className="px-10 py-3 border rounded-lg  transition-colors"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-[#B9032C] text-white rounded-lg hover:brightness-110 transition-all"
+                    className="px-10 py-3 bg-[#B9032C] text-white rounded-lg hover:brightness-110 transition-all"
                   >
                     {modalMode === "edit" ? "Modifier" : "Enregistrer"}
                   </button>

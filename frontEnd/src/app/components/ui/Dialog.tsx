@@ -1,20 +1,12 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
-export function Dialog({
-  children,
-  ...props
-}: DialogPrimitive.DialogProps) {
-  return (
-    <DialogPrimitive.Root {...props}>
-      {children}
-    </DialogPrimitive.Root>
-  );
+export function Dialog({ children, ...props }: DialogPrimitive.DialogProps) {
+  return <DialogPrimitive.Root {...props}>{children}</DialogPrimitive.Root>;
 }
 
 // 1. Définition de l'interface personnalisée
-interface CustomDialogContentProps
-  extends DialogPrimitive.DialogContentProps {
+interface CustomDialogContentProps extends DialogPrimitive.DialogContentProps {
   hideOverlay?: boolean;
 }
 
@@ -38,11 +30,33 @@ export function DialogContent({
       />
 
       <DialogPrimitive.Content
-  className={`fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card text-foreground rounded-xl shadow-xl p-6 z-50 border border-border outline-none ${className}`}
+        className={`
+   fixed
+    inset-0
+    m-auto
+    w-[30vw]
+    h-[28vh]
+    max-w-none
+    max-h-none
+    bg-card
+    text-foreground
+    rounded-2xl
+    shadow-xl
+    p-6
+    overflow-hidden
+    z-50 ${className}`}
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 p-1 rounded-lg hover:bg-gray-100 transition-colors">
+        <DialogPrimitive.Close   className="
+    absolute right-4 top-4 
+    p-1 rounded-lg
+    text-muted-foreground
+    hover:text-foreground
+    hover:bg-transparent
+    transition-colors
+  "
+>
           <X className="w-5 h-5" />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
@@ -68,9 +82,7 @@ export function DialogTitle({
   className?: string;
 }) {
   return (
-    <DialogPrimitive.Title
-      className={`text-2xl font-semibold ${className}`}
-    >
+    <DialogPrimitive.Title className={`text-2xl font-semibold ${className}`}>
       {children}
     </DialogPrimitive.Title>
   );

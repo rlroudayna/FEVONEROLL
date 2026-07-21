@@ -523,7 +523,7 @@ export function Reporting() {
       >
         {modalOpen && (
           <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card w-full max-w-[520px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+            <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
               {/* HEADER */}
               <div className="flex justify-between items-center py-3.5 px-6 border-b border-border bg-card">
                 <h2 className="text-xl font-bold text-foreground">
@@ -566,7 +566,7 @@ export function Reporting() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Titre */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Titre du rapport{" "}
                         <span className="text-red-500 ml-1">*</span>
                       </label>
@@ -583,7 +583,7 @@ export function Reporting() {
 
                     {/* Numéro demande */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Nom demande d'essai{" "}
                         <span className="text-red-500 ml-1">*</span>
                       </label>
@@ -606,7 +606,7 @@ export function Reporting() {
 
                     {/* Client */}
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs font-medium text-muted-foreground-530">
+                      <label className="text-sm font-medium text-muted-foreground-530">
                         Client <span className="text-red-500 ml-1">*</span>
                       </label>
 
@@ -627,7 +627,7 @@ export function Reporting() {
 
                     {/* Date */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Date d'essai{" "}
                         <span className="text-red-500 ml-1">*</span>
                       </label>
@@ -643,7 +643,7 @@ export function Reporting() {
 
                     {/* Chargé d'essai */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         déposant <span className="text-red-500 ml-1">*</span>
                       </label>
                       <input
@@ -659,7 +659,7 @@ export function Reporting() {
                     {/* Rapport */}
                     {/* Rapport */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-xs font-medium text-muted-foreground-900">
+                      <label className="text-sm font-medium text-muted-foreground-900">
                         Rapport <span className="text-red-500 ml-1">*</span>
                       </label>
 
@@ -707,20 +707,20 @@ export function Reporting() {
                 {/* SECTION FICHIER */}
 
                 {/* BOUTONS */}
-                <div className="flex justify-end gap-34 mt-8">
+                <div className="flex justify-end gap-34 mt-10">
                   <button
                     onClick={() => {
                       setModalOpen(false);
                       resetForm();
                     }}
-                    className="px-11 py-2.5 bg-card border border-border text-foreground font-semibold rounded-lg transition shadow-sm"
+                    className="px-12 py-3 bg-card border border-border text-foreground font-semibold rounded-lg transition shadow-sm"
                   >
                     Annuler
                   </button>
                   {mode !== "view" && (
                     <button
                       type="submit"
-                      className="px-5 py-2 bg-red-600 text-white rounded-lg"
+                      className="px-12 py-3 bg-red-600 text-white rounded-lg"
                     >
                       Enregistrer
                     </button>

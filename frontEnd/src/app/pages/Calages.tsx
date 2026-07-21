@@ -431,7 +431,7 @@ export function Calages() {
             <DialogTitle>Confirmation de suppression</DialogTitle>
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            Voulez-vous vraiment supprimer le véhicule{" "}
+            Voulez-vous vraiment supprimer le calage{" "}
             <span className="font-bold">{selectedCalage?.nom}</span> ?
           </p>
           <div className="flex justify-end gap-4 mt-4">
@@ -478,21 +478,21 @@ export function Calages() {
                 </th>
                 <th className="px-1 py-5 font-semibold text-white">
                   Température
-                  <span className="text-xs font-normal opacity-80">(°C)</span>
+                  <span className="text-sm font-normal opacity-80">(°C)</span>
                 </th>
 
                 <th className="px-2 py-5 font-semibold text-white">
-                  A<span className="text-xs font-normal opacity-80">(N)</span>
+                  A<span className="text-sm font-normal opacity-80">(N)</span>
                 </th>
                 <th className="px-2 py5 font-semibold text-white">
                   B
-                  <span className="text-xs font-normal opacity-80">
+                  <span className="text-sm font-normal opacity-80">
                     (N/km/h)
                   </span>
                 </th>
                 <th className="px-2 py-5 font-semibold text-white">
                   C
-                  <span className="text-xs font-normal opacity-80">
+                  <span className="text-sm font-normal opacity-80">
                     (N/(km/h)²)
                   </span>
                 </th>
@@ -621,7 +621,7 @@ export function Calages() {
       {/* Modal formulaire */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+            <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="flex justify-between items-center py-3.5 px-6 border-b border-border bg-card">
               <h2 className="text-xl font-bold text-foreground">
@@ -654,7 +654,7 @@ export function Calages() {
             <form
               onSubmit={handleSubmit}
               noValidate={false}
-              className="overflow-y-auto px-6 py-4 space-y-4"
+              className="overflow-y-auto px-6 py-4 space-y-4 px-10"
             >
               {/* SECTION 1 : Identification */}
               <section>
@@ -662,10 +662,11 @@ export function Calages() {
                   Identification
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-20">
+
                   {/* Nom du calage */}
                   <div className="flex flex-col gap-1.5 py-2">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Nom du calage
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -683,7 +684,7 @@ export function Calages() {
                   </div>
                   {/* Client */}
                   <div className="flex flex-col gap-1.5 py-2">
-                    <label className="text-xs font-medium text-muted-foreground-530">
+                    <label className="text-sm font-medium text-muted-foreground-530">
                       Client <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -710,7 +711,7 @@ export function Calages() {
                   </div>
                   {/* Température */}
                   <div className="flex flex-col gap-1.5 py-2">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Température (°C)
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -727,8 +728,8 @@ export function Calages() {
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                  <div className="flex flex-col gap-1.5 py-2">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Mode de conduite
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -762,10 +763,10 @@ export function Calages() {
                   Associations
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
                   {/* Véhicule */}
                   <div className="flex flex-col gap-1.5 ">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Véhicule
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -794,7 +795,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   {/* Loi de route */}
                   <div className="flex flex-col gap-1.5 ">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Loi de route
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -829,9 +830,9 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   Coefficients provisoires
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 gap-x-8">
                   <div className="flex flex-col gap-1.5 ">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       A (N)
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -850,7 +851,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       B (N/km/h)
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -869,7 +870,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       C (N/(km/h)²)
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -891,7 +892,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
               {/* SECTION 4 : Description */}
               <section>
-                <label className="text-xs font-medium text-muted-foreground-900 block mb-2">
+                <label className="text-sm font-medium text-muted-foreground-900 block mb-2">
                   Commentaire
                 </label>
 
@@ -917,7 +918,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   <button
                     type="submit"
-                    className="px-5 py-2 bg-[#E30613] text-white rounded-lg"
+                    className="px-10 py-3 bg-[#E30613] text-white rounded-lg"
                   >
                     {modalMode === "edit" ? "Modifier" : "Ajouter"}
                   </button>

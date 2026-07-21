@@ -299,7 +299,7 @@ export function Clients() {
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border-border rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
               Non
             </button>
@@ -320,17 +320,20 @@ export function Clients() {
       </Dialog>
       {/* MODAL */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-[600px] max-h-[95vh] bg-card text-foreground border border-border">
+        <DialogContent className="bg-card w-[90vw] h-[90vh] px-4 overflow-hidden rounded-2xl shadow-2xl flex flex-col">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-semibold text-foreground border-b border-border pb-2">
+            <DialogTitle className="text-2xl font-semibold text-foreground border-b border-border pb-2 px-2">
               {modalMode === "add" && "Ajouter client"}
               {modalMode === "edit" && "Modifier client"}
               {modalMode === "view" && "Détails client"}
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4 mt-8 ">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 mx-auto w-full max-w-8xl space-y-6 px-8"
+          >
             {/* GRID PRINCIPAL */}
-            <div className="grid grid-cols-1  gap-3">
+            <div className="grid grid-cols-1 gap-3">
               {/* NOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">

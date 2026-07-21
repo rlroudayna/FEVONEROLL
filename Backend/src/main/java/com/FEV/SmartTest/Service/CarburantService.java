@@ -44,6 +44,11 @@ public class CarburantService {
         existing.setEthanolContent(carburant.getEthanolContent());
         existing.setNhv(carburant.getNhv());
         existing.setStatus(carburant.getStatus());
+        existing.setCommentaire(carburant.getCommentaire());
+        existing.setTypeCarbone(carburant.getTypeCarbone());
+
+
+
 
         return repository.save(existing);
     }

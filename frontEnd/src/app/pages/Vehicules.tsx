@@ -323,7 +323,7 @@ export function Vehicules() {
                 </option>
               ))}
             </select>
-          )}        
+          )}
 
           {/* Filtre localisation */}
           <select
@@ -376,7 +376,7 @@ export function Vehicules() {
             <tbody>
               {filteredVehicles.map((v) => {
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
                     motorisationStyles[v.motorisation] ||
                     "bg-card-100 text-muted-foreground-700"
                   }`}
@@ -412,7 +412,6 @@ export function Vehicules() {
                       {v.marque}
                     </td>
 
-          
                     {/* Localisation */}
                     <td className="px-6 py-4 text-muted-foreground-800">
                       {v.localisation}
@@ -502,7 +501,7 @@ export function Vehicules() {
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border-border rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
               Non
             </button>
@@ -523,7 +522,7 @@ export function Vehicules() {
       </Dialog>
       {/* MODAL D'AJOUT (CAHIER DES CHARGES COMPLET) */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold text-foreground">
               <div className="flex justify-between items-center p-2 border-b bg-card border-b border-border">
@@ -533,10 +532,13 @@ export function Vehicules() {
               </div>
             </DialogTitle>
           </DialogHeader>
+            <div className="flex-1 overflow-y-auto px-4 bg-card min-h-[70vh]">
+
           <form className="space-y-6 mt-2" onSubmit={handleSubmit}>
+
             {" "}
             {/* SECTION IDENTIFICATION */}
-            <p className="text-xs text-muted-foreground-500"></p>
+            <p className="text-sm text-muted-foreground-500"></p>
             <div>
               <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
                 Identification du véhicule
@@ -577,7 +579,7 @@ export function Vehicules() {
                   },
                 ].map((field) => (
                   <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-muted-foreground-500">
+                    <label className="text-sm font-medium text-muted-foreground-500">
                       {field.label}
                       {field.required && (
                         <span className="text-red-500 ml-1">*</span>
@@ -603,7 +605,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                 {/* Client */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground-500">
+                  <label className="text-sm font-medium text-muted-foreground-500">
                     Client <span className="text-red-500 ml-1">*</span>
                   </label>
                   <select
@@ -628,7 +630,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                 {/* Localisation */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground">
+                  <label className="text-sm font-medium text-muted-foreground">
                     Localisation
                     <span className="text-red-500 ml-1">*</span>
                   </label>
@@ -661,7 +663,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground-500">
+                  <label className="text-sm font-medium text-muted-foreground-500">
                     Type moteur
                     <span className="text-red-500 ml-1">*</span>
                   </label>
@@ -687,7 +689,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs font-medium text-muted-foreground-500">
+                  <label className="text-sm font-medium text-muted-foreground-500">
                     Carburant
                     <span className="text-red-500 ml-1">*</span>
                   </label>
@@ -725,7 +727,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   },
                 ].map((field) => (
                   <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-muted-foreground-500">
+                    <label className="text-sm font-medium text-muted-foreground-500">
                       {field.label}
                       {field.required && (
                         <span className="text-red-500 ml-1">*</span>
@@ -779,10 +781,9 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     key: "architectureElectrique",
                     required: false,
                   },
-                  
                 ].map((field) => (
                   <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-xs text-muted-foreground-500">
+                    <label className="text-sm text-muted-foreground-500">
                       {field.label}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -799,9 +800,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         disabled={modalMode === "view"}
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
  focus:outline-none focus:ring-2 focus:ring-ring transition"
-                      >
-                        
-                      </select>
+                      ></select>
                     ) : (
                       <input
                         name={field.key}
@@ -824,7 +823,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               </div>
             </div>
             <div className="mt-5 flex flex-col gap-1 w-full">
-              <label className="text-xs font-medium text-muted-foreground-500">
+              <label className="text-sm font-medium text-muted-foreground-500">
                 Commentaire
               </label>
 
@@ -862,9 +861,12 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 </button>
               </div>
             )}
+            
           </form>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
+    
   );
 }

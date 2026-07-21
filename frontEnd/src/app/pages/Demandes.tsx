@@ -675,14 +675,14 @@ export function Demandes() {
           href={getFileUrl(filePath) ?? "#"}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 w-full text-xs border border-green-200 bg-green-50 text-green-700 p-2 rounded-lg hover:bg-green-100 transition text-left"
+          className="flex items-center gap-2 w-full text-sm border border-green-200 bg-green-50 text-green-700 p-2 rounded-lg hover:bg-green-100 transition text-left"
         >
           <span>📎</span>
           <span className="truncate flex-1">{fileName}</span>
           <span className="text-[10px] shrink-0 underline">👁 Voir</span>
         </a>
       ) : (
-        <div className="w-full text-xs border border-dashed border-border text-muted-foreground p-2 rounded-lg">
+        <div className="w-full text-sm border border-dashed border-border text-muted-foreground p-2 rounded-lg">
           Aucun fichier
         </div>
       )}
@@ -1501,10 +1501,11 @@ export function Demandes() {
               <DialogHeader>
                 <DialogTitle>Confirmation de suppression</DialogTitle>
               </DialogHeader>
-              <p className="py-4 text-muted-foreground-700">
-                Voulez-vous vraiment supprimer le véhicule{" "}
+              <p className="py-4 text-muted-foreground-700 break-words">
+                Voulez-vous vraiment supprimer cet demmande d'essai{" "}
                 <span className="font-bold">{selectedDemande?.nomAuto}</span> ?
               </p>
+
               <div className="flex justify-end gap-4 mt-4">
                 <button
                   onClick={() => setShowConfirmDelete(false)}
@@ -1637,7 +1638,7 @@ export function Demandes() {
 
       {showModal && (
         <div className="fixed inset-0 bg-foreground/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[850px] max-h-[95vh] overflow-hidden rounded-xl flex flex-col shadow-2xl">
+          <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             <div className="flex justify-between items-center p-6 border-b bg-card">
               <h2 className="text-xl font-bold text-foreground">
                 {modalMode === "view"
@@ -1654,7 +1655,7 @@ export function Demandes() {
             </div>
 
             {/* Onglets */}
-            <div className="flex border-b bg-card sticky top-0 z-10">
+            <div className="flex w-full border-b bg-card sticky top-0 z-10">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -1665,10 +1666,10 @@ export function Demandes() {
 
                     setActiveTab(tab.id);
                   }}
-                  className={`px-6 py-3 font-semibold text-sm transition ${
+                  className={`flex-1 py-3 font-semibold text-base text-center transition ${
                     activeTab === tab.id
                       ? "border-b-4 border-[#E30613]/50 text-foreground"
-                      : "text-muted-foreground-500 "
+                      : "text-muted-foreground-500"
                   }`}
                 >
                   {tab.label}
@@ -1684,12 +1685,12 @@ export function Demandes() {
               <form
                 id="demandeForm"
                 onSubmit={handleSubmit}
-                className="space-y-6 animate-in fade-in pb-6"
+                className="space-y-6 animate-in fade-in pb-6 px-6"
               >
                 {activeTab === "general" && (
                   <div className="space-y-8 animate-in fade-in pb-6">
                     {" "}
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-2 gap-6 gap-x-18">
                       {/* Véhicule */}
 
                       <div className="space-y-2">
@@ -1703,7 +1704,7 @@ export function Demandes() {
                           value={form.vehiculeId ?? ""}
                           required
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner un véhicule</option>
                           {vehicules.map((v) => (
@@ -1728,7 +1729,7 @@ export function Demandes() {
                           value={form.cycleId ?? ""}
                           required
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner un cycle</option>
                           {cycles.map((c) => (
@@ -1751,7 +1752,7 @@ export function Demandes() {
                           required
                           disabled={isView}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner un calage</option>
                           {calages.map((c) => (
@@ -1774,7 +1775,7 @@ export function Demandes() {
                           required
                           disabled={isView}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner une loi</option>
                           {loisRoute.map((l) => (
@@ -1796,7 +1797,7 @@ export function Demandes() {
                           disabled={isView}
                           value={form.nomAuto}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           readOnly
                         />
                       </div>
@@ -1813,7 +1814,7 @@ export function Demandes() {
                           disabled={isView}
                           value={form.statutDemande}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Sélectionner statut</option>
                           <option value={StatutDemande.En_cours}>
@@ -1839,7 +1840,7 @@ export function Demandes() {
                           disabled={isView}
                           onChange={handleChange}
                           placeholder="Entrer le nom du demandeur"
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         />
                       </div>
 
@@ -1855,7 +1856,7 @@ export function Demandes() {
                           required
                           onChange={handleChange}
                           disabled={modalMode === "view"}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="" disabled>
                             Sélectionner un client
@@ -1879,7 +1880,7 @@ export function Demandes() {
                           disabled={isView}
                           value={form.technicienId ?? ""}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="">Choisir technicien</option>
 
@@ -1891,7 +1892,7 @@ export function Demandes() {
                         </select>
                       </div>
                       <div className="flex flex-col gap-1">
-                        <label className="text-xs font-medium text-muted-foreground">
+                        <label className="text-sm font-medium text-muted-foreground">
                           N° Projet <span className="text-red-500">*</span>
                         </label>
 
@@ -1901,7 +1902,7 @@ export function Demandes() {
                           disabled={isView}
                           value={form.numeroProjet ?? ""}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           required
                         />
                       </div>
@@ -1918,7 +1919,7 @@ export function Demandes() {
                           value={form.banc}
                           disabled={isView}
                           onChange={handleChange}
-                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
                           <option value="BANC_1">BANC_1</option>
                         </select>
@@ -1933,7 +1934,7 @@ export function Demandes() {
                         Planification
                         <span className="text-red-500 ml-1">*</span>
                       </h3>
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-2 gap-6 gap-x-18">
                         <div className="space-y-2">
                           <label className="text-sm font-bold text-muted-foreground-700">
                             Date de l'essai
@@ -1946,7 +1947,7 @@ export function Demandes() {
                             name="datePlanification"
                             value={form.datePlanification}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           />
                         </div>
                         <div className="space-y-2">
@@ -1960,7 +1961,7 @@ export function Demandes() {
                             value={form.shift}
                             required
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           >
                             <option value="">Sélectionner</option>
                             <option value="MATIN">MATIN</option>
@@ -1978,7 +1979,7 @@ export function Demandes() {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {/* Macération */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs cursor-pointer">
+                          <label className="flex items-center gap-2 font-bold text-sm cursor-pointer">
                             <input
                               type="checkbox"
                               name="besoinMaceration"
@@ -1992,7 +1993,7 @@ export function Demandes() {
                           {form.besoinMaceration && (
                             <div className="space-y-3 pl-3 animate-in zoom-in-95">
                               <div>
-                                <label className="text-xs text-muted-foreground-600">
+                                <label className="text-sm text-muted-foreground-600">
                                   Température macération (°C)
                                 </label>
                                 <input
@@ -2001,7 +2002,7 @@ export function Demandes() {
                                   disabled={isView}
                                   value={form.temperatureMaceration}
                                   onChange={handleChange}
-                                  className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                                  className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                                   placeholder="Ex: 23"
                                 />
                               </div>
@@ -2011,7 +2012,7 @@ export function Demandes() {
 
                         {/* Température eau */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs">
+                          <label className="flex items-center gap-2 font-bold text-sm">
                             Température d'eau (°C)
                           </label>
                           <input
@@ -2020,9 +2021,9 @@ export function Demandes() {
                             disabled={isView}
                             value={form.temperatureEau}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           />
-                          <label className="flex items-center gap-2 font-bold text-xs  mt-2">
+                          <label className="flex items-center gap-2 font-bold text-sm mt-2">
                             Pression ambiante (mbar, hpa)
                           </label>
                           <input
@@ -2031,13 +2032,13 @@ export function Demandes() {
                             disabled={isView}
                             value={form.pressionAmbiante}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           />
                         </div>
 
                         {/* Température et Hygrométrie */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs ">
+                          <label className="flex items-center gap-2 font-bold text-sm ">
                             Température ambiante (°C)
                           </label>
                           <input
@@ -2046,10 +2047,10 @@ export function Demandes() {
                             disabled={isView}
                             value={form.temperatureEssai}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                             placeholder="Ex: 23"
                           />
-                          <label className="flex items-center gap-2 font-bold text-xs mt-2">
+                          <label className="flex items-center gap-2 font-bold text-sm mt-2">
                             Hygrométrie (%)
                           </label>
                           <input
@@ -2058,14 +2059,14 @@ export function Demandes() {
                             disabled={isView}
                             value={form.hygrometrieEssai}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                             placeholder="Ex: 50"
                           />
                         </div>
 
                         {/* STT */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs cursor-pointer text-foreground-700">
+                          <label className="flex items-center gap-2 font-bold text-sm cursor-pointer text-foreground-700">
                             <input
                               type="checkbox"
                               name="activationSTT"
@@ -2080,7 +2081,7 @@ export function Demandes() {
 
                         {/* Gestion batterie 12V */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs">
+                          <label className="flex items-center gap-2 font-bold text-sm">
                             Gestion batterie 12V
                             <span className="text-red-500 ml-1">*</span>
                           </label>
@@ -2090,7 +2091,7 @@ export function Demandes() {
                             disabled={isView}
                             value={form.gestionBatterie12V ?? ""}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           >
                             <option value="">Sélectionner</option>
                             <option value="CHARGEMENT_BATTERIE">
@@ -2099,7 +2100,7 @@ export function Demandes() {
                             <option value="BBN">BBN</option>
                           </select>
 
-                          <label className="flex items-center gap-2 font-bold text-xs mt-2">
+                          <label className="flex items-center gap-2 font-bold text-sm mt-2">
                             SOC départ 12V (%)
                           </label>
                           <input
@@ -2108,14 +2109,14 @@ export function Demandes() {
                             disabled={isView}
                             value={form.socDepart12V}
                             onChange={handleChange}
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                             placeholder="Ex: 80"
                           />
                         </div>
 
                         {/* Climatisation */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs cursor-pointer">
+                          <label className="flex items-center gap-2 font-bold text-sm cursor-pointer">
                             <input
                               type="checkbox"
                               name="activationClim"
@@ -2129,7 +2130,7 @@ export function Demandes() {
 
                           {form.activationClim && (
                             <div className="mt-2">
-                              <label className="text-xs text-muted-foreground-600">
+                              <label className="text-sm text-muted-foreground-600">
                                 Température régulation (°C)
                               </label>
                               <input
@@ -2138,7 +2139,7 @@ export function Demandes() {
                                 disabled={isView}
                                 value={form.temperatureRegulationClim ?? ""}
                                 onChange={handleChange}
-                                className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                                className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                                 placeholder="Ex: 80"
                               />
                             </div>
@@ -2147,7 +2148,7 @@ export function Demandes() {
 
                         {/* Chauffage habitacle */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs cursor-pointer">
+                          <label className="flex items-center gap-2 font-bold text-sm cursor-pointer">
                             <input
                               type="checkbox"
                               name="chauffageHabitable"
@@ -2162,7 +2163,7 @@ export function Demandes() {
 
                         {/* Type d'essai */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-xs">
+                          <label className="flex items-center gap-2 font-bold text-sm">
                             Type d'essai
                             <span className="text-red-500 ml-1">*</span>
                           </label>
@@ -2177,7 +2178,7 @@ export function Demandes() {
                                 typeEssai: e.target.value || undefined,
                               })
                             }
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           >
                             <option value="">Sélectionner</option>
 
@@ -2191,7 +2192,7 @@ export function Demandes() {
 
                         {/* Vérification Coast Down */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm col-span-1">
-                          <label className="flex items-center gap-2 font-bold text-xs cursor-pointer">
+                          <label className="flex items-center gap-2 font-bold text-sm cursor-pointer">
                             <input
                               type="checkbox"
                               name="verificationCoastDown"
@@ -2204,7 +2205,7 @@ export function Demandes() {
                           </label>
                           {form.verificationCoastDown && (
                             <div className="">
-                              <label className="text-xs text-muted-foreground-600">
+                              <label className="text-sm text-muted-foreground-600">
                                 Nombre de décélérations
                               </label>
                               <input
@@ -2213,7 +2214,7 @@ export function Demandes() {
                                 disabled={isView}
                                 value={form.nombreDecelerations ?? ""}
                                 onChange={handleChange}
-                                className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                                className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                                 placeholder="Ex: 3"
                               />
                             </div>
@@ -2225,7 +2226,7 @@ export function Demandes() {
                     <section className="mt-6">
                       <label className="block text-sm font-bold text-muted-foreground-700 mb-2">
                         Commentaire{" "}
-                        <span className="text-xs font-normal text-muted-foreground-500">
+                        <span className="text-sm font-normal text-muted-foreground-500">
                           (Optionnel)
                         </span>
                       </label>
@@ -2252,7 +2253,7 @@ export function Demandes() {
                       </h3>
                       <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-muted-foreground-500">
+                          <label className="text-sm font-bold text-muted-foreground-500">
                             Capot
                             <span className="text-red-500 ml-1">*</span>
                           </label>
@@ -2270,7 +2271,7 @@ export function Demandes() {
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-muted-foreground-500">
+                          <label className="text-sm font-bold text-muted-foreground-500">
                             Soufflante
                             <span className="text-red-500 ml-1">*</span>
                           </label>
@@ -2297,7 +2298,7 @@ export function Demandes() {
 
                         {/* Q_CVS */}
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-muted-foreground-500">
+                          <label className="text-sm font-bold text-muted-foreground-500">
                             Q_CVS
                           </label>
                           <input
@@ -2326,7 +2327,7 @@ export function Demandes() {
                               })
                             }
                           />
-                          <label className="text-xs font-bold text-muted-foreground-500">
+                          <label className="text-sm font-bold text-muted-foreground-500">
                             Carflow
                           </label>
                         </div>
@@ -2341,7 +2342,7 @@ export function Demandes() {
                       {/* Section 1 : Configuration CVS & Sacs */}
                       <section>
                         <div>
-                          <h4 className="text-xs font-foreground text-foreground uppercase mb-4 flex items-center gap-2">
+                          <h4 className="text-sm font-foreground text-foreground uppercase mb-4 flex items-center gap-2">
                             <Settings size={14} /> Configuration CVS & Phases
                           </h4>
 
@@ -2398,7 +2399,7 @@ export function Demandes() {
                                         onChange={handleChange}
                                         disabled={isView}
                                         placeholder="0.0"
-                                        className="w-full border-2 border-border bg-background text-foreground p-2 rounded-lg text-xs outline-none focus:ring-2 focus:ring-ring transition"
+                                        className="w-full border-2 border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       />
 
                                       <span className="absolute right-2 top-2 text-[9px] text-muted-foreground-400 font-bold">
@@ -2415,7 +2416,7 @@ export function Demandes() {
 
                       {/* Section 2 : Particules (PM & PN) */}
                       <section className="space-y-6">
-                        <h4 className="text-xs font-black text-foreground uppercase mb-4 flex items-center gap-2">
+                        <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
                           <Activity size={14} /> Mesures Particulaires (PN/PM)
                         </h4>
 
@@ -2566,12 +2567,12 @@ export function Demandes() {
                         Caractéristiques du véhicule
                       </h3>
                       {!vehiculeDetails ? (
-                        <p className="text-xs text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
+                        <p className="text-sm text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
                           Sélectionnez un véhicule dans l'onglet "Informations
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-18">
                           {[
                             {
                               label: "Nom du véhicule",
@@ -2594,7 +2595,7 @@ export function Demandes() {
                             },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
-                              <label className="text-xs font-bold text-muted-foreground-600 uppercase">
+                              <label className="text-sm font-bold text-muted-foreground-600 uppercase">
                                 {f.label}
                               </label>
                               <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2614,7 +2615,7 @@ export function Demandes() {
                         Caractéristiques de la loi de route
                       </h3>
                       {!loiDetails ? (
-                        <p className="text-xs text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
+                        <p className="text-sm text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
                           Sélectionnez une loi de route dans l'onglet
                           "Informations générales".
                         </p>
@@ -2655,7 +2656,7 @@ export function Demandes() {
                         Caractéristiques du calage
                       </h3>
                       {!calageDetails ? (
-                        <p className="text-xs text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
+                        <p className="text-sm text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
                           Sélectionnez un calage dans l'onglet "Informations
                           générales".
                         </p>
@@ -2663,7 +2664,7 @@ export function Demandes() {
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {/* Ligne complète */}
                           <div className="col-span-2">
-                            <label className="text-xs text-muted-foreground-600">
+                            <label className="text-sm text-muted-foreground-600">
                               Nom du calage
                             </label>
                             <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2708,7 +2709,7 @@ export function Demandes() {
                         Caractéristiques du cycle
                       </h3>
                       {!cycleDetails ? (
-                        <p className="text-xs text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
+                        <p className="text-sm text-muted-foreground-400 italic p-4 border border-dashed rounded-lg">
                           Sélectionnez un cycle dans l'onglet "Informations
                           générales".
                         </p>
@@ -2747,11 +2748,11 @@ export function Demandes() {
                       Configuration des gaz Bruts
                     </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pl-4   ">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-26 pl-4   ">
                       {/* SECTION 1 : Lignes Standard (L1, L2, L3) */}
                       <section className="space-y-6">
                         <div>
-                          <h4 className="text-xs font-black text-foreground uppercase mb-4 flex items-center gap-2">
+                          <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
                             <Settings size={14} /> Lignes de Prélèvement
                             Standard
                           </h4>
@@ -2888,7 +2889,7 @@ export function Demandes() {
                       {/* SECTION 2 : Lignes Spéciales (QCL & PN) */}
                       <section className="space-y-6">
                         <div>
-                          <h4 className="text-xs font-black text-foreground uppercase mb-4 flex items-center gap-2">
+                          <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
                             <Activity size={14} /> Lignes FTIR
                           </h4>
                           <div className="grid grid-cols-1 gap-4">
@@ -2982,7 +2983,7 @@ export function Demandes() {
                                 disabled={isView}
                                 className="w-4 h-4 accent-red-600"
                               />
-                              <span className="text-xs font-bold text-muted-foreground-500 uppercase">
+                              <span className="text-sm font-bold text-muted-foreground-500 uppercase">
                                 Mesure EGR
                               </span>
                             </div>
@@ -3045,7 +3046,7 @@ export function Demandes() {
                                   onChange={(e) =>
                                     handleFileChange(e, "software1")
                                   }
-                                  className="w-full text-xs border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
+                                  className="w-full text-sm border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
                                 />
                               )}
                             </div>
@@ -3075,7 +3076,7 @@ export function Demandes() {
                                   onChange={(e) =>
                                     handleFileChange(e, "calibration1")
                                   }
-                                  className="w-full text-xs border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
+                                  className="w-full text-sm border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
                                 />
                               )}
                             </div>
@@ -3105,7 +3106,7 @@ export function Demandes() {
                                   onChange={(e) =>
                                     handleFileChange(e, "experiment1")
                                   }
-                                  className="w-full text-xs border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
+                                  className="w-full text-sm border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
                                 />
                               )}
                             </div>
@@ -3153,7 +3154,7 @@ export function Demandes() {
                             </div>
 
                             {!!form[xcuKey] && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-8 animate-in slide-in-from-left-2">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-8 animate-in slide-in-from-left-2 gap-x-22">
                                 {/* Software N */}
                                 <div className="space-y-1">
                                   <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">
@@ -3181,7 +3182,7 @@ export function Demandes() {
                                       onChange={(e) =>
                                         handleFileChange(e, softwareKey)
                                       }
-                                      className="w-full text-xs border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
+                                      className="w-full text-sm border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
                                     />
                                   )}
                                 </div>
@@ -3213,7 +3214,7 @@ export function Demandes() {
                                       onChange={(e) =>
                                         handleFileChange(e, calibKey)
                                       }
-                                      className="w-full text-xs border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
+                                      className="w-full text-sm border border-border bg-background text-foreground p-2 rounded-lg outline-none focus:ring-2 focus:ring-ring transition"
                                     />
                                   )}
                                 </div>
@@ -3268,7 +3269,7 @@ export function Demandes() {
                 )}
                 {/* 5ème Onglet Mesures auxiliaires */}
                 {activeTab === "mesuresAux" && (
-                  <div className="space-y-8 animate-in fade-in text-xs">
+                  <div className="space-y-8 animate-in fade-in text-sm">
                     {/* Section 1 : Sélection des mesures */}
                     <section className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
                       {mesureItems.map(
@@ -3284,7 +3285,7 @@ export function Demandes() {
            : "bg-card-50 border-border"
        }`}
                           >
-                            <span className="text-xs font-bold text-muted-foreground-700 uppercase">
+                            <span className="text-sm font-bold text-muted-foreground-700 uppercase">
                               {item.label}
                             </span>
                             <input
@@ -3316,7 +3317,7 @@ export function Demandes() {
                               >
                                 {/* Header */}
                                 <div className="flex justify-between items-center mb-4">
-                                  <span className="text-xs font-bold text-foreground uppercase">
+                                  <span className="text-sm font-bold text-foreground uppercase">
                                     {item.label}
                                   </span>
                                   {!isView && (
@@ -3324,7 +3325,7 @@ export function Demandes() {
                                       type="button"
                                       disabled={isView}
                                       onClick={() => addRow(item.id)}
-                                      className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+                                      className="px-2 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                                     >
                                       + Ajouter
                                     </button>
@@ -3362,7 +3363,7 @@ export function Demandes() {
                                         }
                                         placeholder="Ex: idx-01"
                                         disabled={isView}
-                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-xs outline-none focus:ring-2 focus:ring-ring transition"
+                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       />
                                     </div>
 
@@ -3384,7 +3385,7 @@ export function Demandes() {
                                           )
                                         }
                                         placeholder="Ex: 102"
-                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-xs outline-none focus:ring-2 focus:ring-ring transition"
+                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       />
                                     </div>
 
@@ -3403,7 +3404,7 @@ export function Demandes() {
                                             e.target.value,
                                           )
                                         }
-                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-xs outline-none focus:ring-2 focus:ring-ring transition"
+                                        className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       >
                                         <option value="">
                                           Sélectionner...
@@ -3449,7 +3450,7 @@ export function Demandes() {
                           !form.thermocouples &&
                           !form.sondeLambdaLA4 && (
                             <div className="text-center py-10 border-2 border-dashed border-border rounded-xl">
-                              <p className="text-xs text-muted-foreground-400 font-medium">
+                              <p className="text-sm text-muted-foreground-400 font-medium">
                                 Cochez une mesure pour configurer ses détails.
                               </p>
                             </div>

@@ -43,7 +43,7 @@ interface cycle {
 const familleColors: { [key: string]: string } = {
   CONCEPTION_SPECIFIQUE: "bg-[#E3F2FD] text-[#1565C0]",
   RDE: "bg-[#E8F5E9] text-[#2E7D32]",
-CYCLE_NORMEE: "bg-[#FFF3E0] text-[#EF6C00]",
+  CYCLE_NORMEE: "bg-[#FFF3E0] text-[#EF6C00]",
 };
 
 export function Cycles() {
@@ -606,7 +606,7 @@ export function Cycles() {
       {/* MODAL OPTIMISÉ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-card w-full max-w-[750px] max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+          <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
               <h2 className="text-xl font-semibold text-muted-foreground-800">
@@ -623,16 +623,16 @@ export function Cycles() {
               </button>
             </div>
             {/* BODY */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="py-6 space-y-6 px-8">
               {/* Section 1: Identification */}
               <section>
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-1">
                   Identification
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Nom du cycle
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -648,12 +648,12 @@ export function Cycles() {
                         })
                       }
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
+        focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5 ">
-                    <label className="text-xs font-medium text-muted-foreground-530">
+                    <label className="text-sm font-medium text-muted-foreground-530">
                       Client <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -669,7 +669,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       }}
                       disabled={modalMode === "view"}
                       required
-                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground"
+                      className="h-11 px-4 rounded-lg border border-border bg-background text-foreground"
                     >
                       <option value="">Sélectionner un client</option>
 
@@ -682,7 +682,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Famille
                       <span className="text-red-500 ml-1">*</span>
                     </label>
@@ -712,16 +712,16 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               </section>
 
               {/* Section: Caractéristiques */}
+
               <section>
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-1">
                   Caractéristiques
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Durée */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
-                      Durée(s) <span className="text-red-500 ml-1">*</span>
+                    <label className="text-sm font-medium text-muted-foreground-900">
+                      Durée (s) <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="number"
@@ -731,14 +731,14 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       onChange={(e) =>
                         setForm({ ...form, duree: e.target.value })
                       }
-                      className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
+                      className="h-11 px-8 rounded-lg border border-border bg-background text-foreground
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
                   {/* Nombre de phases */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Nombre Phase <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -756,7 +756,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   {/* Nombre de stabilités */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-muted-foreground-900">
+                    <label className="text-sm font-medium text-muted-foreground-900">
                       Nombre stabilités
                     </label>
                     <input
@@ -767,11 +767,11 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         setForm({ ...form, nombreStabilite: e.target.value })
                       }
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
-        focus:outline-none focus:ring-2 focus:ring-ring transition"
+    focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
                   <div className="md:col-span-4">
-                    <h4 className="text-xs font-medium text-muted-foreground-900 mb-2">
+                    <h4 className="text-sm font-medium text-muted-foreground-900 mb-2">
                       Données de trace{" "}
                       <span className="text-red-500 ml-1">*</span>
                     </h4>
@@ -794,13 +794,13 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       <>
                         <div
                           className={`border border-dashed rounded-lg min-h-24 flex flex-col items-center justify-center cursor-pointer transition-all
-        ${
-          fileError
-            ? "border-red-500 bg-red-50"
-            : traceFile
-              ? "border-emerald-400 bg-emerald-50/30"
-              : "border-border hover:border-border hover:bg-gray-50"
-        }`}
+  ${
+    fileError
+      ? "border-red-500 bg-red-50 dark:bg-red-950/30"
+      : traceFile
+        ? "border-emerald-400 bg-emerald-50/30 dark:bg-emerald-950/30"
+        : "border-border "
+  }`}
                         >
                           <input
                             type="file"
@@ -832,8 +832,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                                 <div className="w-10 h-10 flex items-center justify-center rounded-lg border border-border bg-background">
                                   <Upload className="w-4 h-4" />
                                 </div>
-                                <span className="text-muted-foreground text-xs font-medium text-center mt-2">
-                                  Téléverser un fichier
+                                <span className="text-muted-foreground text-sm font-medium text-center mt-2">
+                                  Importer un fichier (.xls, .xlsx, .csv){" "}
                                 </span>
                               </>
                             )}
@@ -842,7 +842,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                         {/* ✅ MESSAGE ERREUR ICI (PAS DANS LE LABEL) */}
                         {fileError && !traceFile && (
-                          <p className="text-red-500 text-xs mt-2 font-medium">
+                          <p className="text-red-500 text-sm mt-2 font-medium">
                             ⚠️ Veuillez téléverser un fichier de trace
                           </p>
                         )}

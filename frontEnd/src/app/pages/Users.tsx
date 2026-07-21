@@ -499,7 +499,7 @@ export function Users() {
             </span>{" "}
             ?
           </p>
-          <div className="flex justify-end gap-4 mt-4">
+          <div className="flex justify-end gap-4 mt-2">
             <button
               onClick={() => setShowConfirmDelete(false)}
               className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
@@ -524,7 +524,7 @@ export function Users() {
       {/* Modal d'ajout */}
       {/* ================= USER FORM MODAL ================= */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-[400px] max-h-[95vh] bg-card text-foreground border border-border">
+        <DialogContent className="bg-card w-[90vw] h-[90vh] px-10 py-6 overflow-hidden rounded-2xl shadow-2xl flex flex-col">
           {" "}
           {/* HEADER */}
           <DialogHeader>
@@ -536,9 +536,13 @@ export function Users() {
             </DialogTitle>
           </DialogHeader>
           {/* FORMULAIRE UNIQUE */}
-          <form onSubmit={handleSubmit} className="space-y-2 mt-6">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 mx-auto w-full max-w-8xl space-y-6"
+          >
+            {" "}
             {/* GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
               {/* PRENOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
@@ -573,47 +577,46 @@ export function Users() {
                 />
               </div>
             </div>
-
-            {/* EMAIL */}
-            <div className="flex flex-col gap-1.5">
-              <label>
-                Email <span className="text-red-500 ml-1">*</span>
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                disabled={modalMode === "view"}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-      focus:outline-none focus:ring-2 focus:ring-ring transition"
-                required
-              />
-            </div>
-
-            {/* TELEPHONE */}
-            <div className="flex flex-col gap-1.5">
-              <label>
-                Téléphone <span className="text-red-500 ml-1">*</span>
-              </label>
-
-              <div className="flex gap-2">
-                <PhoneInput
-                  country={"ma"}
+            <div className="grid grid-cols-2 gap-12">
+              {/* EMAIL */}
+              <div className="flex flex-col gap-1.5 ">
+                <label className="text-sm font-medium">
+                  Email <span className="text-red-500 ml-1">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  required
                   disabled={modalMode === "view"}
-                  value={formData.numeroTelephone}
-                  onChange={(phone) =>
-                    setFormData({ ...formData, numeroTelephone: "+" + phone })
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
                   }
-                  inputClass="!w-full !h-11 !pl-12 !rounded-lg !border !border-border !bg-background"
-                  containerClass="w-full"
+                  className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+      focus:outline-none focus:ring-2 focus:ring-ring transition"
                 />
               </div>
-            </div>
+              {/* TELEPHONE */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">
+                  Téléphone <span className="text-red-500 ml-1">*</span>
+                </label>
 
+                <div className="flex gap-6">
+                  <PhoneInput
+                    country={"ma"}
+                    disabled={modalMode === "view"}
+                    value={formData.numeroTelephone}
+                    onChange={(phone) =>
+                      setFormData({ ...formData, numeroTelephone: "+" + phone })
+                    }
+                    inputClass="!w-full !h-11 !pl-14 !rounded-lg !border !border-border !bg-background"
+                    containerClass="w-full"
+                  />
+                </div>
+              </div>
+            </div>
             {/* ROLE + CLIENT */}
-            <div className="flex gap-4">
+            <div className="flex gap-12 mt-4">
               {/* ROLE */}
               <div className="flex flex-col gap-1.5 w-full">
                 <label className="text-sm font-medium">
@@ -623,6 +626,7 @@ export function Users() {
                 <select
                   value={formData.role}
                   disabled={modalMode === "view"}
+                  required
                   onChange={(e) => {
                     const role = e.target.value as Role;
                     const isInternal = INTERNAL_ROLES.includes(role);
@@ -642,7 +646,6 @@ export function Users() {
                   }}
                   className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
       focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  required
                 >
                   <option value="">Choisir un rôle</option>
                   {roles.map((r) => (
@@ -688,29 +691,30 @@ export function Users() {
             </div>
             {/* PASSWORD */}
             {modalMode === "add" && (
-              <div className="flex flex-col gap-1.5">
-                <label>
-                  Mot de passe <span className="text-red-500 ml-1">*</span>
-                </label>
-                <input
-                  type="password"
-                  value={formData.motDePasse}
-                  onChange={(e) =>
-                    setFormData({ ...formData, motDePasse: e.target.value })
-                  }
-                  className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+              <div className="grid grid-cols-2 gap-12 mt-4">
+                <div className="flex flex-col gap-1.5 ">
+                  <label className="text-sm font-medium">
+                    Mot de passe <span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={formData.motDePasse}
+                    onChange={(e) =>
+                      setFormData({ ...formData, motDePasse: e.target.value })
+                    }
+                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
       focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  required
-                />
+                    required
+                  />
+                </div>
               </div>
             )}
-
             {/* ACTIONS */}
-            <div className="flex justify-end gap-32 pt-4">
+            <div className="flex justify-end gap-6 pt-4">
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 border rounded-lg"
+                className="px-8 py-3 border rounded-lg"
               >
                 Annuler
               </button>
@@ -718,7 +722,7 @@ export function Users() {
               {modalMode !== "view" && (
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-red-600 text-white rounded-lg"
+                  className="px-8 py-3 bg-red-600 text-white rounded-lg"
                 >
                   Enregistrer
                 </button>
