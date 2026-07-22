@@ -81,25 +81,42 @@ export function Reporting() {
 
   const handleExport = async () => {
     if (isSubmitting) return;
-    setIsSubmitting(true);
-    const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("demandeId", String(demandeId));
-    formData.append("clientId", String(clientId));
-    formData.append("dateCreation", dateCreation);
-    formData.append("chargeEssai", chargeEssai);
-    formData.append("commentaire", commentaire);
+    try {
+      setIsSubmitting(true);
 
-    if (file) {
-      formData.append("file", file);
+      const formData = new FormData();
+
+      formData.append("title", title);
+      formData.append("demandeId", String(demandeId));
+      formData.append("clientId", String(clientId));
+      formData.append("dateCreation", dateCreation);
+      formData.append("chargeEssai", chargeEssai);
+      formData.append("commentaire", commentaire);
+
+      if (file) {
+        formData.append("file", file);
+      }
+
+      await authFetch("/Rapport/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      toast.success("Rapport enregistré");
+
+      await fetchReports();
+
+      setModalOpen(false);
+      resetForm();
+    } catch (error) {
+      toast.error("Erreur lors de l'enregistrement");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    await authFetch("/Rapport/upload", {
-      method: "POST",
-      body: formData,
-    });
   };
+
   const handleUpdate = async () => {
     if (!selectedReport) return;
 
@@ -264,18 +281,6 @@ export function Reporting() {
     fetchAllClients();
     fetchActiveClients();
     fetchReports();
-  }, []);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await authFetch("/users/me");
-        setRole(user.role);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchUser();
   }, []);
 
   useEffect(() => {
@@ -555,7 +560,7 @@ export function Reporting() {
                 </button>
               </div>
               {/* BODY */}
-              <div className="overflow-y-auto px-6 py-6 space-y-6">
+              <div className="overflow-y-auto px-8 py-6 space-y-6">
                 {/* SECTION IDENTIFICATION */}
                 <section>
                   <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-4">
@@ -563,7 +568,7 @@ export function Reporting() {
                   </h3>
 
                   {/* GRID PRINCIPALE */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Titre */}
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
@@ -690,7 +695,7 @@ export function Reporting() {
 
                 {/* SECTION DESCRIPTION */}
                 <section>
-                  <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-3">
+                  <h3 className="text-sm font-medium text-muted-foreground-900 mb-3">
                     Commentaire
                   </h3>
 
@@ -707,7 +712,7 @@ export function Reporting() {
                 {/* SECTION FICHIER */}
 
                 {/* BOUTONS */}
-                <div className="flex justify-end gap-34 mt-10">
+                <div className="flex justify-end gap-3 mt-10">
                   <button
                     onClick={() => {
                       setModalOpen(false);

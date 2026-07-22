@@ -16,7 +16,7 @@ export enum Composition {
 }
 
 export enum FuelStatus {
-  Draft = "Draft",
+  Published = "Published",
 }
 
 /* ================= INTERFACES ================= */
@@ -72,10 +72,16 @@ const INITIAL_FORM_STATE: CarburantForm = {
   co2Content: "",
   ethanolContent: "",
   nhv: "",
-  status: FuelStatus.Draft,
+  status: FuelStatus.Published,
   commentaire: "",
 };
-
+const labels = {
+  carbonNumber: "Carbone",
+  hydrogenNumber: "Hydrogène",
+  oxygenNumber: "Oxygène",
+  nitrogenNumber: "Azote",
+  sulfurNumber: "Soufre",
+};
 /* ================= COMPONENT ================= */
 
 export function Carburants() {
@@ -333,10 +339,14 @@ export function Carburants() {
               <th className="px-5 py-4 text-white text-left">
                 Densité (kg/m³){" "}
               </th>
+              <th className="px-5 py-4 text-white text-left">
+                Température de référence (°C)
+              </th>
               <th className="px-5 py-4 text-white text-left">Composition</th>
-              <th className="px-5 py-4 text-white text-left">Carbon</th>
-              <th className="px-5 py-4 text-white text-left">H₂O</th>
-              <th className="px-5 py-4 text-white text-left">NHV</th>
+              <th className="px-5 py-4 text-white text-left">H₂O (%)</th>
+              <th className="px-5 py-4 text-white text-left">CO₂ (%)</th>
+              <th className="px-5 py-4 text-white text-left">Ethanol (%)</th>
+              <th className="px-5 py-4 text-white text-left">NHV (J/kg) </th>
               <th className="px-5 py-4 text-white text-left">Status</th>
               <th className="px-5 py-4 text-white text-center">Actions</th>
             </tr>
@@ -355,11 +365,21 @@ export function Carburants() {
               filteredCarburants.map((c) => (
                 <tr key={c.id} className="border-b hover:bg-[#E30613]/5">
                   <td className="px-5 py-4">{c.nom}</td>
-                  <td className="px-5 py-4">{c.density}</td>
-                  <td className="px-5 py-4">{c.composition}</td>
-                  <td className="px-5 py-4">{c.carbonNumber}</td>
-                  <td className="px-5 py-4">{c.h2oContent}</td>
-                  <td className="px-5 py-4">{c.nhv}</td>
+                  <td className="px-14 py-4">{c.density}</td>
+
+                  <td className="px-14 py-4">{c.referenceTemperature}</td>
+
+                  <td className="px-5 py-4">
+                    {" "}
+                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
+                      {c.composition}{" "}
+                    </span>
+                  </td>
+                  <td className="px-8 py-4">{c.h2oContent}</td>
+                  <td className="px-8 py-4">{c.co2Content}</td>
+                  <td className="px-10 py-4">{c.ethanolContent}</td>
+                  <td className="px-8 py-4">{c.nhv}</td>
+
                   <td className="px-5 py-4">
                     <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
                       {c.status}
@@ -422,14 +442,14 @@ export function Carburants() {
 
             <form
               onSubmit={handleSubmit}
-              className="p-6 space-y-8 overflow-y-auto max-h-[85vh]"
+              className="p-8 space-y-4 overflow-y-auto max-h-[85vh]"
             >
               {/* ================= PROPRIETES ================= */}
               <section>
-                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
+                <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-4">
                   Propriétés physiques
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Nom <span className="text-red-500">*</span>
@@ -447,7 +467,7 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Density (kg/m³)<span className="text-red-500">*</span>
+                      Densité (kg/m³)<span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -504,10 +524,10 @@ export function Carburants() {
 
               {/* ================= ATOMS ================= */}
               <section>
-                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
+                <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-2 mt-2">
                   Composition atomique
                 </h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {(
                     [
                       "carbonNumber",
@@ -519,7 +539,7 @@ export function Carburants() {
                   ).map((field) => (
                     <div key={field}>
                       <label className="block text-sm font-medium mb-1 capitalize">
-                        {field.replace("Number", "")}
+                        {labels[field]}
                       </label>
                       <input
                         type="number"
@@ -538,7 +558,7 @@ export function Carburants() {
 
               {/* ================= CONTENU ================= */}
               <section>
-                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
+                <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-4">
                   Contenu
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -574,9 +594,7 @@ export function Carburants() {
 
               {/* ================= STATUS ================= */}
               <section>
-                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
-                  État
-                </h3>
+                <h3 className="block text-sm font-medium mb-1">État</h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
@@ -600,9 +618,7 @@ export function Carburants() {
               </section>
               {/* ================= COMMENTAIRE ================= */}
               <section>
-                <h3 className="text-[#B9032C] font-semibold uppercase mb-4 text-sm tracking-wider">
-                  Commentaire
-                </h3>
+                <h3 className="block text-sm font-medium mb-1">Commentaire</h3>
 
                 <textarea
                   value={form.commentaire}
@@ -624,13 +640,13 @@ export function Carburants() {
                       setShowModal(false);
                       resetForm();
                     }}
-                    className="px-10 py-3 border rounded-lg  transition-colors"
+                    className="px-8 py-2 border rounded-lg  transition-colors"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
-                    className="px-10 py-3 bg-[#B9032C] text-white rounded-lg hover:brightness-110 transition-all"
+                    className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                   >
                     {modalMode === "edit" ? "Modifier" : "Enregistrer"}
                   </button>

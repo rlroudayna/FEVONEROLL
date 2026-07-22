@@ -621,7 +621,7 @@ export function Calages() {
       {/* Modal formulaire */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+          <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             {/* HEADER */}
             <div className="flex justify-between items-center py-3.5 px-6 border-b border-border bg-card">
               <h2 className="text-xl font-bold text-foreground">
@@ -658,12 +658,11 @@ export function Calages() {
             >
               {/* SECTION 1 : Identification */}
               <section>
-                <h3 className="font-semibold text-[#B9032C] uppercase text-sm tracking-wider mb-2">
+                <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider ">
                   Identification
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-20">
-
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 ">
                   {/* Nom du calage */}
                   <div className="flex flex-col gap-1.5 py-2">
                     <label className="text-sm font-medium text-muted-foreground-900">
@@ -763,7 +762,7 @@ export function Calages() {
                   Associations
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   {/* Véhicule */}
                   <div className="flex flex-col gap-1.5 ">
                     <label className="text-sm font-medium text-muted-foreground-900">
@@ -830,7 +829,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   Coefficients provisoires
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 gap-x-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 ">
                   <div className="flex flex-col gap-1.5 ">
                     <label className="text-sm font-medium text-muted-foreground-900">
                       A (N)
@@ -911,16 +910,16 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="px-5 py-2 border rounded-lg"
+                    className="px-8 py-2 border rounded-lg"
                   >
                     Annuler
                   </button>
 
                   <button
                     type="submit"
-                    className="px-10 py-3 bg-[#E30613] text-white rounded-lg"
+                    className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                   >
-                    {modalMode === "edit" ? "Modifier" : "Ajouter"}
+                    {modalMode === "edit" ? "Modifier" : "Enregistrer"}
                   </button>
                 </div>
               )}

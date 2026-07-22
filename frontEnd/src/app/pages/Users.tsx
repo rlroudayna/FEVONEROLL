@@ -542,7 +542,7 @@ export function Users() {
           >
             {" "}
             {/* GRID */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
               {/* PRENOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
@@ -576,9 +576,6 @@ export function Users() {
                   required
                 />
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-12">
-              {/* EMAIL */}
               <div className="flex flex-col gap-1.5 ">
                 <label className="text-sm font-medium">
                   Email <span className="text-red-500 ml-1">*</span>
@@ -595,6 +592,10 @@ export function Users() {
       focus:outline-none focus:ring-2 focus:ring-ring transition"
                 />
               </div>
+            </div>
+            <div className="grid grid-cols-3 gap-8">
+              {/* EMAIL */}
+              
               {/* TELEPHONE */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
@@ -614,9 +615,7 @@ export function Users() {
                   />
                 </div>
               </div>
-            </div>
-            {/* ROLE + CLIENT */}
-            <div className="flex gap-12 mt-4">
+               {/* ROLE + CLIENT */}
               {/* ROLE */}
               <div className="flex flex-col gap-1.5 w-full">
                 <label className="text-sm font-medium">
@@ -689,9 +688,10 @@ export function Users() {
                 </select>
               </div>
             </div>
+           
             {/* PASSWORD */}
             {modalMode === "add" && (
-              <div className="grid grid-cols-2 gap-12 mt-4">
+              <div className="grid grid-cols-3 gap-8 mt-4">
                 <div className="flex flex-col gap-1.5 ">
                   <label className="text-sm font-medium">
                     Mot de passe <span className="text-red-500 ml-1">*</span>
@@ -710,7 +710,7 @@ export function Users() {
               </div>
             )}
             {/* ACTIONS */}
-            <div className="flex justify-end gap-6 pt-4">
+            <div className="flex justify-end gap-3 pt-4">
               <button
                 type="button"
                 onClick={() => setShowModal(false)}

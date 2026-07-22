@@ -173,6 +173,7 @@ export function Demandes() {
     id: number;
     nom?: string;
     familleTest?: familleTest;
+    nombrePhase?: string;
   }
   interface MesureRow {
     id?: number;
@@ -195,6 +196,7 @@ export function Demandes() {
     id: number;
     nom?: string;
     temperature?: number;
+    modeConduite?: string;
   }
   interface MesureDTO {
     id?: number;
@@ -1685,12 +1687,12 @@ export function Demandes() {
               <form
                 id="demandeForm"
                 onSubmit={handleSubmit}
-                className="space-y-6 animate-in fade-in pb-6 px-6"
+                className="space-y-6 animate-in fade-in pb-6 px-4"
               >
                 {activeTab === "general" && (
                   <div className="space-y-8 animate-in fade-in pb-6">
                     {" "}
-                    <div className="grid grid-cols-2 gap-6 gap-x-18">
+                    <div className="grid grid-cols-3 gap-6">
                       {/* Véhicule */}
 
                       <div className="space-y-2">
@@ -1845,7 +1847,7 @@ export function Demandes() {
                       </div>
 
                       {/* client */}
-                      <div className="flex flex-col gap-2">
+                      <div className="space-y-2">
                         <label className="text-sm font-bold text-muted-foreground-700">
                           Client <span className="text-red-500 ml-1">*</span>
                         </label>
@@ -1934,7 +1936,7 @@ export function Demandes() {
                         Planification
                         <span className="text-red-500 ml-1">*</span>
                       </h3>
-                      <div className="grid grid-cols-2 gap-6 gap-x-18">
+                      <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-2">
                           <label className="text-sm font-bold text-muted-foreground-700">
                             Date de l'essai
@@ -2372,15 +2374,15 @@ export function Demandes() {
                             </div>
 
                             {form.mesureSAC && (
-                              <div className="grid grid-cols-2 gap-3 animate-in slide-in-from-top-2 duration-300">
-                                <p className="col-span-2 text-[10px] font-bold text-foreground uppercase tracking-tight mb-1">
+                              <div className="grid grid-cols-3 gap-3 animate-in slide-in-from-top-2 duration-300">
+                                <p className="col-span-full text-[10px] font-bold text-foreground uppercase tracking-tight mb-1">
                                   Débits par Phase (m^3/min)
                                 </p>
 
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                                   <div
                                     key={num}
-                                    className="flex flex-col gap-1"
+                                    className="flex flex-col gap-2"
                                   >
                                     <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
                                       Phase {num}
@@ -2420,7 +2422,7 @@ export function Demandes() {
                           <Activity size={14} /> Mesures Particulaires (PN/PM)
                         </h4>
 
-                        <div className="space-y-4">
+                        <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* PM Masse */}
                           <div
                             className={`p-4 border rounded-xl shadow-sm space-y-4
@@ -2572,7 +2574,7 @@ export function Demandes() {
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 gap-x-18">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 gap-6">
                           {[
                             {
                               label: "Nom du véhicule",
@@ -2580,6 +2582,10 @@ export function Demandes() {
                                 vehiculeDetails.nomAppliImmat ||
                                 vehiculeDetails.identificateur ||
                                 vehiculeDetails.nomAuto,
+                            },
+                            {
+                              label: "identificateur",
+                              value: (vehiculeDetails as any).identificateur,
                             },
                             {
                               label: "Boîte de vitesse",
@@ -2593,9 +2599,13 @@ export function Demandes() {
                               label: "Carburant",
                               value: (vehiculeDetails as any).carburant,
                             },
+                            {
+                              label: "Marque",
+                              value: (vehiculeDetails as any).marque,
+                            },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
-                              <label className="text-sm font-bold text-muted-foreground-600 uppercase">
+                              <label className="text-sm font-bold text-muted-foreground-600 ">
                                 {f.label}
                               </label>
                               <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2620,7 +2630,7 @@ export function Demandes() {
                           "Informations générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                           {[
                             { label: "Nom", value: loiDetails.nom },
                             {
@@ -2636,7 +2646,7 @@ export function Demandes() {
                             },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
-                              <label className="text-[11px] font-semibold text-muted-foreground-500">
+                              <label className="text-sm font-bold text-muted-foreground-600 ">
                                 {f.label}
                               </label>
                               <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2661,9 +2671,9 @@ export function Demandes() {
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
                           {/* Ligne complète */}
-                          <div className="col-span-2">
+                          <div className="col-span-1">
                             <label className="text-sm text-muted-foreground-600">
                               Nom du calage
                             </label>
@@ -2674,6 +2684,10 @@ export function Demandes() {
 
                           {/* Les autres champs */}
                           {[
+                            {
+                              label: "Mode de conduite",
+                              value: calageDetails.modeConduite,
+                            },
                             {
                               label: "Température (°C)",
                               value: calageDetails.temperature,
@@ -2689,7 +2703,7 @@ export function Demandes() {
                             },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
-                              <label className="text-[11px] font-semibold text-muted-foreground-500">
+                              <label className="text-sm font-bold text-muted-foreground-600 ">
                                 {f.label}
                               </label>
                               <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2714,7 +2728,7 @@ export function Demandes() {
                           générales".
                         </p>
                       ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                           {[
                             { label: "Nom du cycle", value: cycleDetails.nom },
                             {
@@ -2725,9 +2739,13 @@ export function Demandes() {
                               label: "Durée(s)",
                               value: (cycleDetails as any).duree,
                             },
+                            {
+                              label: "Nombre de phases",
+                              value: cycleDetails.nombrePhase,
+                            },
                           ].map((f) => (
                             <div key={f.label} className="space-y-1">
-                              <label className="text-[11px] font-semibold text-muted-foreground-500">
+                              <label className="text-sm font-bold text-muted-foreground-600 ">
                                 {f.label}
                               </label>
                               <div className="w-full border border-border p-3 rounded-lg text-sm bg-muted text-foreground font-mono">
@@ -2748,18 +2766,17 @@ export function Demandes() {
                       Configuration des gaz Bruts
                     </h3>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-26 pl-4   ">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-8 pl-4   ">
                       {/* SECTION 1 : Lignes Standard (L1, L2, L3) */}
-                      <section className="space-y-6">
+                      <section className="space-y-8">
                         <div>
-                          <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
-                            <Settings size={14} /> Lignes de Prélèvement
-                            Standard
+                          <h4 className="text-sm font-black text-foreground uppercase mb-4 mt-2 flex items-center gap-2">
+                            <Settings size={14} /> Lignes de Prélèvement Standard
                           </h4>
-                          <div className="grid grid-cols-1 gap-4">
+                          <div className="grid grid-cols-3 gap-4 ">
                             {/* Ligne 1 */}
                             <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
-                              <div className="flex items-center gap-3 mb-2">
+                              <div className="flex items-center gap-3 mb-2 ">
                                 <input
                                   type="checkbox"
                                   id="ligne1"
@@ -2887,12 +2904,12 @@ export function Demandes() {
                       </section>
 
                       {/* SECTION 2 : Lignes Spéciales (QCL & PN) */}
-                      <section className="space-y-6">
+                      <section className="space-y-2">
                         <div>
                           <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
                             <Activity size={14} /> Lignes FTIR
                           </h4>
-                          <div className="grid grid-cols-1 gap-4">
+                          <div className="grid grid-cols-3 gap-4">
                             {/* FTIR — accès direct, pas de tableau inline */}
                             <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
                               <div className="flex items-center gap-3 mb-2">
@@ -2927,8 +2944,7 @@ export function Demandes() {
                                 </div>
                               )}
                             </div>
-                          </div>
-                        </div>
+                         
 
                         {/* Microsoot */}
                         <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
@@ -2989,6 +3005,8 @@ export function Demandes() {
                             </div>
                           </div>
                         </div>
+                         </div>
+                        </div>
                       </section>
                     </div>
                   </div>
@@ -3000,7 +3018,7 @@ export function Demandes() {
                     <h3 className="text-lg font-bold text-foreground mb-4 border-b pb-2">
                       Configuration INCA
                     </h3>
-                    <div className="grid grid-cols-1 gap-8">
+                    <div className="grid grid-cols-2 gap-8">
                       {/* XCU 1 */}
                       <div className="p-4 border border-red-200 rounded-xl bg-card shadow-sm">
                         <div className="flex items-center gap-3 mb-4">
@@ -3154,7 +3172,7 @@ export function Demandes() {
                             </div>
 
                             {!!form[xcuKey] && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-8 animate-in slide-in-from-left-2 gap-x-22">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-8 animate-in slide-in-from-left-2 ">
                                 {/* Software N */}
                                 <div className="space-y-1">
                                   <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">

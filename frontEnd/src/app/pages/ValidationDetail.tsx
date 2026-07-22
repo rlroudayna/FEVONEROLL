@@ -109,7 +109,7 @@ export function ValidationDetail() {
     <div className="max-w-7xl mx-auto space-y-4">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-semibold text-foreground">
+          <h1 className="text-2xl font-semibold text-muted-foreground-600 text-left mb-2">
           Détail validation
         </h1>
 

@@ -333,7 +333,7 @@ export function Clients() {
             className="mt-6 mx-auto w-full max-w-8xl space-y-6 px-8"
           >
             {/* GRID PRINCIPAL */}
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-3 gap-6">
               {/* NOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
@@ -429,7 +429,7 @@ export function Clients() {
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 border rounded-lg"
+                className="px-8 py-2 border rounded-lg"
               >
                 Annuler
               </button>
@@ -437,7 +437,7 @@ export function Clients() {
               {modalMode !== "view" && (
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-red-600 text-white rounded-lg"
+                  className="px-8 py-2 bg-red-600 text-white rounded-lg"
                 >
                   Enregistrer
                 </button>

@@ -444,8 +444,9 @@ export function Planning() {
       </div>
 
       {/* FILTER BAR */}
-      <div className="bg-card p-5 rounded-xl border border-border shadow-sm flex flex-col lg:flex-row lg:items-center gap-4">
-        <div className="flex items-center gap-2">
+      <div className="bg-card w-full p-4 rounded-xl border border-border shadow-sm flex flex-col lg:flex-row items-center gap-4">
+        {" "}
+        <div className="flex items-center gap-4">
           <button
             onClick={() => setWeekOffset(weekOffset - 1)}
             className="p-2 rounded-md hover:bg-muted transition"
@@ -463,27 +464,25 @@ export function Planning() {
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
-
         <button
           onClick={() => setWeekOffset(0)}
-          className="h-12 px-10 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm"
+          className="h-12 px-6 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm font-medium shrink-0 w-full lg:w-auto"
         >
           Aujourd'hui
         </button>
-
-<div className="flex flex-1 flex-wrap gap-3 items-center">          <input
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full flex-1">
+          {" "}
+          <input
             type="text"
             placeholder="Projet"
             value={numeroProjetFilter}
             onChange={(e) => setNumeroProjetFilter(e.target.value)}
-            className="h-12 px-6 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus-within:ring-ring transition w-full sm:w-[160px]"
-          />
+className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          />
           <input
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="h-12 px-6 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none w-full sm:w-[160px] transition"
-          />
+className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          />
           <select
             value={selectedTechnicienId}
             onChange={(e) =>
@@ -491,8 +490,7 @@ export function Planning() {
                 e.target.value ? Number(e.target.value) : "",
               )
             }
-            className="h-12 px-6 bg-background text-foreground border border-border rounded-lg text-sm"
-          >
+className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          >
             <option value="">Tous techniciens</option>
             {techniciens.map((t) => (
               <option key={t.id} value={t.id}>
@@ -504,8 +502,7 @@ export function Planning() {
             onClick={() =>
               setViewMode(viewMode === "calendar" ? "list" : "calendar")
             }
-            className="h-12 px-10 bg-background text-foreground border border-border rounded-lg flex items-center gap-2 hover:bg-muted transition"
-          >
+className="h-12 px-4 bg-background text-foreground border border-border rounded-lg flex items-center justify-center gap-2 hover:bg-muted transition w-full"          >
             <List className="w-4 h-4" />
             <span className="text-sm capitalize">{viewMode}</span>
           </button>

@@ -680,7 +680,7 @@ export function LoisDeRoute() {
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
                       {
                         label: "Nom de la loi",
@@ -725,8 +725,6 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         />
                       </div>
                     ))}
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
                         Client <span className="text-red-500 ml-1">*</span>
@@ -743,8 +741,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                           handleChange("client", selectedClient || null);
                         }}
-                        className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-                         focus:outline-none focus:ring-2 focus:ring-ring transition"
+                       className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
                         <option value={0} disabled>
                           Sélectionner un client
@@ -757,6 +755,9 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         ))}
                       </select>
                     </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
+                    
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
                         Norme
@@ -818,7 +819,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 gap-6">
                     {[
                       { label: "Inertie (kg)", field: "inertieKg" },
                       { label: "Masse d'essai (kg)", field: "masseEssaiKg" },
@@ -907,14 +908,14 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     <button
                       type="button"
                       onClick={() => setShowModal(false)}
-                      className="px-5 py-2 border rounded-lg"
+                      className="px-8 py-2 border rounded-lg"
                     >
                       Annuler
                     </button>
 
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-[#E30613] text-white rounded-lg"
+                      className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                     >
                       {modalMode === "edit" ? "Modifier" : "Enregistrer"}
                     </button>

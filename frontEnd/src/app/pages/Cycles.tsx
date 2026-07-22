@@ -623,14 +623,14 @@ export function Cycles() {
               </button>
             </div>
             {/* BODY */}
-            <form onSubmit={handleSubmit} className="py-6 space-y-6 px-8">
+            <form onSubmit={handleSubmit} className="p-8 space-y-6">
               {/* Section 1: Identification */}
               <section>
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-1">
                   Identification
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
                       Nom du cycle
@@ -648,7 +648,7 @@ export function Cycles() {
                         })
                       }
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
-        focus:outline-none focus:ring-2 focus:ring-ring transition"
+         focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
@@ -718,7 +718,7 @@ export function Cycles() {
                   Caractéristiques
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
                       Durée (s) <span className="text-red-500 ml-1">*</span>
@@ -731,8 +731,8 @@ export function Cycles() {
                       onChange={(e) =>
                         setForm({ ...form, duree: e.target.value })
                       }
-                      className="h-11 px-8 rounded-lg border border-border bg-background text-foreground
-        focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
+    focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
@@ -750,7 +750,7 @@ export function Cycles() {
                         setForm({ ...form, nombrePhase: e.target.value })
                       }
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
-        focus:outline-none focus:ring-2 focus:ring-ring transition"
+    focus:outline-none focus:ring-2 focus:ring-ring transition"
                     />
                   </div>
 
@@ -771,7 +771,7 @@ export function Cycles() {
                     />
                   </div>
                   <div className="md:col-span-4">
-                    <h4 className="text-sm font-medium text-muted-foreground-900 mb-2">
+                    <h4 className="text-sm font-medium text-muted-foreground-900 mb-2 ">
                       Données de trace{" "}
                       <span className="text-red-500 ml-1">*</span>
                     </h4>
@@ -852,7 +852,7 @@ export function Cycles() {
                 </div>
               </section>
               <section>
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-2">
+                <h3 className="text-sm font-medium text-muted-foreground-900 mb">
                   Commentaire
                 </h3>
 
@@ -880,14 +880,14 @@ focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
                         setShowModal(false);
                         resetForm();
                       }}
-                      className="px-5 py-2 border rounded-lg"
+                      className="px-8 py-2 border rounded-lg"
                     >
                       Annuler
                     </button>
 
                     <button
                       type="submit"
-                      className="px-6 py-2 bg-[#E30613] text-white rounded-lg"
+                      className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                     >
                       {modalMode === "edit" ? "Modifier" : "Enregistrer"}
                     </button>

@@ -544,7 +544,7 @@ export function Vehicules() {
                 Identification du véhicule
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                 {[
                   {
                     label: "Nom (Appli_Immat)",
@@ -847,14 +847,14 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     setModalMode("add");
                     setShowModal(false);
                   }}
-                  className="px-5 py-2 border rounded-lg hover:bg-muted"
+                  className="px-8 py-2 border rounded-lg hover:bg-muted"
                 >
                   Annuler
                 </button>
 
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#E30613] text-white rounded-lg
+                  className="px-8 py-2 bg-[#E30613] text-white rounded-lg
             hover:brightness-110 transition shadow"
                 >
                   Enregistrer
