@@ -1,5 +1,5 @@
 package com.FEV.SmartTest.Enum;
 
 public enum Banc {
-    BANC_1
+    MA_OZ_RO1
 }

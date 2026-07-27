@@ -37,8 +37,9 @@ public class DemandeEssaiService {
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
     private final LoiRouteRepository loiRepository;
+    private final CarburantRepository carburantRepository;
 
-    public DemandeEssaiService(DemandeEssaiRepository demandRepository, CustomUserDetailsService userDetailsService, ValidationTechnicienRepository validationTechnicienRepo, ValidationChargeRepository validationChargeRepo, VehiculeRepository vehiculeRepository, CalageRepository calageRepository, CycleConduiteRepository cycleRepository, UserRepository userRepository, ClientRepository clientRepository, LoiRouteRepository loiRepository) {
+    public DemandeEssaiService(DemandeEssaiRepository demandRepository, CustomUserDetailsService userDetailsService, ValidationTechnicienRepository validationTechnicienRepo, ValidationChargeRepository validationChargeRepo, VehiculeRepository vehiculeRepository, CalageRepository calageRepository, CycleConduiteRepository cycleRepository, UserRepository userRepository, ClientRepository clientRepository, LoiRouteRepository loiRepository, CarburantRepository carburantRepository) {
         this.demandRepository = demandRepository;
         this.userDetailsService = userDetailsService;
         this.validationTechnicienRepo = validationTechnicienRepo;
@@ -49,6 +50,7 @@ public class DemandeEssaiService {
         this.userRepository = userRepository;
         this.clientRepository = clientRepository;
         this.loiRepository = loiRepository;
+        this.carburantRepository = carburantRepository;
     }
 
     public DemandeEssai create(DemandeEssaiRequest dto,
@@ -82,7 +84,10 @@ public class DemandeEssaiService {
                 loiRepository.findById(dto.getLoiId())
                         .orElseThrow(() -> new RuntimeException("Loi introuvable"))
         );
-
+        demande.setTypeCarburant(
+                carburantRepository.findById(dto.getCarburantId())
+                        .orElseThrow(() -> new RuntimeException("Carburant introuvable"))
+        );
         if (dto.getClientId() != null) {
             Client client = clientRepository.findById(dto.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client introuvable"));
@@ -99,6 +104,7 @@ public class DemandeEssaiService {
         demande.setBanc(dto.getBanc());
         demande.setShift(dto.getShift());
         demande.setTypeEssai(dto.getTypeEssai());
+        demande.setTemps(dto.getTemps());
         demande.setCapot(dto.getCapot());
         demande.setSoufflante(dto.getSoufflante());
         demande.setGestionBatterie12V(dto.getGestionBatterie12V());
@@ -131,8 +137,6 @@ public class DemandeEssaiService {
         demande.setPointPrelevementL1(dto.getPointPrelevementL1());
         demande.setLigne2(dto.getLigne2());
         demande.setPointPrelevementL2(dto.getPointPrelevementL2());
-        demande.setLigne3(dto.getLigne3());
-        demande.setPointPrelevementL3(dto.getPointPrelevementL3());
         demande.setMicrosot(dto.getMicrosot());
         demande.setPointPrelevementMicrosot(dto.getPointPrelevementMicrosot());
         demande.setQcl1(dto.getQcl1());
@@ -160,8 +164,6 @@ public class DemandeEssaiService {
         demande.setDebitCVsPhase6(dto.getDebitCVsPhase6());
         demande.setDebitCVsPhase7(dto.getDebitCVsPhase7());
         demande.setDebitCVsPhase8(dto.getDebitCVsPhase8());
-        demande.setDebitCVsPhase9(dto.getDebitCVsPhase9());
-        demande.setDebitCVsPhase10(dto.getDebitCVsPhase10());
         demande.setQcvs(dto.getQcvs());
         demande.setCarflow(dto.getCarflow());
 
@@ -286,6 +288,10 @@ public class DemandeEssaiService {
                     loiRepository.findById(updated.getLoiId())
                             .orElseThrow(() -> new RuntimeException("Loi introuvable"))
             );
+            d.setTypeCarburant(
+                    carburantRepository.findById(updated.getCarburantId())
+                            .orElseThrow(() -> new RuntimeException("Loi introuvable"))
+            );
 
             d.setClient(
                     clientRepository.findById(updated.getClientId())
@@ -316,6 +322,7 @@ public class DemandeEssaiService {
 
             // Type essai
             d.setTypeEssai(updated.getTypeEssai());
+            d.setTemps(updated.getTemps());
             d.setVerificationCoastDown(updated.getVerificationCoastDown());
             d.setNombreDecelerations(updated.getNombreDecelerations());
             d.setCommentaire(updated.getCommentaire());
@@ -330,8 +337,6 @@ public class DemandeEssaiService {
             d.setDebitCVsPhase6(updated.getDebitCVsPhase6());
             d.setDebitCVsPhase7(updated.getDebitCVsPhase7());
             d.setDebitCVsPhase8(updated.getDebitCVsPhase8());
-            d.setDebitCVsPhase9(updated.getDebitCVsPhase9());
-            d.setDebitCVsPhase10(updated.getDebitCVsPhase10());
 
             // Particules
             d.setPm(updated.getPm());
@@ -346,8 +351,6 @@ public class DemandeEssaiService {
             d.setPointPrelevementL1(updated.getPointPrelevementL1());
             d.setLigne2(updated.getLigne2());
             d.setPointPrelevementL2(updated.getPointPrelevementL2());
-            d.setLigne3(updated.getLigne3());
-            d.setPointPrelevementL3(updated.getPointPrelevementL3());
 
             // Microsot / QCL
             d.setMicrosot(updated.getMicrosot());

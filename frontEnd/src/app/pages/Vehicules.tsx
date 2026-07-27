@@ -532,281 +532,207 @@ export function Vehicules() {
               </div>
             </DialogTitle>
           </DialogHeader>
-            <div className="flex-1 overflow-y-auto px-4 bg-card min-h-[70vh]">
+          <div className="flex-1 overflow-y-auto px-4 bg-card min-h-[70vh]">
+            <form className="space-y-6 mt-2" onSubmit={handleSubmit}>
+              {" "}
+              {/* SECTION IDENTIFICATION */}
+              <p className="text-sm text-muted-foreground-500"></p>
+              <div>
+                <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
+                  Identification du véhicule
+                </h3>
 
-          <form className="space-y-6 mt-2" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+                  {[
+                    {
+                      label: "Nom (Appli_Immat)",
+                      key: "nomAppliImmat",
+                      required: true,
+                    },
+                    {
+                      label: "Identificateur",
+                      key: "identificateur",
+                      placeholder: "Automatique",
+                      required: true,
+                    },
+                    {
+                      label: "Immatriculation",
+                      key: "immatriculation",
+                      required: true,
+                    },
+                    {
+                      label: "Marque",
+                      key: "marque",
+                      required: true,
+                    },
+                    { label: "VIN", key: "vin", required: true },
+                    {
+                      label: "Site",
+                      key: "site",
+                      required: true,
+                    },
+                    {
+                      label: "Responsable",
+                      key: "responsable",
+                    },
+                  ].map((field) => (
+                    <div key={field.key} className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-muted-foreground-500">
+                        {field.label}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                      </label>
 
-            {" "}
-            {/* SECTION IDENTIFICATION */}
-            <p className="text-sm text-muted-foreground-500"></p>
-            <div>
-              <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                Identification du véhicule
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-                {[
-                  {
-                    label: "Nom (Appli_Immat)",
-                    key: "nomAppliImmat",
-                    required: true,
-                  },
-                  {
-                    label: "Identificateur",
-                    key: "identificateur",
-                    placeholder: "Automatique",
-                    required: true,
-                  },
-                  {
-                    label: "Immatriculation",
-                    key: "immatriculation",
-                    required: true,
-                  },
-                  {
-                    label: "Marque",
-                    key: "marque",
-                    required: true,
-                  },
-                  { label: "VIN", key: "vin", required: true },
-                  {
-                    label: "Site",
-                    key: "site",
-                    required: true,
-                  },
-                  {
-                    label: "Responsable",
-                    key: "responsable",
-                  },
-                ].map((field) => (
-                  <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-muted-foreground-500">
-                      {field.label}
-                      {field.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </label>
-
-                    <input
-                      name={field.key}
-                      required={field.required}
-                      defaultValue={
-                        selectedVehicle?.[
-                          field.key as keyof Vehicle
-                        ]?.toString() ?? ""
-                      }
-                      disabled={
-                        modalMode === "view" || field.key === "identificateur"
-                      }
-                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
-                    />
-                  </div>
-                ))}
-
-                {/* Client */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-muted-foreground-500">
-                    Client <span className="text-red-500 ml-1">*</span>
-                  </label>
-                  <select
-                    name="clientId"
-                    defaultValue={selectedVehicle?.client?.id ?? ""}
-                    required
-                    disabled={modalMode === "view"}
-                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-                     focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  >
-                    <option value="" disabled>
-                      Sélectionner un client
-                    </option>
-
-                    {activeClients.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.nom}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Localisation */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-muted-foreground">
-                    Localisation
-                    <span className="text-red-500 ml-1">*</span>
-                  </label>
-                  <select
-                    name="localisation"
-                    defaultValue={selectedVehicle?.localisation ?? ""}
-                    required
-                    disabled={modalMode === "view"}
-                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  >
-                    <option value="" disabled>
-                      Sélectionner
-                    </option>
-
-                    {["HORS_FEV", "BAR", " PARC_FEV_CA"].map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-            {/* MOTORISATION */}
-            <div>
-              <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                Motorisation
-              </h3>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-muted-foreground-500">
-                    Type moteur
-                    <span className="text-red-500 ml-1">*</span>
-                  </label>
-
-                  <select
-                    name="motorisation"
-                    defaultValue={selectedVehicle?.motorisation ?? ""}
-                    required
-                    disabled={modalMode === "view"}
-                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  >
-                    <option value="" disabled>
-                      Sélectionner
-                    </option>
-
-                    {["ICE", "HEV", "PHEV", "BEV"].map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-muted-foreground-500">
-                    Carburant
-                    <span className="text-red-500 ml-1">*</span>
-                  </label>
-
-                  <select
-                    name="carburant"
-                    defaultValue={selectedVehicle?.carburant ?? ""}
-                    required
-                    disabled={modalMode === "view"}
-                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
-                  >
-                    <option value="" disabled>
-                      Sélectionner
-                    </option>
-
-                    {["ESSENCE", "DIESEL", "GNV"].map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {[
-                  {
-                    label: "Code moteur",
-                    key: "moteur",
-                    required: true,
-                  },
-                  {
-                    label: "Boite vitesse",
-                    key: "boiteVitesse",
-                    required: true,
-                  },
-                ].map((field) => (
-                  <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-muted-foreground-500">
-                      {field.label}
-                      {field.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </label>
-                    <input
-                      name={field.key}
-                      required={field.required}
-                      defaultValue={
-                        selectedVehicle?.[
-                          field.key as keyof Vehicle
-                        ]?.toString() ?? ""
-                      }
-                      disabled={modalMode === "view"}
-                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* CARACTERISTIQUES */}
-            {/* CARACTERISTIQUES */}
-            <div>
-              <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                Caractéristiques
-              </h3>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-                {[
-                  {
-                    label: "dimensions de pneus (mm)",
-                    key: "dimensionsPneus",
-                    required: true,
-                  },
-
-                  { required: true, label: "Puissance (kW)", key: "puissance" },
-                  {
-                    label: "Empattement (mm)",
-                    key: "empattement",
-                    required: true,
-                  },
-                  { label: "Couleur", key: "couleur", required: true },
-                  {
-                    label: "Plateforme véhicule",
-                    key: "plateformeVehicule",
-                    required: false,
-                  },
-                  {
-                    label: "Architecture électrique",
-                    key: "architectureElectrique",
-                    required: false,
-                  },
-                ].map((field) => (
-                  <div key={field.key} className="flex flex-col gap-1">
-                    <label className="text-sm text-muted-foreground-500">
-                      {field.label}
-                      <span className="text-red-500 ml-1">*</span>
-                    </label>
-
-                    {field.key === "typeCatalyseur" ? (
-                      <select
+                      <input
+                        name={field.key}
+                        required={field.required}
                         defaultValue={
                           selectedVehicle?.[
                             field.key as keyof Vehicle
                           ]?.toString() ?? ""
                         }
-                        name="typeCatalyseur"
-                        required
-                        disabled={modalMode === "view"}
+                        disabled={
+                          modalMode === "view" || field.key === "identificateur"
+                        }
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
- focus:outline-none focus:ring-2 focus:ring-ring transition"
-                      ></select>
-                    ) : (
+focus:outline-none focus:ring-2 focus:ring-ring transition"
+                      />
+                    </div>
+                  ))}
+
+                  {/* Client */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-muted-foreground-500">
+                      Client <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <select
+                      name="clientId"
+                      defaultValue={selectedVehicle?.client?.id ?? ""}
+                      required
+                      disabled={modalMode === "view"}
+                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+                     focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="" disabled>
+                        Sélectionner un client
+                      </option>
+
+                      {activeClients.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.nom}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Localisation */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-muted-foreground">
+                      Localisation
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <select
+                      name="localisation"
+                      defaultValue={selectedVehicle?.localisation ?? ""}
+                      required
+                      disabled={modalMode === "view"}
+                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="" disabled>
+                        Sélectionner
+                      </option>
+
+                      {["HORS_FEV", "BAR", " PARC_FEV_CA"].map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+              {/* MOTORISATION */}
+              <div>
+                <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
+                  Motorisation
+                </h3>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-muted-foreground-500">
+                      Type moteur
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+
+                    <select
+                      name="motorisation"
+                      defaultValue={selectedVehicle?.motorisation ?? ""}
+                      required
+                      disabled={modalMode === "view"}
+                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="" disabled>
+                        Sélectionner
+                      </option>
+
+                      {["ICE", "HEV", "PHEV", "BEV"].map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium text-muted-foreground-500">
+                      Carburant
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+
+                    <select
+                      name="carburant"
+                      defaultValue={selectedVehicle?.carburant ?? ""}
+                      required
+                      disabled={modalMode === "view"}
+                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    >
+                      <option value="" disabled>
+                        Sélectionner
+                      </option>
+
+                      {["ESSENCE", "DIESEL", "GNV"].map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {[
+                    {
+                      label: "Code moteur",
+                      key: "moteur",
+                      required: true,
+                    },
+                    {
+                      label: "Boite vitesse",
+                      key: "boiteVitesse",
+                      required: true,
+                    },
+                  ].map((field) => (
+                    <div key={field.key} className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-muted-foreground-500">
+                        {field.label}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                      </label>
                       <input
                         name={field.key}
-                        type={
-                          numberFields.includes(field.key) ? "number" : "text"
-                        }
                         required={field.required}
                         defaultValue={
                           selectedVehicle?.[
@@ -817,56 +743,128 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                       />
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="mt-5 flex flex-col gap-1 w-full">
-              <label className="text-sm font-medium text-muted-foreground-500">
-                Commentaire
-              </label>
+              {/* CARACTERISTIQUES */}
+              {/* CARACTERISTIQUES */}
+              <div>
+                <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
+                  Caractéristiques
+                </h3>
 
-              <textarea
-                name="commentaire"
-                rows={4}
-                defaultValue={selectedVehicle?.commentaire ?? ""}
-                disabled={modalMode === "view"}
-                className="w-full px-3 py-3 rounded-lg border border-border bg-background text-foreground
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                  {[
+                    {
+                      label: "dimensions de pneus (mm)",
+                      key: "dimensionsPneus",
+                    },
+
+                    {
+                      
+                      label: "Puissance (kW)",
+                      key: "puissance",
+                    },
+                    {
+                      label: "Empattement (mm)",
+                      key: "empattement",
+                      required: true,
+                    },
+                    { label: "Couleur", key: "couleur" },
+                    {
+                      label: "Plateforme véhicule",
+                      key: "plateformeVehicule",
+                    },
+                    {
+                      label: "Architecture électrique",
+                      key: "architectureElectrique",
+                    },
+                  ].map((field) => (
+                    <div key={field.key} className="flex flex-col gap-1">
+                      <label className="text-sm text-muted-foreground-500">
+                        {field.label}
+                        {field.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                      </label>
+                      {field.key === "typeCatalyseur" ? (
+                        <select
+                          defaultValue={
+                            selectedVehicle?.[
+                              field.key as keyof Vehicle
+                            ]?.toString() ?? ""
+                          }
+                          name="typeCatalyseur"
+                          required
+                          disabled={modalMode === "view"}
+                          className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+ focus:outline-none focus:ring-2 focus:ring-ring transition"
+                        ></select>
+                      ) : (
+                        <input
+                          name={field.key}
+                          type={
+                            numberFields.includes(field.key) ? "number" : "text"
+                          }
+                          required={field.required}
+                          defaultValue={
+                            selectedVehicle?.[
+                              field.key as keyof Vehicle
+                            ]?.toString() ?? ""
+                          }
+                          disabled={modalMode === "view"}
+                          className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+focus:outline-none focus:ring-2 focus:ring-ring transition"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-5 flex flex-col gap-1 w-full">
+                <label className="text-sm font-medium text-muted-foreground-500">
+                  Commentaire
+                </label>
+
+                <textarea
+                  name="commentaire"
+                  rows={4}
+                  defaultValue={selectedVehicle?.commentaire ?? ""}
+                  disabled={modalMode === "view"}
+                  className="w-full px-3 py-3 rounded-lg border border-border bg-background text-foreground
     focus:outline-none focus:ring-2 focus:ring-ring transition resize-y"
-                placeholder="Saisir un commentaire..."
-              />
-            </div>
-            {/* FOOTER */}
-            {modalMode !== "view" && (
-              <div className="flex justify-end gap-3 ">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedVehicle(null);
-                    setModalMode("add");
-                    setShowModal(false);
-                  }}
-                  className="px-8 py-2 border rounded-lg hover:bg-muted"
-                >
-                  Annuler
-                </button>
-
-                <button
-                  type="submit"
-                  className="px-8 py-2 bg-[#E30613] text-white rounded-lg
-            hover:brightness-110 transition shadow"
-                >
-                  Enregistrer
-                </button>
+                  placeholder="Saisir un commentaire..."
+                />
               </div>
-            )}
-            
-          </form>
+              {/* FOOTER */}
+              {modalMode !== "view" && (
+                <div className="flex justify-end gap-3 ">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedVehicle(null);
+                      setModalMode("add");
+                      setShowModal(false);
+                    }}
+                    className="px-8 py-2 border rounded-lg hover:bg-muted"
+                  >
+                    Annuler
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="px-8 py-2 bg-[#E30613] text-white rounded-lg
+            hover:brightness-110 transition shadow"
+                  >
+                    Enregistrer
+                  </button>
+                </div>
+              )}
+            </form>
           </div>
         </DialogContent>
       </Dialog>
     </div>
-    
   );
 }

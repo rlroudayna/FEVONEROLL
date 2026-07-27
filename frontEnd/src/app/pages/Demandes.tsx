@@ -109,6 +109,7 @@ export function Demandes() {
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [calages, setCalages] = useState<Calage[]>([]);
   const [loisRoute, setLoisRoute] = useState<LoiRoute[]>([]);
+  const [typeCarburant, setTypeCarburant] = useState<typeCarburant[]>([]);
   const [demandes, setDemandes] = useState<DemandeEssai[]>([]);
   const [loading, setLoading] = useState(true);
   const [vehiculeDetails, setVehiculeDetails] = useState<Vehicule | null>(null);
@@ -189,6 +190,7 @@ export function Demandes() {
     cycleId?: number;
     calageId?: number;
     loiId?: number;
+    carburantId?: number;
     technicienId: number;
     clientId: number;
   }
@@ -218,6 +220,10 @@ export function Demandes() {
     id?: number;
     nom: string;
   }
+  interface typeCarburant {
+    id?: number;
+    nom: string;
+  }
   interface DemandeEssai {
     id?: number;
     nomAuto?: string;
@@ -230,7 +236,7 @@ export function Demandes() {
     cycle?: { id: number };
     calage?: { id: number };
     loi?: { id: number };
-
+    typeCarburant?: { id: number; nom?: string };
     client?: { id: number; nom: string };
 
     demandeur?: string;
@@ -256,6 +262,7 @@ export function Demandes() {
     chauffageHabitable?: boolean;
 
     typeEssai?: string;
+    temps?: number;
     verificationCoastDown?: boolean;
     nombreDecelerations?: number;
     commentaire?: string;
@@ -286,9 +293,6 @@ export function Demandes() {
 
     ligne2?: boolean;
     pointPrelevementL2?: string;
-
-    ligne3?: boolean;
-    pointPrelevementL3?: string;
 
     microsot?: boolean;
     pointPrelevementMicrosot?: string;
@@ -360,13 +364,14 @@ export function Demandes() {
     cycleId: undefined,
     calageId: undefined,
     loiId: undefined,
+    carburantId: undefined,
 
     // ===== PROJET =====
     clientId: undefined,
     demandeur: "",
     technicienId: undefined,
 
-    banc: "BANC_1",
+    banc: "MA_OZ_RO1",
     datePlanification: "",
     shift: undefined,
 
@@ -388,6 +393,7 @@ export function Demandes() {
 
     // ===== TYPE ESSAI =====
     typeEssai: "",
+    temps:0,
     verificationCoastDown: false,
     nombreDecelerations: 0,
     commentaire: "",
@@ -405,7 +411,6 @@ export function Demandes() {
     debitCVsPhase9: 0,
     debitCVsPhase10: 0,
 
-    // ===== PM / PN =====
     pm: false,
     debitPrelevement: 0,
     pn10Nano: false,
@@ -418,8 +423,6 @@ export function Demandes() {
     pointPrelevementL1: "",
     ligne2: false,
     pointPrelevementL2: "",
-    ligne3: false,
-    pointPrelevementL3: "",
     microsot: false,
     pointPrelevementMicrosot: "",
 
@@ -432,7 +435,6 @@ export function Demandes() {
     pointPrelevementFITR: "",
     egr: false,
 
-    // ===== XCU =====
     xcu1: false,
     software1: "",
     calibration1: "",
@@ -449,7 +451,6 @@ export function Demandes() {
     acquisitionEOBD: false,
     typeAcquisition: "",
 
-    // ===== MESURES COURANT =====
     mesureCourant: false,
 
     capot: "FERME",
@@ -477,11 +478,12 @@ export function Demandes() {
         cycleId: undefined,
         calageId: undefined,
         loiId: undefined,
+        carburantId: undefined,
         technicienId: demande?.technicienId,
 
         client: undefined,
         demandeur: "",
-        banc: "BANC_1",
+        banc: "MA_OZ_RO1",
         datePlanification: "",
         shift: undefined,
 
@@ -500,6 +502,7 @@ export function Demandes() {
         chauffageHabitable: false,
 
         typeEssai: "",
+        temps: 0,
         verificationCoastDown: false,
         nombreDecelerations: 0,
         commentaire: "",
@@ -511,11 +514,9 @@ export function Demandes() {
 
         ligne1: false,
         ligne2: false,
-        ligne3: false,
         microsot: false,
         egr: false,
         fitr: false,
-
         xcu1: false,
         xcu2: false,
         xcu3: false,
@@ -582,6 +583,7 @@ export function Demandes() {
         cycleId: demande.cycle?.id,
         calageId: demande.calage?.id,
         loiId: demande.loi?.id,
+        carburantId: demande.typeCarburant?.id,
         clientId: demande.client?.id,
         mesureCourant: demande.mesureCourant ?? false,
         mesureTension: demande.mesureTension ?? false,
@@ -780,7 +782,6 @@ export function Demandes() {
     });
   };
 
-  // ✅ Handler unifié pour tous les fichiers
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: keyof typeof files,
@@ -811,6 +812,7 @@ export function Demandes() {
     fetchLoisRoute();
     fetchActiveClients();
     fetchAllClients();
+    fetchCarburant();
   }, []);
   const fetchActiveClients = async () => {
     try {
@@ -852,6 +854,14 @@ export function Demandes() {
       setLoisRoute(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Erreur chargement lois de route", error);
+    }
+  };
+  const fetchCarburant = async () => {
+    try {
+      const data = await authFetch("/carburants");
+      setTypeCarburant(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Erreur chargement de carburant", error);
     }
   };
 
@@ -1001,7 +1011,7 @@ export function Demandes() {
   // Fonction pour récupérer les véhicules
   const fetchVehicules = async () => {
     try {
-      const data = await authFetch("/vehicules"); // Remplacez par votre endpoint réel
+      const data = await authFetch("/vehicules");
       setVehicules(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Erreur chargement véhicules", error);
@@ -1121,6 +1131,7 @@ export function Demandes() {
         cycleId: form.cycleId,
         calageId: form.calageId,
         loiId: form.loiId,
+        carburantId: form.carburantId,
         clientId: form.clientId,
         technicienId: form.technicienId,
 
@@ -1153,6 +1164,7 @@ export function Demandes() {
         chauffageHabitable: form.chauffageHabitable,
 
         typeEssai: form.typeEssai,
+        temps: form.temps,
         verificationCoastDown: form.verificationCoastDown,
         nombreDecelerations: form.nombreDecelerations,
         commentaire: form.commentaire,
@@ -1171,7 +1183,6 @@ export function Demandes() {
         pointPrelevementL1: form.pointPrelevementL1,
 
         ligne2: form.ligne2,
-        ligne3: form.ligne3,
 
         qcl1: form.qcl1,
         qcl2: form.qcl2,
@@ -1195,7 +1206,6 @@ export function Demandes() {
         qcvs: form.qcvs,
         carflow: form.carflow,
         pointPrelevementL2: form.pointPrelevementL2,
-        pointPrelevementL3: form.pointPrelevementL3,
         microsot: form.microsot,
         debitCVsPhase1: form.debitCVsPhase1,
         debitCVsPhase2: form.debitCVsPhase2,
@@ -1305,6 +1315,7 @@ export function Demandes() {
         cycle: form.cycleId ? { id: form.cycleId } : undefined,
         calage: form.calageId ? { id: form.calageId } : undefined,
         loi: form.loiId ? { id: form.loiId } : undefined,
+        typeCarburant: form.carburantId ? { id: form.carburantId } : undefined,
       };
 
       const updated = await authFetch(`/demandes-essai/${selectedDemande.id}`, {
@@ -1323,6 +1334,7 @@ export function Demandes() {
                 cycle: d.cycle,
                 calage: d.calage,
                 loi: d.loi,
+                carburant: d.typeCarburant,
               }
             : d,
         ),
@@ -1923,11 +1935,34 @@ export function Demandes() {
                           onChange={handleChange}
                           className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                         >
-                          <option value="BANC_1">BANC_1</option>
+                          <option value="MA_OZ_RO1">MA_OZ_RO1</option>
                         </select>
                         <p className="text-xs text-muted-foreground-500">
                           Un seul banc disponible actuellement
                         </p>
+                      </div>
+
+                      {/* Carburant */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-muted-foreground-700">
+                          Type de carburant
+                          <span className="text-red-500 ml-1">*</span>
+                        </label>
+                        <select
+                          name="carburantId"
+                          disabled={isView}
+                          value={form.carburantId ?? ""}
+                          required
+                          onChange={handleChange}
+                          className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+                        >
+                          <option value="">Sélectionner un carburant</option>
+                          {typeCarburant.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.nom || `typeCarburant ${c.id}`}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     {/* Section Date et Shift (transition vers onglet suivant) */}
@@ -2165,32 +2200,53 @@ export function Demandes() {
 
                         {/* Type d'essai */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm">
-                          <label className="flex items-center gap-2 font-bold text-sm">
-                            Type d'essai
-                            <span className="text-red-500 ml-1">*</span>
-                          </label>
-                          <select
-                            name="typeEssai"
-                            disabled={isView}
-                            value={form.typeEssai ?? ""}
-                            required
-                            onChange={(e) =>
-                              setForm({
-                                ...form,
-                                typeEssai: e.target.value || undefined,
-                              })
-                            }
-                            className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
-                          >
-                            <option value="">Sélectionner</option>
+  <label className="flex items-center gap-2 font-bold text-sm">
+    Type d'essai
+    <span className="text-red-500 ml-1">*</span>
+  </label>
+  <select
+    name="typeEssai"
+    disabled={isView}
+    value={form.typeEssai ?? ""}
+    required
+    onChange={(e) =>
+      setForm({
+        ...form,
+        typeEssai: e.target.value || undefined,
+      })
+    }
+    className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+  >
+    <option value="">Sélectionner</option>    <option value="TM">TM (tir macéré)</option>
+    <option value="TC">TC (Tir chaud)</option>
+    <option value="RL">RL (roulage)</option>
+    <option value="CL">CL (Calage)</option>
+    <option value="PR">PR (Précon)</option>
+  </select>
 
-                            <option value="TM">TM (tir macéré)</option>
-                            <option value="TC">TC (Tir chaud)</option>
-                            <option value="RL">RL (roulage)</option>
-                            <option value="CL">CL (Calage)</option>
-                            <option value="PR">PR (Précon)</option>
-                          </select>
-                        </div>
+  {/* Champ de temps affiché uniquement si typeEssai === "RL" */}
+  {form.typeEssai === "RL" && (
+    <div className="pt-2">
+      <label className="block font-bold text-sm mb-1">
+        Temps (s)
+      </label>
+      <input
+        type="number"
+        name="temps"
+        disabled={isView}
+        value={form.temps ?? ""}
+        placeholder=""
+        onChange={(e) =>
+          setForm({
+            ...form,
+            temps: e.target.value ? parseFloat(e.target.value) : undefined,
+          })
+        }
+        className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
+      />
+    </div>
+  )}
+</div>
 
                         {/* Vérification Coast Down */}
                         <div className="space-y-3 p-4 bg-card rounded-lg border shadow-sm col-span-1">
@@ -2376,40 +2432,83 @@ export function Demandes() {
                             {form.mesureSAC && (
                               <div className="grid grid-cols-3 gap-3 animate-in slide-in-from-top-2 duration-300">
                                 <p className="col-span-full text-[10px] font-bold text-foreground uppercase tracking-tight mb-1">
-                                  Débits par Phase (m^3/min)
+                                  Débits par Phase (m³/min)
                                 </p>
 
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                                  <div
-                                    key={num}
-                                    className="flex flex-col gap-2"
-                                  >
-                                    <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                      Phase {num}
-                                    </label>
+                                {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => {
+                                  const fieldName = `debitCVsPhase${num}`;
+                                  const val = (form as any)[fieldName];
+                                  // La phase est considérée comme "cochée" si sa valeur est définie ou non vide
+                                  const isPhaseActive =
+                                    val !== undefined &&
+                                    val !== null &&
+                                    val !== "";
 
-                                    <div className="relative">
-                                      <input
-                                        type="number"
-                                        step="0.1"
-                                        name={`debitCVsPhase${num}`}
-                                        value={
-                                          (form as any)[
-                                            `debitCVsPhase${num}`
-                                          ] || ""
-                                        }
-                                        onChange={handleChange}
-                                        disabled={isView}
-                                        placeholder="0.0"
-                                        className="w-full border-2 border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
-                                      />
+                                  return (
+                                    <div
+                                      key={num}
+                                      className="flex flex-col gap-2 p-2 rounded-lg border border-border/50 bg-background/50"
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <input
+                                          type="checkbox"
+                                          id={`checkPhase${num}`}
+                                          disabled={isView}
+                                          checked={isPhaseActive}
+                                          onChange={(e) => {
+                                            if (!e.target.checked) {
+                                              // Quand on décoche, on vide la valeur de la phase
+                                              handleChange({
+                                                target: {
+                                                  name: fieldName,
+                                                  value: "",
+                                                  type: "text",
+                                                },
+                                              } as any);
+                                            } else {
+                                              // Quand on coche, on initialise par exemple à "0.0" ou valeur par défaut
+                                              handleChange({
+                                                target: {
+                                                  name: fieldName,
+                                                  value: "0.0",
+                                                  type: "text",
+                                                },
+                                              } as any);
+                                            }
+                                          }}
+                                          className="w-4 h-4 accent-red-600 rounded cursor-pointer"
+                                        />
+                                        <label
+                                          htmlFor={`checkPhase${num}`}
+                                          className="text-[10px] font-bold text-muted-foreground-400 uppercase cursor-pointer"
+                                        >
+                                          Phase {num}
+                                        </label>
+                                      </div>
 
-                                      <span className="absolute right-2 top-2 text-[9px] text-muted-foreground-400 font-bold">
-                                        CVS
-                                      </span>
+                                      <div className="relative">
+                                        <input
+                                          type="number"
+                                          step="0.1"
+                                          name={fieldName}
+                                          value={val || ""}
+                                          onChange={handleChange}
+                                          disabled={isView || !isPhaseActive}
+                                          placeholder="0.0"
+                                          className={`w-full border-2 border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none transition focus:ring-2 focus:ring-ring ${
+                                            !isPhaseActive
+                                              ? "opacity-40 cursor-not-allowed bg-muted/20"
+                                              : ""
+                                          }`}
+                                        />
+
+                                        <span className="absolute right-2 top-2 text-[9px] text-muted-foreground-400 font-bold">
+                                          CVS
+                                        </span>
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
@@ -2771,7 +2870,8 @@ export function Demandes() {
                       <section className="space-y-8">
                         <div>
                           <h4 className="text-sm font-black text-foreground uppercase mb-4 mt-2 flex items-center gap-2">
-                            <Settings size={14} /> Lignes de Prélèvement Standard
+                            <Settings size={14} /> Lignes de Prélèvement
+                            Standard
                           </h4>
                           <div className="grid grid-cols-3 gap-4 ">
                             {/* Ligne 1 */}
@@ -2857,48 +2957,6 @@ export function Demandes() {
                                 </div>
                               )}
                             </div>
-
-                            {/* Ligne 3 */}
-                            <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
-                              <div className="flex items-center gap-3 mb-2">
-                                <input
-                                  type="checkbox"
-                                  id="ligne3"
-                                  name="ligne3"
-                                  checked={!!form.ligne3}
-                                  onChange={handleChange}
-                                  disabled={isView}
-                                  className="w-4 h-4 accent-red-600"
-                                />
-                                <label
-                                  htmlFor="ligne3"
-                                  className="text-sm font-bold text-muted-foreground-700 uppercase"
-                                >
-                                  Ligne 3
-                                </label>
-                              </div>
-                              {!!form.ligne3 && (
-                                <div className="pl-7 animate-in slide-in-from-left-2">
-                                  <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                    Point de prélèvement
-                                  </label>
-                                  <select
-                                    name="pointPrelevementL3"
-                                    value={form.pointPrelevementL3 ?? ""}
-                                    disabled={isView}
-                                    onChange={handleChange}
-                                    className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
-                                  >
-                                    <option value="">-- Sélectionner --</option>
-                                    <option value="Amont CATA">
-                                      Amont CATA
-                                    </option>
-                                    <option value="Aval CATA">Aval CATA</option>
-                                    <option value="Canule">Canule</option>
-                                  </select>
-                                </div>
-                              )}
-                            </div>
                           </div>
                         </div>
                       </section>
@@ -2932,80 +2990,110 @@ export function Demandes() {
                               {!!form.fitr && (
                                 <div className="pl-7 animate-in slide-in-from-left-2">
                                   <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                    Localisation
+                                    Point de prélèvement
                                   </label>
-                                  <input
-                                    type="text"
+                                  <select
                                     name="pointPrelevementFITR"
                                     value={form.pointPrelevementFITR ?? ""}
+                                    disabled={isView}
                                     onChange={handleChange}
                                     className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
-                                  />
+                                  >
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="Amont CATA">
+                                      sortie moteur
+                                    </option>
+                                    <option value="Aval CATA">
+                                      amont cata
+                                    </option>
+                                    <option value="Canule">amont SCR1</option>
+                                    <option value="Canule">aval SCR1</option>
+                                    <option value="Canule">aval SCR2</option>
+                                    <option value="Canule">amont SCRf</option>
+                                    <option value="Canule">aval SCRf</option>
+                                    <option value="Canule">amont ASC</option>
+                                    <option value="Canule">aval ASC</option>
+                                    <option value="Canule">cannule</option>
+                                  </select>
                                 </div>
                               )}
                             </div>
-                         
 
-                        {/* Microsoot */}
-                        <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
-                          <div className="flex items-center gap-3 mb-2">
-                            <input
-                              type="checkbox"
-                              id="microsot"
-                              name="microsot"
-                              checked={!!form.microsot}
-                              onChange={handleChange}
-                              disabled={isView}
-                              className="w-4 h-4 accent-red-600"
-                            />
-                            <label
-                              htmlFor="microsot"
-                              className="text-sm font-bold text-muted-foreground-900 uppercase"
-                            >
-                              Microsoot
-                            </label>
-                          </div>
-                          {!!form.microsot && (
-                            <div className="pl-7 animate-in slide-in-from-left-2">
-                              <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                Localisation
-                              </label>
-                              <input
-                                type="text"
-                                name="pointPrelevementMicrosot"
-                                value={form.pointPrelevementMicrosot ?? ""}
-                                onChange={handleChange}
-                                disabled={isView}
-                                className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
-                              />
+                            {/* Microsoot */}
+                            <div className="p-3 bg-card border border-red-200 rounded-xl shadow-sm">
+                              <div className="flex items-center gap-3 mb-2">
+                                <input
+                                  type="checkbox"
+                                  id="microsot"
+                                  name="microsot"
+                                  checked={!!form.microsot}
+                                  onChange={handleChange}
+                                  disabled={isView}
+                                  className="w-4 h-4 accent-red-600"
+                                />
+                                <label
+                                  htmlFor="microsot"
+                                  className="text-sm font-bold text-muted-foreground-900 uppercase"
+                                >
+                                  Microsoot
+                                </label>
+                              </div>
+                              {!!form.microsot && (
+                                <div className="pl-7 animate-in slide-in-from-left-2">
+                                  <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
+                                    Point de prélèvement
+                                  </label>
+                                  <select
+                                    name="pointPrelevementMicrosot"
+                                    value={form.pointPrelevementMicrosot ?? ""}
+                                    disabled={isView}
+                                    onChange={handleChange}
+                                    className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
+                                  >
+                                    <option value="">-- Sélectionner --</option>
+                                    <option value="Amont CATA">
+                                      sortie moteur
+                                    </option>
+                                    <option value="Aval CATA">
+                                      amont cata
+                                    </option>
+                                    <option value="Canule">amont SCR1</option>
+                                    <option value="Canule">aval SCR1</option>
+                                    <option value="Canule">aval SCR2</option>
+                                    <option value="Canule">amont SCRf</option>
+                                    <option value="Canule">aval SCRf</option>
+                                    <option value="Canule">amont ASC</option>
+                                    <option value="Canule">aval ASC</option>
+                                    <option value="Canule">cannule</option>
+                                  </select>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
 
-                        {/* Analyses Spécifiques */}
-                        <div className="p-4 border rounded-xl space-y-4 border-red-200 shadow-sm">
-                          <h5 className="text-[11px] font-bold text-foreground uppercase flex items-center gap-2">
-                            Analyses Spécifiques
-                          </h5>
-                          <div className="flex flex-col gap-3">
-                            {/* egr — accès direct, pas de tableau inline */}
-                            <div className="flex items-center gap-3">
-                              <input
-                                type="checkbox"
-                                id="egr"
-                                name="egr"
-                                checked={!!form.egr}
-                                onChange={handleChange}
-                                disabled={isView}
-                                className="w-4 h-4 accent-red-600"
-                              />
-                              <span className="text-sm font-bold text-muted-foreground-500 uppercase">
-                                Mesure EGR
-                              </span>
+                            {/* Analyses Spécifiques */}
+                            <div className="p-4 border rounded-xl space-y-4 border-red-200 shadow-sm">
+                              <h5 className="text-[11px] font-bold text-foreground uppercase flex items-center gap-2">
+                                Analyses Spécifiques
+                              </h5>
+                              <div className="flex flex-col gap-3">
+                                {/* egr — accès direct, pas de tableau inline */}
+                                <div className="flex items-center gap-3">
+                                  <input
+                                    type="checkbox"
+                                    id="egr"
+                                    name="egr"
+                                    checked={!!form.egr}
+                                    onChange={handleChange}
+                                    disabled={isView}
+                                    className="w-4 h-4 accent-red-600"
+                                  />
+                                  <span className="text-sm font-bold text-muted-foreground-500 uppercase">
+                                    Mesure EGR
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                         </div>
                         </div>
                       </section>
                     </div>
@@ -3318,7 +3406,6 @@ export function Demandes() {
                         ),
                       )}
                     </section>
-                    {/* Section 2 : Détails dynamiques pour CHAQUE mesure sélectionnée */}
                     {/* Section 2 : Détails dynamiques pour CHAQUE mesure sélectionnée */}
                     <section className="space-y-6">
                       <h3 className="text-sm font-bold text-muted-foreground-700 border-b pb-2 uppercase tracking-tight">

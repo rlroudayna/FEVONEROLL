@@ -24,7 +24,7 @@ import {
   ForgotPassword,
   NotFound,
   Clients,
-  Carburants
+  Carburants,
 } from "./pages";
 import { ResetPassword } from "./pages/ResetPassword";
 
@@ -86,13 +86,16 @@ export const router = createBrowserRouter([
             element: <ValidationDetail />,
           },
 
-{
-  element: <ProtectedRoute allowedRoles={["ADMIN", "CHARGE_ESSAI"]} />,
-  children: [
-    { path: "reporting", element: <Reporting /> },
-  ],
-},
-{ path: "carburants", element: <Carburants /> },          { path: "profile", element: <Profile /> },
+          {
+            element: (
+              <ProtectedRoute allowedRoles={["ADMIN", "CHARGE_ESSAI"]} />
+            ),
+            children: [{ path: "reporting", element: <Reporting /> },
+              { path: "carburants", element: <Carburants /> },
+            ],
+          },
+          { path: "carburants", element: <Carburants /> },
+          { path: "profile", element: <Profile /> },
         ],
       },
     ],

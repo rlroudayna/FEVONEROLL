@@ -50,6 +50,10 @@ public class DemandeEssai {
     private LoiRoute loi;
 
     @ManyToOne
+    @JoinColumn(name = "carburant_id")
+    private Carburant typeCarburant;
+
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
     private String demandeur;
@@ -78,6 +82,7 @@ public class DemandeEssai {
 
     @Enumerated(EnumType.STRING)
     private TypeEssai typeEssai;
+    private Integer temps;
     private Boolean verificationCoastDown;
     private Integer nombreDecelerations;
     private String commentaire;
@@ -92,8 +97,7 @@ public class DemandeEssai {
     private Float debitCVsPhase6;
     private Float debitCVsPhase7;
     private Float debitCVsPhase8;
-    private Float debitCVsPhase9;
-    private Float debitCVsPhase10;
+
 
     private Boolean pm;
     private Float debitPrelevement;
@@ -106,8 +110,6 @@ public class DemandeEssai {
     private String pointPrelevementL1;
     private Boolean ligne2;
     private String pointPrelevementL2;
-    private Boolean ligne3;
-    private String pointPrelevementL3;
     private Boolean microsot;
     private String pointPrelevementMicrosot;
 

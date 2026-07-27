@@ -266,9 +266,9 @@ const getValidationStyle = (status?: string) => {
   switch (status) {
     case "OK":
       return "bg-[#E8F5E9] text-[#2E7D32]";
-    case "NOK":
-      return "bg-[#FFF9C4] text-[#FBC02D]";
     case "OK_SOUS_RESERVE":
+      return "bg-[#FFF9C4] text-[#FBC02D]";
+    case "NOK":
       return "bg-[#FFEBEE] text-[#C62828]";
     default:
       return "bg-gray-100 text-muted-foreground-600";

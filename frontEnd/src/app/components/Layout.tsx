@@ -73,6 +73,12 @@ const navigation = [
   { name: "Calages", path: "/app/calages", icon: Settings },
 
   { name: "Cycles", path: "/app/cycles", icon: Repeat },
+  {
+    name: "Carburants",
+    path: "/app/carburants",
+    icon: Fuel,
+    roles: [Role.ADMIN, Role.CHARGE_ESSAI],
+  },
 
   { name: "Demandes", path: "/app/demandes", icon: FileText },
 
@@ -86,11 +92,6 @@ const navigation = [
     icon: TrendingUp,
     roles: [Role.ADMIN, Role.CHARGE_ESSAI],
   },
-  {
-  name: "Carburants",
-  path: "/app/carburants",
-  icon: Fuel,
-},
 ];
 
 export function Layout() {

@@ -230,6 +230,10 @@ export function ValidationConducteur() {
   );
   const isReadOnly = isValidated;
   const handleSubmit = async () => {
+     if (!selectedStatus) {
+      toast.warning("Veuillez sélectionner un statut avant de valider.");
+      return;
+    }
     try {
       if (!selectedStatus) return;
       await authFetch(`/validation_technicien/${id}`, {
@@ -448,7 +452,6 @@ export function ValidationConducteur() {
         {!isValidated && (
           <button
             onClick={handleSubmit}
-            disabled={!selectedStatus}
             className="px-20 py-2.5 bg-card border-2 border-gray text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
           >
             Valider l'essai

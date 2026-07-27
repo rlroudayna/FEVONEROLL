@@ -393,26 +393,41 @@ export function Planning() {
   useEffect(() => {
     fetchDemandes();
   }, []);
+  const SHIFT_ORDER: Record<string, number> = {
+    MATIN: 1,
+    APRES_MIDI: 2,
+    NUIT: 3,
+  };
   /* ── Transform ── */
   const planningData: DayPlanning[] = useMemo(
-    () =>
-      weekDays.map((day) => ({
-        day: `${day.dayName} ${day.label}`,
-        slots: demandes
-          .filter((dem) => dem.datePlanification?.startsWith(day.date))
-          .map((dem) => ({
-            time: dem.shift ?? "MATIN",
-            numeroProjet: dem.numeroProjet?.toString() ?? "",
-            date: dem.datePlanification,
-            NomDemande: dem.nomAuto ?? "",
-            technicienId:
-              dem.technicienId != null ? Number(dem.technicienId) : null,
-            shift: dem.shift,
-          })),
-      })),
-    [demandes, weekDays],
-  );
+  () =>
+    weekDays.map((day) => {
+      const daySlots = demandes
+        .filter((dem) => dem.datePlanification?.startsWith(day.date))
+        .map((dem) => ({
+          time: dem.shift ?? "MATIN",
+          numeroProjet: dem.numeroProjet?.toString() ?? "",
+          date: dem.datePlanification ?? "",
+          NomDemande: dem.nomAuto ?? "",
+          technicienId:
+            dem.technicienId != null ? Number(dem.technicienId) : null,
+          shift: dem.shift,
+        }));
 
+      // Tri chronologique : MATIN (1) -> APRES_MIDI/SOIR (2) -> NUIT (3)
+      daySlots.sort((a, b) => {
+        const orderA = SHIFT_ORDER[a.shift ?? "MATIN"] ?? 99;
+        const orderB = SHIFT_ORDER[b.shift ?? "MATIN"] ?? 99;
+        return orderA - orderB;
+      });
+
+      return {
+        day: `${day.dayName} ${day.label}`,
+        slots: daySlots,
+      };
+    }),
+  [demandes, weekDays],
+);
   /* ── Filter ── */
   const filteredPlanning = planningData.map((day) => ({
     ...day,
@@ -477,12 +492,14 @@ export function Planning() {
             placeholder="Projet"
             value={numeroProjetFilter}
             onChange={(e) => setNumeroProjetFilter(e.target.value)}
-className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          />
+            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
+          />
           <input
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          />
+            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
+          />
           <select
             value={selectedTechnicienId}
             onChange={(e) =>
@@ -490,7 +507,8 @@ className="h-12 px-4 bg-background text-foreground border border-border rounded-
                 e.target.value ? Number(e.target.value) : "",
               )
             }
-className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"          >
+            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
+          >
             <option value="">Tous techniciens</option>
             {techniciens.map((t) => (
               <option key={t.id} value={t.id}>
@@ -502,7 +520,8 @@ className="h-12 px-4 bg-background text-foreground border border-border rounded-
             onClick={() =>
               setViewMode(viewMode === "calendar" ? "list" : "calendar")
             }
-className="h-12 px-4 bg-background text-foreground border border-border rounded-lg flex items-center justify-center gap-2 hover:bg-muted transition w-full"          >
+            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg flex items-center justify-center gap-2 hover:bg-muted transition w-full"
+          >
             <List className="w-4 h-4" />
             <span className="text-sm capitalize">{viewMode}</span>
           </button>

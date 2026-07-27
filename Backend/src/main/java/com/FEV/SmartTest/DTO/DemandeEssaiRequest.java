@@ -17,6 +17,7 @@ public class DemandeEssaiRequest {
     private Long calageId;
     private Long cycleId;
     private Long loiId;
+    private Long carburantId;
 
     private String nomAuto;
     private Long numeroProjet;
@@ -39,7 +40,6 @@ public class DemandeEssaiRequest {
     private Float pressionAmbiante;
     private Boolean activationSTT;
     private Float temperatureEssai;
-
     private ListeGestionBatterie12V gestionBatterie12V;
 
     private Float socDepart12V;
@@ -48,6 +48,7 @@ public class DemandeEssaiRequest {
     private Boolean chauffageHabitable;
 
     private TypeEssai typeEssai;
+    private Integer temps;
     private Boolean verificationCoastDown;
     private Integer nombreDecelerations;
     private String commentaire;

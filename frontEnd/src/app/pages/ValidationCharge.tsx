@@ -254,6 +254,15 @@ export function ValidationCharge() {
   const [clients, setClients] = useState<Client[]>([]);
   const [clientFilter, setClientFilter] = useState<number | "Tous">("Tous");
   const handleSubmit = async () => {
+    if (!selectedStatus) {
+      toast.warning("Veuillez sélectionner un statut avant de valider.");
+      return;
+    }
+
+    if (!fichierBaR && !demande?.validationCharge?.fichierBaRPath) {
+      toast.warning("Le fichier BàR est obligatoire avant la validation.");
+      return;
+    }
     try {
       const formData = new FormData();
 
@@ -333,27 +342,26 @@ export function ValidationCharge() {
     fetchClients();
   }, []);
 
-  
   const viewFile = async (path?: string) => {
-  if (!path) return;
-  try {
-    const token = localStorage.getItem("token");
-   const response = await fetch(
-  `http://localhost:8080/api/validation_charge/view?path=${encodeURIComponent(path)}`,
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  },
-);
-    if (!response.ok) throw new Error();
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    window.open(blobUrl, "_blank");
-  } catch {
-    toast.error("Impossible d'ouvrir le fichier");
-  }
-};
+    if (!path) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:8080/api/validation_charge/view?path=${encodeURIComponent(path)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (!response.ok) throw new Error();
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      window.open(blobUrl, "_blank");
+    } catch {
+      toast.error("Impossible d'ouvrir le fichier");
+    }
+  };
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -431,8 +439,66 @@ export function ValidationCharge() {
         </div>
       </div>
 
+      {/* Validation demandeur */}
+      <div className="bg-card rounded-xl shadow-sm p-3">
+        <h3 className="text-lg font-semibold mb-4">
+          Validation chargé d'essai
+        </h3>
+        <div className="grid grid-cols-3 gap-4">
+          <button
+            disabled={isReadOnly}
+            onClick={() => !isReadOnly && setSelectedStatus("OK")}
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedStatus === "OK"
+                ? "bg-[#E8F5E9] border-[#2E7D32]"
+                : "bg-card border-[#E0E0E0] hover:border-[#2E7D32]"
+            }`}
+          >
+            <CheckCircle className="w-8 h-8 text-[#2E7D32] mx-auto mb-2" />
+            <div className="font-medium">OK - Essai valide</div>
+          </button>
+
+          <button
+            disabled={isReadOnly}
+            onClick={() => !isReadOnly && setSelectedStatus("NOK")}
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedStatus === "NOK"
+                ? "bg-[#FFEBEE] border-[#C62828]"
+                : "bg-card border-[#E0E0E0] hover:border-[#C62828]"
+            }`}
+          >
+            <XCircle className="w-8 h-8 text-[#C62828] mx-auto mb-2" />
+            <div className="font-medium">NOK - Essai non valide</div>
+          </button>
+
+          <button
+            disabled={isReadOnly}
+            onClick={() => !isReadOnly && setSelectedStatus("OK_SOUS_RESERVE")}
+            className={`p-4 rounded-lg border-2 transition-all ${
+              selectedStatus === "OK_SOUS_RESERVE"
+                ? "bg-[#FFF3E0] border-[#ED6C02]"
+                : "bg-card border-[#E0E0E0] hover:border-[#ED6C02]"
+            }`}
+          >
+            <AlertTriangle className="w-8 h-8 text-[#ED6C02] mx-auto mb-2" />
+            <div className="font-medium">OK sous réserve</div>
+          </button>
+        </div>
+        <label className="flex items-center gap-3 cursor-pointer p-6">
+          <input
+            type="checkbox"
+            disabled={isReadOnly}
+            checked={oetbChecked}
+            onChange={(e) => setOetbChecked(e.target.checked)}
+            className="w-5 h-5 text-black rounded focus:[#E30613]"
+          />
+          <span className="text-sm">OETB</span>
+        </label>
+      </div>
+      {/* OETB */}
       {/* Import fichiers */}
       {/* Import fichiers */}
+
       <div className="bg-card rounded-xl shadow-sm px-3 py-2">
         <h3 className="text-base font-semibold mb-3">Import des fichiers</h3>
 
@@ -546,64 +612,6 @@ export function ValidationCharge() {
         </div>
       </div>
 
-      {/* Validation demandeur */}
-      <div className="bg-card rounded-xl shadow-sm p-3">
-        <h3 className="text-lg font-semibold mb-4">
-          Validation chargé d'essai
-        </h3>
-        <div className="grid grid-cols-3 gap-4">
-          <button
-            disabled={isReadOnly}
-            onClick={() => !isReadOnly && setSelectedStatus("OK")}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedStatus === "OK"
-                ? "bg-[#E8F5E9] border-[#2E7D32]"
-                : "bg-card border-[#E0E0E0] hover:border-[#2E7D32]"
-            }`}
-          >
-            <CheckCircle className="w-8 h-8 text-[#2E7D32] mx-auto mb-2" />
-            <div className="font-medium">OK - Essai valide</div>
-          </button>
-
-          <button
-            disabled={isReadOnly}
-            onClick={() => !isReadOnly && setSelectedStatus("NOK")}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedStatus === "NOK"
-                ? "bg-[#FFEBEE] border-[#C62828]"
-                : "bg-card border-[#E0E0E0] hover:border-[#C62828]"
-            }`}
-          >
-            <XCircle className="w-8 h-8 text-[#C62828] mx-auto mb-2" />
-            <div className="font-medium">NOK - Essai non valide</div>
-          </button>
-
-          <button
-            disabled={isReadOnly}
-            onClick={() => !isReadOnly && setSelectedStatus("OK_SOUS_RESERVE")}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedStatus === "OK_SOUS_RESERVE"
-                ? "bg-[#FFF3E0] border-[#ED6C02]"
-                : "bg-card border-[#E0E0E0] hover:border-[#ED6C02]"
-            }`}
-          >
-            <AlertTriangle className="w-8 h-8 text-[#ED6C02] mx-auto mb-2" />
-            <div className="font-medium">OK sous réserve</div>
-          </button>
-        </div>
-        <label className="flex items-center gap-3 cursor-pointer p-6">
-          <input
-            type="checkbox"
-            disabled={isReadOnly}
-            checked={oetbChecked}
-            onChange={(e) => setOetbChecked(e.target.checked)}
-            className="w-5 h-5 text-black rounded focus:[#E30613]"
-          />
-          <span className="text-sm">OETB</span>
-        </label>
-      </div>
-      {/* OETB */}
-
       <div className="bg-card rounded-xl shadow-sm p-6">
         <label className="block text-lg font-semibold mb-3">
           Commentaire de chargé d'essai
@@ -629,7 +637,7 @@ export function ValidationCharge() {
         {!isReadOnly && (
           <button
             onClick={handleSubmit}
-            disabled={!selectedStatus}
+            
             className="px-10 py-2.5 bg-card border-2 border-border text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
           >
             Valider l'essai
