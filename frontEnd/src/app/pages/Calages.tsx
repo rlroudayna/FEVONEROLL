@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/Dialog";
-
+import { useTranslation } from "react-i18next";
 export interface LoiRoute {
   id: number;
   nom: string;
@@ -67,6 +67,8 @@ export function Calages() {
   const [allClients, setAllClients] = useState<{ id: number; nom: string }[]>(
     [],
   );
+  const { t } = useTranslation();
+
   const filteredCalages = calages.filter((c) => {
     const matchSearch =
       c.nom?.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -123,7 +125,7 @@ export function Calages() {
         setVehicules(vehiculesData ?? []);
         setLoisRoutes(loisData ?? []);
       } catch (err) {
-        toast.error("Erreur lors du chargement des données");
+        toast.error(t("calages.updatedSuccess"));
       }
     };
 
@@ -200,7 +202,7 @@ export function Calages() {
           prev.map((c) => (c.id === updated.id ? updated : c)),
         );
 
-        toast.success("Calage modifié !");
+        toast.success(t("calages.updatedSuccess"));
       } else {
         const created = await authFetch("/calages", {
           method: "POST",
@@ -209,7 +211,7 @@ export function Calages() {
 
         setCalages((prev) => [...prev, created]);
 
-        toast.success("Calage ajouté !");
+        toast.success(t("calages.createdSuccess"));
       }
 
       await fetchCalages();
@@ -225,7 +227,7 @@ export function Calages() {
     try {
       await authFetch(`/calages/${id}`, { method: "DELETE" });
       setCalages((prev) => prev.filter((c) => c.id !== id));
-      toast.success("Calage supprimé !");
+      toast.success(t("calages.deletedSuccess"));
       await fetchCalages();
     } catch (err: any) {
       console.error(err);
@@ -235,8 +237,8 @@ export function Calages() {
         err?.message?.includes("foreign key");
 
       const message = isConstraint
-        ? "Suppression impossible : ce calage est utilisé dans d'autres données."
-        : "Erreur lors de la suppression du calage.";
+        ? t("calages.deleteConstraintError")
+        : t("calages.deleteError");
 
       toast.error(message);
     }
@@ -337,11 +339,9 @@ export function Calages() {
         {" "}
         <div>
           <h1 className="text-2xl font-semibold text-muted-foreground-600 text-left mb-2">
-            Gestion des calages
+            {t("calages.title")}
           </h1>
-          <p className="text-muted-foreground ">
-            Gérer les configurations de calage pour les essais
-          </p>
+          <p className="text-muted-foreground ">{t("calages.subtitle")}</p>
         </div>
         {canEdit && (
           <button
@@ -357,7 +357,7 @@ export function Calages() {
             className="h-11 px-6 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            Ajouter un calage
+            {t("calages.add")}{" "}
           </button>
         )}
       </div>
@@ -368,7 +368,7 @@ export function Calages() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-400 transition-colors group-focus-within:text-[#E30613]" />
           <input
             type="text"
-            placeholder="Rechercher par nom..."
+            placeholder={t("calages.searchName")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full h-12 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -385,7 +385,7 @@ export function Calages() {
               )
             }
           >
-            <option value="Tous">Client (Tous)</option>
+            <option value="Tous"> {t("calages.allClients")}</option>
 
             {allClients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -399,7 +399,7 @@ export function Calages() {
           onChange={(e) => setFilterVehicule(e.target.value)}
           className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
         >
-          <option value="Tous">Tous les véhicules</option>
+          <option value="Tous"> {t("calages.allVehicles")}</option>
 
           {vehicules.map((v) => (
             <option key={v.id} value={v.id}>
@@ -414,7 +414,7 @@ export function Calages() {
           onChange={(e) => setFilterLoi(e.target.value)}
           className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
         >
-          <option value="Tous">Lois de route (Tous)</option>
+          <option value="Tous"> {t("calages.allRoadLaws")}</option>
 
           {loisRoutes.map((l) => (
             <option key={l.id} value={l.id}>
@@ -428,10 +428,10 @@ export function Calages() {
         {/* On active le mode transparent ici */}
         <DialogContent className="max-w-md" hideOverlay={true}>
           <DialogHeader>
-            <DialogTitle>Confirmation de suppression</DialogTitle>
+            <DialogTitle> {t("calages.deleteConfirmation")}</DialogTitle>
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            Voulez-vous vraiment supprimer le calage{" "}
+            {t("calages.deleteConfirmationMessage")}{" "}
             <span className="font-bold">{selectedCalage?.nom}</span> ?
           </p>
           <div className="flex justify-end gap-4 mt-4">
@@ -439,7 +439,7 @@ export function Calages() {
               onClick={() => setShowConfirmDelete(false)}
               className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Non
+              {t("common.no")}
             </button>
             <button
               onClick={() => {
@@ -451,7 +451,7 @@ export function Calages() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              Confirmer suppression
+              {t("common.confirm")}{" "}
             </button>
           </div>
         </DialogContent>
@@ -464,20 +464,24 @@ export function Calages() {
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
                 <th className="px-8 py-5 font-semibold text-white">
-                  Nom du calage
+                  {t("calages.calageName")}
                 </th>
                 <th className="px-8 py-5 text-left font-semibold text-white">
-                  Client
+                  {t("calages.client")}
                 </th>
-                <th className="px-3 py-5 font-semibold text-white">Véhicule</th>
+                <th className="px-3 py-5 font-semibold text-white">
+                  {" "}
+                  {t("calages.vehicle")}
+                </th>
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Loi de route
+                  {t("calages.roadLaw")}
                 </th>
                 <th className="px-2 py-3 font-semibold text-white whitespace-nowrap">
-                  Mode de conduite
+                  {t("calages.drivingMode")}
                 </th>
                 <th className="px-1 py-5 font-semibold text-white">
-                  Température
+                  {t("calages.temperature")}
+
                   <span className="text-sm font-normal opacity-80">(°C)</span>
                 </th>
 
@@ -496,7 +500,10 @@ export function Calages() {
                     (N/(km/h)²)
                   </span>
                 </th>
-                <th className="px-2 py-5 font-semibold text-white">Actions</th>
+                <th className="px-2 py-5 font-semibold text-white">
+                  {" "}
+                  {t("calages.actions")}
+                </th>
               </tr>
             </thead>
 
@@ -610,7 +617,7 @@ export function Calages() {
                     colSpan={8}
                     className="text-center py-10 text-muted-foreground-400"
                   >
-                    Aucun calage trouvé
+                    {t("calages.noCalage")}{" "}
                   </td>
                 </tr>
               )}
@@ -625,9 +632,9 @@ export function Calages() {
             {/* HEADER */}
             <div className="flex justify-between items-center py-3.5 px-6 border-b border-border bg-card">
               <h2 className="text-xl font-bold text-foreground">
-                {modalMode === "add" && "Ajouter un calage"}
-                {modalMode === "edit" && "Modifier le calage"}
-                {modalMode === "view" && "Détails du calage"}
+                {modalMode === "add" && t("calages.add")}
+                {modalMode === "edit" && t("calages.edit")}
+                {modalMode === "view" && t("calages.details")}
               </h2>
 
               <button
@@ -659,14 +666,14 @@ export function Calages() {
               {/* SECTION 1 : Identification */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider ">
-                  Identification
+                  {t("calages.identification")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 ">
                   {/* Nom du calage */}
                   <div className="flex flex-col gap-1.5 py-2">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Nom du calage
+                      {t("calages.calageName")}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -684,7 +691,8 @@ export function Calages() {
                   {/* Client */}
                   <div className="flex flex-col gap-1.5 py-2">
                     <label className="text-sm font-medium text-muted-foreground-530">
-                      Client <span className="text-red-500 ml-1">*</span>
+                      {t("calages.client")}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
 
                     <select
@@ -698,7 +706,7 @@ export function Calages() {
                       className="h-11 px-3 rounded-lg border border-border bg-background text-foreground"
                     >
                       <option value={0} disabled>
-                        Sélectionner un client
+                        {t("calages.selectClient")}
                       </option>
 
                       {activeClients.map((c) => (
@@ -711,7 +719,7 @@ export function Calages() {
                   {/* Température */}
                   <div className="flex flex-col gap-1.5 py-2">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Température (°C)
+                      {t("calages.temperature")} (°C)
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -729,7 +737,7 @@ export function Calages() {
                   </div>
                   <div className="flex flex-col gap-1.5 py-2">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Mode de conduite
+                      {t("calages.drivingMode")}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -745,7 +753,7 @@ export function Calages() {
                       className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
                       focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
-                      <option value="">Sélectionner</option>
+                      <option value=""> {t("common.select")}</option>
                       <option value={ModeConduite.TRACTION}>Traction</option>
                       <option value={ModeConduite.QUATRE_X_QUATRE}>4×4</option>
                       <option value={ModeConduite.PROPULSION}>
@@ -759,14 +767,15 @@ export function Calages() {
               {/* SECTION 2 : Associations */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider  mb-2">
-                  Associations
+                  {t("calages.associations")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   {/* Véhicule */}
                   <div className="flex flex-col gap-1.5 ">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Véhicule
+                      {t("calages.vehicle")}
+
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -782,7 +791,7 @@ export function Calages() {
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
-                      <option value="">Sélectionner véhicule</option>
+                      <option value=""> {t("common.select")}</option>
 
                       {vehicules.map((v) => (
                         <option key={v.id} value={v.id}>
@@ -795,7 +804,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   {/* Loi de route */}
                   <div className="flex flex-col gap-1.5 ">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Loi de route
+                      {t("calages.roadLaw")}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -811,7 +820,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
-                      <option value="">Sélectionner loi</option>
+                      <option value="">{t("common.select")}</option>
 
                       {loisRoutes.map((l) => (
                         <option key={l.id} value={l.id}>
@@ -826,7 +835,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               {/* SECTION 3 : Coefficients */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-2 ">
-                  Coefficients provisoires
+                  {t("calages.provisionalCoefficients")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 ">
@@ -892,11 +901,11 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               {/* SECTION 4 : Description */}
               <section>
                 <label className="text-sm font-medium text-muted-foreground-900 block mb-2">
-                  Commentaire
+                  {t("calages.comment")}
                 </label>
 
                 <textarea
-                  placeholder="Informations supplémentaires..."
+                  placeholder={t("calages.commentPlaceholder")}
                   value={newCalage.description}
                   onChange={(e) => handleChange("description", e.target.value)}
                   disabled={modalMode === "view"}
@@ -912,14 +921,16 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     onClick={() => setShowModal(false)}
                     className="px-8 py-2 border rounded-lg"
                   >
-                    Annuler
+                    {t("common.cancel")}
                   </button>
 
                   <button
                     type="submit"
                     className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                   >
-                    {modalMode === "edit" ? "Modifier" : "Enregistrer"}
+                    {modalMode === "edit"
+                      ? t("common.edit")
+                      : t("common.save")}{" "}
                   </button>
                 </div>
               )}

@@ -6,7 +6,6 @@ import { Forbidden } from "./pages/Forbidden";
 import {
   Welcome,
   Login,
-  SignUp,
   Dashboard,
   Users,
   Vehicules,
@@ -19,7 +18,6 @@ import {
   ValidationConducteur,
   ValidationCharge,
   ValidationDetail,
-  Reporting,
   Profile,
   ForgotPassword,
   NotFound,
@@ -37,10 +35,7 @@ export const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-  {
-    path: "/signup",
-    element: <SignUp />,
-  },
+  
   {
     path: "/forgot-password",
     element: <ForgotPassword />,
@@ -90,9 +85,7 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["ADMIN", "CHARGE_ESSAI"]} />
             ),
-            children: [{ path: "reporting", element: <Reporting /> },
-              { path: "carburants", element: <Carburants /> },
-            ],
+           
           },
           { path: "carburants", element: <Carburants /> },
           { path: "profile", element: <Profile /> },

@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/Dialog";
-
+import { useTranslation } from "react-i18next";
 export enum Norme {
   WLTP = "WLTP",
   NEDC = "NEDC",
@@ -67,7 +67,7 @@ export function LoisDeRoute() {
   const [clientFilter, setClientFilter] = useState("Tous");
   const [normeFilter, setNormeFilter] = useState("Tous");
   const [normeModeConduite, setNormeModeConduite] = useState("Tous");
-
+  const { t } = useTranslation();
   const [activeClients, setActiveClients] = useState<
     { id: number; nom: string }[]
   >([]);
@@ -168,7 +168,7 @@ export function LoisDeRoute() {
       });
       setLois((prev) => [...prev, created]);
       setShowModal(false);
-      toast.success("Lois de route créé avec succès !");
+      toast.success(t("roadLaws.createdSuccess"));
     } catch (err) {
       console.error(err);
       toast.error("Erreur lors de la création du lois !");
@@ -190,8 +190,8 @@ export function LoisDeRoute() {
         });
 
         setLois((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
+        toast.success(t("roadLaws.updatedSuccess"));
 
-        toast.success("Loi modifiée avec succès !");
       } else {
         const created = await authFetch("/lois-route", {
           method: "POST",
@@ -200,7 +200,7 @@ export function LoisDeRoute() {
 
         setLois((prev) => [...prev, created]);
 
-        toast.success("Loi ajoutée avec succès !");
+        toast.success(t("roadLaws.createdSuccess"));
       }
 
       // reset propre du formulaire
@@ -215,7 +215,7 @@ export function LoisDeRoute() {
     try {
       await authFetch(`/lois-route/${id}`, { method: "DELETE" });
       setLois((prev) => prev.filter((l) => l.id !== id));
-      toast.success("Lois de route supprimé !");
+      toast.success(t("roadLaws.deletedSuccess"));
     } catch (err: any) {
       console.error(err);
 
@@ -325,11 +325,9 @@ export function LoisDeRoute() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-2xl font-semibold text-foreground mb-2">
-            Gestion de lois de route
+            {t("roadLaws.title")}
           </h1>
-          <p className="text-muted-foreground">
-            Paramétrer les lois de simulation des efforts routiers
-          </p>
+          <p className="text-muted-foreground">{t("roadLaws.subtitle")} </p>
         </div>
         {canEdit && (
           <button
@@ -344,7 +342,7 @@ export function LoisDeRoute() {
             className="ml-auto h-11 px-6 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            Ajouter une loi de route
+            {t("roadLaws.add")}
           </button>
         )}
       </div>
@@ -356,7 +354,7 @@ export function LoisDeRoute() {
 
           <input
             type="text"
-            placeholder="Rechercher par nom"
+            placeholder={t("roadLaws.searchName")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full h-11 pl-10 pr-4 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -377,7 +375,7 @@ export function LoisDeRoute() {
             value={clientFilter}
             onChange={(e) => setClientFilter(e.target.value)}
           >
-            <option value="Tous">Client (Tous)</option>
+            <option value="Tous"> {t("roadLaws.allClients")}</option>
 
             {allClients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -391,7 +389,7 @@ export function LoisDeRoute() {
           value={normeFilter}
           onChange={(e) => setNormeFilter(e.target.value)}
         >
-          <option value="Tous">Norme (Tous)</option>
+          <option value="Tous"> {t("roadLaws.allStandards")}</option>
           <option value={Norme.WLTP}>WLTP</option>
           <option value={Norme.NEDC}>NEDC</option>
           <option value={Norme.RDE}>RDE</option>
@@ -402,7 +400,7 @@ export function LoisDeRoute() {
           value={normeModeConduite}
           onChange={(e) => setNormeModeConduite(e.target.value)}
         >
-          <option value="Tous">Mode de conduite (Tous)</option>
+          <option value="Tous"> {t("roadLaws.allDrivingModes")}</option>
           <option value={ModeConduite.TRACTION}>Traction</option>
           <option value={ModeConduite.QUATRE_X_QUATRE}>4X4</option>
           <option value={ModeConduite.PROPULSION}>Propulsion</option>
@@ -413,7 +411,7 @@ export function LoisDeRoute() {
 
           <input
             type="number"
-            placeholder="Rechercher par inertie"
+            placeholder={t("roadLaws.searchInertia")}
             value={searchInertie}
             onChange={(e) => setSearchInertie(e.target.value)}
             className="w-full h-11 pl-10 pr-4 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -431,37 +429,37 @@ export function LoisDeRoute() {
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
                 <th className="px-8 py-3 font-semibold text-white whitespace-nowrap">
-                  Nom du loi
+                  {t("roadLaws.lawName")}{" "}
                 </th>
 
                 <th className="px-10 py-3 font-semibold text-white whitespace-nowrap">
-                  Client
+                  {t("roadLaws.client")}
                 </th>
 
                 <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
-                  Norme
+                  {t("roadLaws.standard")}
                 </th>
                 <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
-                  Mode de conduite
+                  {t("roadLaws.drivingMode")}
                 </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>Température</span>
+                    <span>{t("roadLaws.temperature")}</span>
                     <span className="text-sm font-normal opacity-80">(°C)</span>
                   </div>
                 </th>
 
                 <th className="px-1 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>Inertie</span>
+                    <span>{t("roadLaws.inertia")}</span>
                     <span className="text-sm font-normal opacity-80">(kg)</span>
                   </div>
                 </th>
 
                 <th className="px-2 py-3 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>Masse d’essai</span>
+                    <span>{t("roadLaws.testMass")}</span>
                     <span className="text-sm font-normal opacity-80">(kg)</span>
                   </div>
                 </th>
@@ -492,7 +490,7 @@ export function LoisDeRoute() {
                 </th>
 
                 <th className="px-6 py-3 font-semibold text-white whitespace-nowrap">
-                  Actions
+                  {t("roadLaws.actions")}
                 </th>
               </tr>
             </thead>
@@ -570,7 +568,7 @@ export function LoisDeRoute() {
                           </button>
                           <button
                             onClick={() => {
-                              setSelectedLois(loi); 
+                              setSelectedLois(loi);
                               setLoisToDelete(loi);
                               setShowConfirmDelete(true);
                             }}
@@ -604,7 +602,7 @@ export function LoisDeRoute() {
                     colSpan={9}
                     className="text-center py-10 text-muted-foreground-400"
                   >
-                    Aucune loi trouvée
+                    {t("roadLaws.noLaw")}{" "}
                   </td>
                 </tr>
               )}
@@ -616,10 +614,10 @@ export function LoisDeRoute() {
           {/* On active le mode transparent ici */}
           <DialogContent className="max-w-md" hideOverlay={true}>
             <DialogHeader>
-              <DialogTitle>Confirmation de suppression</DialogTitle>
+              <DialogTitle> {t("roadLaws.deleteConfirmation")}</DialogTitle>
             </DialogHeader>
             <p className="py-4 text-muted-foreground-700">
-              Voulez-vous vraiment supprimer la lois de route{" "}
+              {t("roadLaws.deleteQuestion")}{" "}
               <span className="font-bold">{selectedLois?.nom}</span> ?
             </p>
 
@@ -628,7 +626,7 @@ export function LoisDeRoute() {
                 onClick={() => setShowConfirmDelete(false)}
                 className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
               >
-                Non
+                {t("common.no")}
               </button>
               <button
                 onClick={() => {
@@ -640,7 +638,7 @@ export function LoisDeRoute() {
                 }}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
               >
-                Confirmer suppression
+                {t("roadLaws.confirmDeletion")}
               </button>
             </div>
           </DialogContent>
@@ -653,9 +651,9 @@ export function LoisDeRoute() {
               {/* HEADER */}
               <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
                 <h2 className="text-xl font-semibold text-muted-foreground-800 px-2">
-                  {modalMode === "add" && "Ajouter une loi de route"}
-                  {modalMode === "edit" && "Modifier la loi de route"}
-                  {modalMode === "view" && "Détails de la loi de route"}
+                  {modalMode === "add" && t("roadLaws.add")}
+                  {modalMode === "edit" && t("roadLaws.edit")}
+                  {modalMode === "view" && t("roadLaws.details")}
                 </h2>
 
                 <button
@@ -676,22 +674,22 @@ export function LoisDeRoute() {
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider">
                       {" "}
-                      Identification
+                      {t("roadLaws.identification")}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
                       {
-                        label: "Nom de la loi",
+                        label: t("roadLaws.lawName"),
                         type: "text",
                         required: true,
-                        placeholder: "Loi_Client_Norme (auto)",
+                        placeholder: t("roadLaws.lawNamePlaceholder"),
                         disabled: true,
                         field: "nom",
                       },
                       {
-                        label: "Température (°C)",
+                        label: `${t("roadLaws.temperature")} (°C)`,
                         type: "number",
                         required: true,
 
@@ -727,7 +725,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     ))}
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
-                        Client <span className="text-red-500 ml-1">*</span>
+                        {t("roadLaws.client")}
+                        <span className="text-red-500 ml-1">*</span>
                       </label>
                       <select
                         name="client"
@@ -741,11 +740,11 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                           handleChange("client", selectedClient || null);
                         }}
-                       className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
+                        className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
                         <option value={0} disabled>
-                          Sélectionner un client
+                          {t("roadLaws.selectClient")}
                         </option>
 
                         {activeClients.map((c) => (
@@ -757,10 +756,10 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-5">
-                    
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
-                        Norme
+                        {t("roadLaws.standard")}
+
                         <span className="text-red-500 ml-1">*</span>
                       </label>
 
@@ -774,7 +773,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
-                        <option value="">Sélectionner</option>
+                        <option value="">{t("common.select")}</option>
                         <option>WLTP</option>
                         <option>NEDC</option>
                         <option>RDE</option>
@@ -782,7 +781,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-sm font-medium text-muted-foreground-900">
-                        Mode de conduite
+                        {t("roadLaws.drivingMode")}
+
                         <span className="text-red-500 ml-1">*</span>
                       </label>
 
@@ -799,7 +799,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
     focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
-                        <option value="">Sélectionner</option>
+                        <option value="">{t("common.select")}</option>
                         <option value={ModeConduite.TRACTION}>Traction</option>
                         <option value={ModeConduite.QUATRE_X_QUATRE}>
                           4×4
@@ -815,7 +815,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 <section className="">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider">
-                      Paramètres d'inertie
+                      {t("roadLaws.inertiaParameters")}{" "}
                     </h3>
                   </div>
 
@@ -852,7 +852,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 <section className="">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider">
-                      Coefficients de résistance
+                      {t("roadLaws.resistanceCoefficients")}{" "}
                     </h3>
                   </div>
 
@@ -889,7 +889,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                 {/* SECTION 4: Commentaires */}
                 <section className="">
                   <label className="text-sm font-medium text-muted-foreground-900 block mb-2">
-                    Commentaire
+                    {t("roadLaws.comments")}
                   </label>
 
                   <textarea
@@ -900,7 +900,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     }
                     className="w-full h-28 p-4 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"
-                    placeholder="Informations additionnelles..."
+                    placeholder={t("roadLaws.commentPlaceholder")}
                   />
                 </section>
                 {modalMode !== "view" && (
@@ -910,14 +910,16 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                       onClick={() => setShowModal(false)}
                       className="px-8 py-2 border rounded-lg"
                     >
-                      Annuler
+                      {t("common.cancel")}
                     </button>
 
                     <button
                       type="submit"
                       className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                     >
-                      {modalMode === "edit" ? "Modifier" : "Enregistrer"}
+                      {modalMode === "edit"
+                        ? t("common.edit")
+                        : t("common.save")}{" "}
                     </button>
                   </div>
                 )}

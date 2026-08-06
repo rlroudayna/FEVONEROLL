@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "../components/ui/Dialog";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 /* ================= ENUMS ================= */
 
@@ -75,23 +76,20 @@ const INITIAL_FORM_STATE: CarburantForm = {
   status: FuelStatus.Published,
   commentaire: "",
 };
-const labels = {
-  carbonNumber: "Carbone",
-  hydrogenNumber: "Hydrogène",
-  oxygenNumber: "Oxygène",
-  nitrogenNumber: "Azote",
-  sulfurNumber: "Soufre",
-};
+
 /* ================= COMPONENT ================= */
 
 export function Carburants() {
   const [carburants, setCarburants] = useState<Carburant[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [compositionFilter, setCompositionFilter] = useState("Tous");
+  const [statusFilter, setStatusFilter] = useState("Tous");
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit" | "view">("add");
   const [selectedCarburant, setSelectedCarburant] = useState<Carburant | null>(
     null,
   );
+  const { t } = useTranslation();
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [role, setRole] = useState("");
   const [form, setForm] = useState<CarburantForm>(INITIAL_FORM_STATE);
@@ -100,7 +98,13 @@ export function Carburants() {
   const [selected, setSelected] = useState<Carburant | null>(null);
 
   /* ================= HANDLERS & ACTIONS ================= */
-
+  const labels = {
+    carbonNumber: t("carburants.carbon"),
+    hydrogenNumber: t("carburants.hydrogen"),
+    oxygenNumber: t("carburants.oxygen"),
+    nitrogenNumber: t("carburants.nitrogen"),
+    sulfurNumber: t("carburants.sulfur"),
+  };
   const resetForm = () => {
     setSelectedCarburant(null);
     setForm(INITIAL_FORM_STATE);
@@ -185,12 +189,11 @@ export function Carburants() {
       });
 
       setCarburants((prev) => [...prev, created]);
-      toast.success("Carburant ajouté avec succès");
+toast.success(t("carburants.createdSuccess"));
       setShowModal(false);
       resetForm();
     } catch {
-      toast.error("Erreur lors de l'ajout du carburant");
-    }
+toast.error(t("carburants.createError"));    }
   };
 
   const updateCarburant = async () => {
@@ -221,21 +224,17 @@ export function Carburants() {
       setCarburants((prev) =>
         prev.map((c) => (c.id === selectedCarburant.id ? updated : c)),
       );
-      toast.success("Carburant modifié avec succès");
-      setShowModal(false);
+toast.success(t("carburants.updatedSuccess"));      setShowModal(false);
     } catch {
-      toast.error("Erreur lors de la mise à jour");
-    }
+toast.error(t("carburants.updateError"));    }
   };
 
   const deleteCarburant = async (id: number) => {
     try {
       await authFetch(`/carburants/${id}`, { method: "DELETE" });
       setCarburants((prev) => prev.filter((c) => c.id !== id));
-      toast.success("Carburant supprimé");
-    } catch {
-      toast.error("Erreur lors de la suppression");
-    }
+toast.success(t("carburants.deletedSuccess"));    } catch {
+toast.error(t("carburants.deleteError"));    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -251,11 +250,17 @@ export function Carburants() {
 
   const filteredCarburants = carburants.filter((c) => {
     const searchLower = searchText.toLowerCase();
-    return (
-      String(c.density).includes(searchText) ||
-      c.composition.toLowerCase().includes(searchLower) ||
-      c.status.toLowerCase().includes(searchLower)
-    );
+
+    const matchText =
+      c.nom.toLowerCase().includes(searchLower) ||
+      String(c.density).includes(searchText);
+
+    const matchComposition =
+      compositionFilter === "Tous" || c.composition === compositionFilter;
+
+    const matchStatus = statusFilter === "Tous" || c.status === statusFilter;
+
+    return matchText && matchComposition && matchStatus;
   });
 
   return (
@@ -264,11 +269,9 @@ export function Carburants() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-2xl font-semibold text-foreground mb-2">
-            Gestion des carburants
+            {t("carburants.title")}
           </h1>
-          <p className="text-muted-foreground">
-            Gérer les carburants disponibles
-          </p>
+          <p className="text-muted-foreground">{t("carburants.subtitle")}</p>
         </div>
 
         {canEdit && (
@@ -277,22 +280,58 @@ export function Carburants() {
             className="ml-auto h-11 px-8 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            <span>Ajouter un carburant</span>
+            <span>{t("carburants.add")}</span>{" "}
           </button>
         )}
       </div>
 
       {/* ================= RECHERCHE ================= */}
       <div className="bg-card p-5 rounded-xl border border-border shadow-sm">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Rechercher..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="w-full h-11 pl-11 pr-3 rounded-lg border border-border bg-background"
-          />
+        <div className="flex flex-col md:flex-row gap-3 w-full">
+          {/* Recherche */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+
+            <input
+              type="text"
+              placeholder={t("carburants.searchPlaceholder")}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="w-full h-11 pl-11 pr-3 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          {/* Filtre Composition */}
+          <div className="relative w-full md:w-60">
+            <select
+              value={compositionFilter}
+              onChange={(e) => setCompositionFilter(e.target.value)}
+              className="w-full h-11 px-4 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="Tous"> {t("carburants.allCompositions")}</option>
+              {Object.values(Composition).map((composition) => (
+                <option key={composition} value={composition}>
+                  {composition}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtre Statut */}
+          <div className="relative w-full md:w-60">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full h-11 px-4 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="Tous"> {t("carburants.allStatuses")}</option>
+              {Object.values(FuelStatus).map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -301,10 +340,10 @@ export function Carburants() {
         <Dialog open={showConfirmDelete}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Confirmation de suppression</DialogTitle>
+              <DialogTitle> {t("carburants.deleteConfirmation")}</DialogTitle>
             </DialogHeader>
             <p className="py-4">
-              Voulez-vous supprimer ce carburant{" "}
+              {t("carburants.deleteQuestion")}{" "}
               <span className="font-bold">{selected?.nom}</span> ?
             </p>
             <div className="flex justify-end gap-3">
@@ -312,7 +351,7 @@ export function Carburants() {
                 onClick={() => setShowConfirmDelete(false)}
                 className="px-4 py-2 border rounded-lg"
               >
-                Annuler
+                {t("common.cancel")}
               </button>
               <button
                 className="px-4 py-2 bg-red-600 text-white rounded-lg"
@@ -323,7 +362,7 @@ export function Carburants() {
                   setShowConfirmDelete(false);
                 }}
               >
-                Supprimer
+                {t("common.delete")}
               </button>
             </div>
           </DialogContent>
@@ -335,20 +374,43 @@ export function Carburants() {
         <table className="w-full text-sm">
           <thead className="bg-[#B9032C]">
             <tr>
-              <th className="px-5 py-4 text-white text-left">Nom</th>
               <th className="px-5 py-4 text-white text-left">
-                Densité (kg/m³){" "}
+                {" "}
+                {t("carburants.name")}
               </th>
               <th className="px-5 py-4 text-white text-left">
-                Température de référence (°C)
+                {t("carburants.density")}
               </th>
-              <th className="px-5 py-4 text-white text-left">Composition</th>
-              <th className="px-5 py-4 text-white text-left">H₂O (%)</th>
-              <th className="px-5 py-4 text-white text-left">CO₂ (%)</th>
-              <th className="px-5 py-4 text-white text-left">Ethanol (%)</th>
-              <th className="px-5 py-4 text-white text-left">NHV (J/kg) </th>
-              <th className="px-5 py-4 text-white text-left">Status</th>
-              <th className="px-5 py-4 text-white text-center">Actions</th>
+              <th className="px-5 py-4 text-white text-left">
+                {t("carburants.referenceTemperature")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {" "}
+                {t("carburants.composition")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {" "}
+                {t("carburants.h2o")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {" "}
+                {t("carburants.co2")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {t("carburants.ethanol")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {" "}
+                {t("carburants.nhv")}
+              </th>
+              <th className="px-5 py-4 text-white text-left">
+                {" "}
+                {t("carburants.status")}
+              </th>
+              <th className="px-5 py-4 text-white text-center">
+                {" "}
+                {t("carburants.actions")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -391,7 +453,7 @@ export function Carburants() {
                         <>
                           <button
                             onClick={() => openModal("edit", c)}
-                            className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
                           >
                             <Edit className="w-4 h-4 text-green-700" />
                           </button>
@@ -400,7 +462,7 @@ export function Carburants() {
                               setSelectedCarburant(c);
                               setShowConfirmDelete(true);
                             }}
-                            className="p-2 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
                           >
                             <Trash2 className="w-4 h-4 text-red-700" />
                           </button>
@@ -408,7 +470,7 @@ export function Carburants() {
                       )}
                       <button
                         onClick={() => openModal("view", c)}
-                        className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
+                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
                       >
                         <Eye className="w-4 h-4 text-blue-700" />
                       </button>
@@ -428,9 +490,11 @@ export function Carburants() {
             {/* HEADER */}
             <div className="px-6 py-4 border-b flex justify-between items-center">
               <h2 className="text-xl font-semibold">
-                {modalMode === "add" && "Ajouter un carburant"}
-                {modalMode === "edit" && "Modifier un carburant"}
-                {modalMode === "view" && "Détails du carburant"}
+                <h2 className="text-xl font-semibold">
+                  {modalMode === "add" && t("carburants.add")}
+                  {modalMode === "edit" && t("carburants.edit")}
+                  {modalMode === "view" && t("carburants.details")}
+                </h2>
               </h2>
               <button
                 onClick={() => setShowModal(false)}
@@ -447,12 +511,13 @@ export function Carburants() {
               {/* ================= PROPRIETES ================= */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-4">
-                  Propriétés physiques
+                  {t("carburants.physicalProperties")}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Nom <span className="text-red-500">*</span>
+                      {t("carburants.name")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
 
                     <input
@@ -467,7 +532,8 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Densité (kg/m³)<span className="text-red-500">*</span>
+                      {t("carburants.density")}
+                      <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"
@@ -482,7 +548,8 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Température de référence (°C)
+                      {t("carburants.referenceTemperature")}
+
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -501,7 +568,8 @@ export function Carburants() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Composition <span className="text-red-500">*</span>
+                      {t("carburants.composition")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <select
                       value={form.composition}
@@ -525,7 +593,7 @@ export function Carburants() {
               {/* ================= ATOMS ================= */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-2 mt-2">
-                  Composition atomique
+                  {t("carburants.atomicComposition")}
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {(
@@ -559,7 +627,7 @@ export function Carburants() {
               {/* ================= CONTENU ================= */}
               <section>
                 <h3 className="font-semibold text-[#E30613] uppercase text-sm tracking-wider mb-4">
-                  Contenu
+                  {t("carburants.content")}
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {(
@@ -572,10 +640,10 @@ export function Carburants() {
                   ).map((field) => (
                     <div key={field}>
                       <label className="block text-sm font-medium mb-1">
-                        {field === "h2oContent" && "H₂O (%)"}
-                        {field === "co2Content" && "CO₂ (%)"}
-                        {field === "ethanolContent" && "Ethanol (%)"}
-                        {field === "nhv" && "NHV (J/kg)"}
+                        {field === "h2oContent" && t("carburants.h2o")}
+                        {field === "co2Content" && t("carburants.co2")}
+                        {field === "ethanolContent" && t("carburants.ethanol")}
+                        {field === "nhv" && t("carburants.nhv")}
                       </label>
                       <input
                         type="number"
@@ -594,7 +662,10 @@ export function Carburants() {
 
               {/* ================= STATUS ================= */}
               <section>
-                <h3 className="block text-sm font-medium mb-1">État</h3>
+                <h3 className="block text-sm font-medium mb-1">
+                  {" "}
+                  {t("carburants.state")}
+                </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
@@ -618,7 +689,10 @@ export function Carburants() {
               </section>
               {/* ================= COMMENTAIRE ================= */}
               <section>
-                <h3 className="block text-sm font-medium mb-1">Commentaire</h3>
+                <h3 className="block text-sm font-medium mb-1">
+                  {" "}
+                  {t("carburants.comment")}
+                </h3>
 
                 <textarea
                   value={form.commentaire}
@@ -627,7 +701,7 @@ export function Carburants() {
                     handleInputChange("commentaire", e.target.value)
                   }
                   className="w-full min-h-[120px] border rounded-lg px-3 py-2 bg-background resize-none"
-                  placeholder="Ajouter un commentaire..."
+                  placeholder={t("carburants.commentPlaceholder")}
                 />
               </section>
 
@@ -642,13 +716,15 @@ export function Carburants() {
                     }}
                     className="px-8 py-2 border rounded-lg  transition-colors"
                   >
-                    Annuler
+                    {t("common.cancel")}
                   </button>
                   <button
                     type="submit"
                     className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                   >
-                    {modalMode === "edit" ? "Modifier" : "Enregistrer"}
+                    {modalMode === "edit"
+                      ? t("common.edit")
+                      : t("common.save")}{" "}
                   </button>
                 </div>
               )}

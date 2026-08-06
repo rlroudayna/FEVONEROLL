@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { authFetch } from "../api";
 import { CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface Vehicule {
   id: number;
@@ -51,7 +52,7 @@ interface DemandeEssai {
   numeroProjet?: number;
 
   statutGlobal?: "EN_COURS" | "FAIT" | "REJETEE";
-  statutDemande?: "EN_CREATION" | "VALIDEE";
+  statutDemande?: "EN_COURS" | "VALIDEE";
 
   // =====================
   // RELATIONS (BACKEND)
@@ -228,10 +229,11 @@ export function ValidationConducteur() {
   const isValidated = ["OK", "NOK", "OK_SOUS_RESERVE"].includes(
     demande?.validationTechnicien?.decision ?? "",
   );
+  const { t } = useTranslation();
   const isReadOnly = isValidated;
   const handleSubmit = async () => {
-     if (!selectedStatus) {
-      toast.warning("Veuillez sélectionner un statut avant de valider.");
+    if (!selectedStatus) {
+      toast.warning(t("validationTechnicien.messages.selectStatus"));
       return;
     }
     try {
@@ -250,7 +252,7 @@ export function ValidationConducteur() {
       const updated = await authFetch(`/demandes-essai/${id}`);
       setDemande(updated);
     } catch (error) {
-      console.error("Erreur validation", error);
+      toast.error(t("validationTechnicien.messages.validationError"));
     }
   };
   useEffect(() => {
@@ -264,7 +266,7 @@ export function ValidationConducteur() {
     if (!demande) return;
 
     if (demande.validationTechnicien?.decision) {
-      toast.success("Cet essai a déjà été validé et est en lecture seule.");
+      toast.success(t("validationTechnicien.messages.alreadyValidated"));
     }
   }, [demande]);
   useEffect(() => {
@@ -290,11 +292,63 @@ export function ValidationConducteur() {
   useEffect(() => {
     fetchClients();
   }, []);
+  const translateDecision = (decision?: string) => {
+    switch (decision) {
+      case "OK":
+        return t("validationTechnicien.decisions.ok");
+
+      case "NOK":
+        return t("validationTechnicien.decisions.nok");
+
+      case "OK_SOUS_RESERVE":
+        return t("validationTechnicien.decisions.okUnderReservation");
+
+      default:
+        return decision ?? "-";
+    }
+  };
+
+  const translateStatus = (status?: string) => {
+    switch (status) {
+      case "EN_COURS":
+        return t("validationTechnicien.status.inProgress");
+
+      case "FAIT":
+        return t("validationTechnicien.status.done");
+
+      case "PAS_FAIT":
+        return t("validationTechnicien.status.notDone");
+
+      case "VALIDEE":
+        return t("validationTechnicien.status.validated");
+
+      case "EN_CREATION":
+        return t("validationTechnicien.status.inCreation");
+
+      default:
+        return status ?? "-";
+    }
+  };
+  const translateShift = (shift?: string) => {
+    switch (shift) {
+      case "MATIN":
+        return t("validationTechnicien.shifts.morning");
+
+      case "SOIR":
+        return t("validationTechnicien.shifts.evening");
+
+      case "NUIT":
+        return t("validationTechnicien.shifts.night");
+
+      default:
+        return shift ?? "-";
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-semibold text-foreground mb-2">
-          Validation Technicien d'essai
+          {t("validationTechnicien.title")}
         </h1>
       </div>
       {/* Carte récapitulatif sous forme de tableau classique */}
@@ -306,20 +360,37 @@ export function ValidationConducteur() {
             {/* THEAD */}
             <thead className="bg-[#B9032C] border-b border-gray-200">
               <tr className="text-xs uppercase tracking-wider text-white">
-                <th className="px-6 py-4 font-semibold text-white">Nom</th>
-                <th className="px-5 py-4 font-semibold text-white">
-                  N° de Projet
+                <th className="px-6 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.name")}
                 </th>
-                <th className="px-2 py-4 font-semibold text-white">Client</th>
+
+                <th className="px-5 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.project")}
+                </th>
+
+                <th className="px-2 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.client")}
+                </th>
+
                 <th className="px-4 py-4 font-semibold text-white">
-                  Demandeur
+                  {t("validationTechnicien.table.requester")}
                 </th>
-                <th className="px-3 py-4 font-semibold text-white">Statut</th>
+
+                <th className="px-3 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.status")}
+                </th>
+
                 <th className="px-5 py-4 font-semibold text-white">
-                  Validation
+                  {t("validationTechnicien.table.validation")}
                 </th>
-                <th className="px-3 py-4 font-semibold text-white">Date</th>
-                <th className="px-5 py-4 font-semibold text-white">Shift</th>
+
+                <th className="px-3 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.date")}
+                </th>
+
+                <th className="px-5 py-4 font-semibold text-white">
+                  {t("validationTechnicien.table.shift")}
+                </th>
               </tr>
             </thead>
 
@@ -349,12 +420,12 @@ export function ValidationConducteur() {
                           : "bg-orange-100 text-orange-700"
                       }`}
                     >
-                      {demande.statutDemande}
+                      {translateStatus(demande.statutDemande)}{" "}
                     </span>
                   </td>
 
                   <td className="px-5 py-4 text-muted-foreground-600">
-                    {demande.statutGlobal}
+                    {translateStatus(demande.statutGlobal)}
                   </td>
 
                   <td className="px-3 py-4 text-muted-foreground-600">
@@ -362,7 +433,7 @@ export function ValidationConducteur() {
                   </td>
 
                   <td className="px-5 py-4 text-muted-foreground-600">
-                    {demande.shift}
+                    {translateShift(demande.shift)}
                   </td>
                 </tr>
               )}
@@ -385,9 +456,12 @@ export function ValidationConducteur() {
           }`}
         >
           <CheckCircle className="w-6 h-6 text-[#2E7D32] mx-auto mb-1" />
-          <div className="text-sm font-semibold mb-1 text-center">OK</div>
+          <div className="text-sm font-semibold mb-1 text-center">
+            {" "}
+            {t("validationTechnicien.decisions.ok")}
+          </div>
           <div className="text-xs text-gray-600 text-center">
-            Essai réalisé sans problèmes
+            {t("validationTechnicien.decisionDescriptions.ok")}
           </div>
         </button>
 
@@ -401,9 +475,12 @@ export function ValidationConducteur() {
           }`}
         >
           <XCircle className="w-6 h-6 text-[#C62828] mx-auto mb-1" />
-          <div className="text-sm font-semibold mb-1 text-center">NOK</div>
+          <div className="text-sm font-semibold mb-1 text-center">
+            {" "}
+            {t("validationTechnicien.decisions.nok")}
+          </div>
           <div className="text-xs text-gray-600 text-center">
-            Essai interrompu ou non réalisé
+            {t("validationTechnicien.decisionDescriptions.nok")}
           </div>
         </button>
 
@@ -418,17 +495,17 @@ export function ValidationConducteur() {
         >
           <AlertTriangle className="w-6 h-6 text-[#ED6C02] mx-auto mb-1" />
           <div className="text-sm font-semibold mb-1 text-center">
-            OK sous réserve
+            {t("validationTechnicien.decisions.okUnderReservation")}
           </div>
           <div className="text-xs text-gray-600 text-center">
-            Essai réalisé mais avec complications
+            {t("validationTechnicien.decisionDescriptions.okUnderReservation")}
           </div>
         </button>
       </div>
       {/* Commentaire */}
       <div className="bg-card rounded-xl shadow-sm p-6">
         <label className="block text-lg font-semibold mb-3">
-          Commentaire de technicien d'essai
+          {t("validationTechnicien.comment.title")}
         </label>
         <textarea
           value={comment}
@@ -436,25 +513,25 @@ export function ValidationConducteur() {
           disabled={isValidated}
           rows={4}
           className="w-full px-4 py-3  text-muted-foreground-600 border border-border rounded-lg focus:outline-none focus:border-[#E30613] resize-none"
-          placeholder="Décrivez le déroulement de l'essai, le comportement du véhicule, les problèmes rencontrés..."
+          placeholder={t("validationTechnicien.comment.placeholder")}
         />
       </div>
       {/* Boutons */}
       {/* Boutons */}
-      <div className="flex justify-end gap-190 mt-8">
+      <div className="flex justify-end gap-8 mt-8">
         <button
           onClick={() => navigate("/app/validation")}
-          className="px-20 py-2.5 bg-card border-2 border-gray text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
+          className="px-15 py-2.5 bg-card border-2 border-gray text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
         >
-          Annuler
+          {t("common.cancel")}
         </button>
 
         {!isValidated && (
           <button
             onClick={handleSubmit}
-            className="px-20 py-2.5 bg-card border-2 border-gray text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
+            className="px-15 py-2.5 bg-card border-2 border-gray text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
           >
-            Valider l'essai
+            {t("validationTechnicien.actions.validate")}
           </button>
         )}
       </div>

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { authFetch } from "../api";
 import { FileText, Eye } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 interface User {
   nom?: string;
   prenom?: string;
@@ -65,6 +66,7 @@ const getBadgeColor = (status?: string) => {
 };
 
 export function ValidationDetail() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -86,7 +88,7 @@ export function ValidationDetail() {
       const blobUrl = URL.createObjectURL(blob);
       window.open(blobUrl, "_blank");
     } catch {
-      toast.error("Impossible d'ouvrir le fichier");
+      toast.error(t("validationDetail.messages.cannotOpenFile"));
     }
   };
 
@@ -94,7 +96,6 @@ export function ValidationDetail() {
     const fetchDemande = async () => {
       try {
         const data = await authFetch(`/demandes-essai/${id}`);
-        console.log("📦 Données récupérées :", data);
 
         setDemande(data);
       } catch (error) {
@@ -105,15 +106,48 @@ export function ValidationDetail() {
     if (id) fetchDemande();
   }, [id]);
 
+  const translateDecision = (decision?: string) => {
+    switch (decision) {
+      case "OK":
+        return t("validationDetail.decision.ok");
+
+      case "NOK":
+        return t("validationDetail.decision.nok");
+
+      case "OK_SOUS_RESERVE":
+        return t("validationDetail.decision.okUnderReservation");
+
+      default:
+        return decision ?? "-";
+    }
+  };
+  const translateStatus = (status?: string) => {
+    switch (status) {
+      case "FAIT":
+        return t("validationDetail.status.done");
+
+      case "EN_COURS":
+        return t("validationDetail.status.inProgress");
+
+      case "REJETEE":
+        return t("validationDetail.status.rejected");
+
+      case "PAS_FAIT":
+        return t("validationDetail.status.notDone");
+
+      default:
+        return status ?? "-";
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto space-y-4">
       {/* Header */}
       <div>
-          <h1 className="text-2xl font-semibold text-muted-foreground-600 text-left mb-2">
-          Détail validation
+        <h1 className="text-2xl font-semibold text-muted-foreground-600 text-left mb-2">
+          {t("validationDetail.title")}
         </h1>
 
-        <p className="text-foreground">Consultation complète des validations</p>
+        <p className="text-foreground"> {t("validationDetail.subtitle")}</p>
       </div>
 
       {/* Tableau récapitulatif */}
@@ -122,13 +156,33 @@ export function ValidationDetail() {
           <table className="w-full text-sm">
             <thead className="bg-[#B9032C] text-white">
               <tr>
-                <th className="px-4 py-4 text-left">Nom</th>
-                <th className="px-4 py-4 text-left">Projet</th>
-                <th className="px-4 py-4 text-left">Client</th>
-                <th className="px-4 py-4 text-left">Demandeur</th>
-                <th className="px-4 py-4 text-left">Date</th>
-                <th className="px-4 py-4 text-left">Shift</th>
-                <th className="px-4 py-4 text-left">Statut</th>
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.name")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.project")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.client")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.requester")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.date")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.shift")}
+                </th>
+
+                <th className="px-4 py-4 text-left">
+                  {t("validationDetail.table.status")}
+                </th>
               </tr>
             </thead>
 
@@ -140,7 +194,10 @@ export function ValidationDetail() {
                 <td className="px-4 py-4">{demande?.demandeur}</td>
                 <td className="px-4 py-4">{demande?.datePlanification}</td>
                 <td className="px-4 py-4">{demande?.shift}</td>
-                <td className="px-4 py-4">{demande?.statutGlobal}</td>
+                <td className="px-4 py-4">
+                  {" "}
+                  {translateStatus(demande?.statutGlobal)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -152,19 +209,21 @@ export function ValidationDetail() {
         {/* Validation technicien */}
         <div className="bg-card rounded-xl border border-border shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Validation technicien</h2>
-
+            <h2 className="text-lg font-semibold">
+              {" "}
+              {t("validationDetail.technician.title")}
+            </h2>
             <p className="text-base text-muted-foreground-500">
               {demande?.validationTechnicien?.technicien
                 ? `${demande.validationTechnicien.technicien.prenom} ${demande.validationTechnicien.technicien.nom}`
-                : "Non renseigné"}
+                : t("validationDetail.messages.notProvided")}{" "}
             </p>
           </div>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-base text-muted-foreground-500 mb-1">
-                Décision
+                {t("validationDetail.technician.decision")}
               </p>
 
               <span
@@ -172,18 +231,20 @@ export function ValidationDetail() {
                   demande?.validationTechnicien?.decision,
                 )}`}
               >
-                {demande?.validationTechnicien?.decision ?? "-"}
+                {translateDecision(
+                  demande?.validationTechnicien?.decision,
+                )}{" "}
               </span>
             </div>
 
             <div>
               <p className="text-base text-muted-foreground-500 mb-1">
-                Commentaire
+                {t("validationDetail.technician.comment")}
               </p>
 
               <div className="p-2 rounded-lg bg-muted min-h-[80px]">
                 {demande?.validationTechnicien?.commentaire ||
-                  "Aucun commentaire"}
+                  t("validationDetail.messages.noComment")}
               </div>
             </div>
           </div>
@@ -192,7 +253,10 @@ export function ValidationDetail() {
         {/* Validation chargé */}
         <div className="bg-card rounded-xl border border-border shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Validation chargé d'essai</h2>
+            <h2 className="text-lg font-semibold">
+              {" "}
+              {t("validationDetail.charge.title")}
+            </h2>
 
             <p className="text-lg text-muted-foreground-500">
               {demande?.validationCharge?.charge
@@ -204,7 +268,7 @@ export function ValidationDetail() {
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
               <p className="text-base text-muted-foreground-500 mb-1">
-                Décision
+                {t("validationDetail.charge.decision")}
               </p>
 
               <span
@@ -212,17 +276,18 @@ export function ValidationDetail() {
                   demande?.validationCharge?.validation,
                 )}`}
               >
-                {demande?.validationCharge?.validation ?? "-"}
+                {translateDecision(demande?.validationCharge?.validation)}{" "}
               </span>
             </div>
 
             <div>
               <p className="text-base text-muted-foreground-500 mb-1">
-                Commentaire
+                {t("validationDetail.charge.comment")}
               </p>
 
               <div className="p-3 rounded-lg bg-muted min-h-[80px]">
-                {demande?.validationCharge?.commentaire || "Aucun commentaire"}
+                {demande?.validationCharge?.commentaire ||
+                  t("validationDetail.messages.noComment")}{" "}
               </div>
             </div>
           </div>
@@ -232,7 +297,7 @@ export function ValidationDetail() {
       {/* Fichiers */}
       <div className="bg-card rounded-xl border border-border shadow-sm p-4">
         <h2 className="text-lg font-semibold mb-3">
-          Fichiers transmis par le chargé
+          {t("validationDetail.files.title")}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -240,12 +305,15 @@ export function ValidationDetail() {
           <div className="border border-border rounded-xl p-4">
             <div className="flex items-center gap-4">
               <FileText className="w-7 h-7 text-blue-600 mb-3" />
-              <h3 className="font-medium">Acquisition INCA</h3>
+              <h3 className="font-medium">
+                {" "}
+                {t("validationDetail.files.inca")}
+              </h3>
             </div>
 
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierINCA || "Aucun fichier"}
+                {demande?.validationCharge?.fichierINCA ||t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierINCA && (
@@ -256,7 +324,7 @@ export function ValidationDetail() {
                   className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
                 >
                   <Eye className="w-4 h-4" />
-                  Voir
+                  {t("validationDetail.files.view")}
                 </button>
               )}
             </div>
@@ -267,12 +335,12 @@ export function ValidationDetail() {
             <div className="flex items-center gap-4">
               <FileText className="w-7 h-7 text-green-600 mb-3" />
 
-              <h3 className="font-medium mb-1">Fichier BàR</h3>
+              <h3 className="font-medium mb-1">{t("validationDetail.files.bar")}</h3>
             </div>
 
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierBaR || "Aucun fichier"}
+                {demande?.validationCharge?.fichierBaR ||   t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierBaR && (
@@ -283,7 +351,7 @@ export function ValidationDetail() {
                   className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
                 >
                   <Eye className="w-4 h-4" />
-                  Voir
+                  {t("validationDetail.files.view")}
                 </button>
               )}
             </div>
@@ -294,11 +362,11 @@ export function ValidationDetail() {
             <div className="flex items-center gap-4">
               <FileText className="w-7 h-7 text-orange-600 mb-3" />
 
-              <h3 className="font-medium mb-1">Checklist</h3>
+              <h3 className="font-medium mb-1">{t("validationDetail.files.checklist")}</h3>
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierChecklist || "Aucun fichier"}
+                {demande?.validationCharge?.fichierChecklist ||   t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierChecklist && (
@@ -309,7 +377,7 @@ export function ValidationDetail() {
                   className="flex items-center gap-2 text-sm text-blue-600 hover:underline whitespace-nowrap"
                 >
                   <Eye className="w-4 h-4" />
-                  Voir
+                  {t("validationDetail.files.view")}
                 </button>
               )}
             </div>
@@ -323,7 +391,7 @@ export function ValidationDetail() {
           onClick={() => navigate("/app/validation")}
           className="px-8 py-2 border border-border rounded-lg text-[#E30613] font-semibold"
         >
-          Retour
+          {t("validationDetail.actions.back")}
         </button>
       </div>
     </div>

@@ -28,6 +28,7 @@ import { images } from "../../assets";
 import logo from "../../assets/images/logo3.png";
 import { authFetch } from "../api";
 import { DoorOpen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 export enum Client {
   RENAULT = "RENAULT",
   STELLANTIS = "STELLANTIS",
@@ -85,17 +86,12 @@ const navigation = [
   { name: "Planning", path: "/app/planning", icon: Calendar },
 
   { name: "Validation", path: "/app/validation", icon: CheckCircle },
-
-  {
-    name: "Reporting",
-    path: "/app/reporting",
-    icon: TrendingUp,
-    roles: [Role.ADMIN, Role.CHARGE_ESSAI],
-  },
 ];
 
 export function Layout() {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
   // État pour gérer si la barre est réduite ou non
   const [isCollapsed, setIsCollapsed] = useState(false);
   const handleLogout = () => {
@@ -175,6 +171,7 @@ export function Layout() {
           })}
         </nav>
       </aside>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
@@ -185,15 +182,32 @@ export function Layout() {
               FevOneRoll
             </span>
           </div>{" "}
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg 
-             hover:bg-black/5 dark:hover:bg-white/10 
-             transition-colors"
-          >
-            <Sun className="hidden dark:block w-5 h-5 text-foreground" />
-            <Moon className="block dark:hidden w-5 h-5 text-foreground" />
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Langue */}
+            <select
+              value={i18n.language}
+              onChange={(e) => {
+                const language = e.target.value as "fr" | "en";
+                i18n.changeLanguage(language);
+                localStorage.setItem("language", language);
+              }}
+              className="h-9 px-2 rounded-lg border border-border bg-background text-foreground text-sm outline-none cursor-pointer"
+            >
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
+
+            {/* Thème */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg 
+      hover:bg-black/5 dark:hover:bg-white/10 
+      transition-colors"
+            >
+              <Sun className="hidden dark:block w-5 h-5 text-foreground" />
+              <Moon className="block dark:hidden w-5 h-5 text-foreground" />
+            </button>
+          </div>
           <div className="flex items-center gap-4">
             {/* Bouton Profil */}
             <button

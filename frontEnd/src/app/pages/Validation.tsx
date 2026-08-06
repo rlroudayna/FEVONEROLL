@@ -11,7 +11,7 @@ import {
   Search,
 } from "lucide-react";
 import { authFetch } from "../api";
-
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import { Menu, MenuItem, MenuButton, MenuItems } from "@headlessui/react";
@@ -292,6 +292,7 @@ export function Validation() {
   const [filterVehicule, setFilterVehicule] = useState("Tous");
   const [filterCycle, setFilterCycle] = useState("Tous");
   const canViewDetails = role?.includes("ADMIN") || role?.includes("EXTERNE");
+  const { t } = useTranslation();
 
   const [clients, setClients] = useState<Client[]>([]);
   const [clientFilter, setClientFilter] = useState<number | "Tous">("Tous");
@@ -419,6 +420,21 @@ export function Validation() {
   useEffect(() => {
     fetchClients();
   }, []);
+  const translateDecision = (decision?: DecisionValidation) => {
+    switch (decision) {
+      case DecisionValidation.OK:
+        return t("validation.decision.ok");
+
+      case DecisionValidation.NOK:
+        return t("validation.decision.nok");
+
+      case DecisionValidation.OK_SOUS_RESERVE:
+        return t("validation.decision.okReservation");
+
+      default:
+        return "";
+    }
+  };
   return (
     <>
       <div className="p-3 space-y-5 bg-gray-10 min-h-screen">
@@ -426,9 +442,9 @@ export function Validation() {
           {/* Titre + description */}
           <div>
             <h1 className="text-2xl font-semibold text-foreground mb-2">
-              Gestion des validations
+              {t("validation.title")}
             </h1>
-            <p className="text-muted-foreground">Valider vos essais</p>
+            <p className="text-muted-foreground"> {t("validation.subtitle")}</p>
           </div>
         </div>
 
@@ -441,7 +457,7 @@ export function Validation() {
 
               <input
                 type="text"
-                placeholder="Recherche par nom de demande"
+                placeholder={t("validation.search.placeholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full h-12 pl-12 pr-4 bg-background text-foreground border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -462,9 +478,16 @@ export function Validation() {
   transition
 "
                 value={clientFilter}
-                onChange={(e) => setClientFilter(e.target.value)}
-              >
-                <option value="Tous">Client (Tous)</option>
+onChange={(e) =>
+  setClientFilter(
+    e.target.value === "Tous" ? "Tous" : Number(e.target.value)
+  )
+}              >
+                <option value="Tous">
+                  {" "}
+                  {t("validation.filters.client")} (
+                  {t("validation.filters.allClients")})
+                </option>
 
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -479,7 +502,10 @@ export function Validation() {
               onChange={(e) => setFilterVehicule(e.target.value)}
               className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
             >
-              <option value="Tous">Tous les véhicules</option>
+              <option value="Tous">
+                {" "}
+                {t("validation.filters.allVehicles")}
+              </option>
 
               {vehicules.map((v) => (
                 <option key={v.id} value={v.id.toString()}>
@@ -490,7 +516,7 @@ export function Validation() {
             {/* Filtre N° projet */}
             <input
               type="text"
-              placeholder="N° de projet"
+              placeholder={t("validation.filters.projectNumber")}
               value={filterProjet}
               onChange={(e) => setFilterProjet(e.target.value)}
               className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
@@ -509,7 +535,7 @@ export function Validation() {
                   type="button"
                   onClick={() => setFilterDate("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground-400 hover:text-red-500"
-                  title="Réinitialiser la date"
+                  title={t("validation.filters.resetDate")}
                 >
                   ✕
                 </button>
@@ -525,28 +551,34 @@ export function Validation() {
               <thead className="bg-[#B9032C] border-b border-border">
                 <tr>
                   <th className="px-5 py-5 font-semibold text-white">
-                    Demande d'essai
+                    {t("validation.table.testRequest")}
                   </th>
-                  <th className="px-6 py-5 font-semibold text-white">Date</th>
-                  <th className="px-4 py-5 font-semibold text-white">
-                    N°_Projet
+                  <th className="px-6 py-5 font-semibold text-white">
+                    {" "}
+                    {t("validation.table.date")}
                   </th>
-                  <th className="px-8 py-5 font-semibold text-white">Client</th>
                   <th className="px-4 py-5 font-semibold text-white">
-                    Véhicule
+                    {t("validation.table.projectNumber")}
+                  </th>
+                  <th className="px-8 py-5 font-semibold text-white">
+                    {" "}
+                    {t("validation.table.client")}
+                  </th>
+                  <th className="px-4 py-5 font-semibold text-white">
+                    {t("validation.table.vehicle")}
                   </th>
                   {/* <th className="px-4 py-4 font-semibold text-white">Cycle</th>*/}
                   <th className="px-2 py-5 font-semibold text-white">
-                    Validation Technicien
+                    {t("validation.table.technicianValidation")}
                   </th>
                   <th className="px-2 py-5 font-semibold text-white">
-                    Validation Chargé
+                    {t("validation.table.chargeValidation")}
                   </th>
                   <th className="px-3 py-5 font-semibold text-white">
-                    Statut Global
+                    {t("validation.table.globalStatus")}
                   </th>
                   <th className="px-3 py-5 font-semibold text-white">
-                    Validation
+                    {t("validation.table.validation")}
                   </th>
                 </tr>
               </thead>
@@ -557,7 +589,7 @@ export function Validation() {
                       colSpan={9}
                       className="text-center py-6 text-muted-foreground-500 font-medium"
                     >
-                      Aucune demande trouvée
+                      {t("validation.messages.noRequestFound")}{" "}
                     </td>
                   </tr>
                 ) : (
@@ -594,7 +626,9 @@ export function Validation() {
                                 row.validationTechnicien.decision,
                               )}`}
                             >
-                              {row.validationTechnicien.decision}
+                              {translateDecision(
+                                row.validationTechnicien.decision,
+                              )}{" "}
                             </span>
                           )}
                         </td>
@@ -605,7 +639,9 @@ export function Validation() {
                                 row.validationCharge.validation,
                               )}`}
                             >
-                              {row.validationCharge.validation}
+                              {translateDecision(
+                                row.validationCharge.validation,
+                              )}{" "}
                             </span>
                           )}
                         </td>
@@ -614,7 +650,11 @@ export function Validation() {
                           <span
                             className={`px-1 py-1 rounded-lg font-bold shadow-sm ${getStatusStyle(globalStatus)}`}
                           >
-                            {globalStatus}
+                            {globalStatus === "FAIT"
+                              ? t("validation.status.done")
+                              : globalStatus === "EN_COURS"
+                                ? t("validation.status.inProgress")
+                                : t("validation.status.notDone")}{" "}
                           </span>
                         </td>
 
@@ -624,7 +664,7 @@ export function Validation() {
                               to={`/app/validation/conducteur/${row.id}`}
                               className="px-3 py-1 bg-green-600 text-white rounded-md text-xs hover:bg-green-700"
                             >
-                              Valider
+                              {t("validation.actions.validate")}
                             </Link>
                           )}
 
@@ -633,7 +673,7 @@ export function Validation() {
                               to={`/app/validation/charge/${row.id}`}
                               className="px-3 py-1 bg-green-600 text-white rounded-md text-xs hover:bg-green-700"
                             >
-                              Valider
+                              {t("validation.actions.validate")}
                             </Link>
                           )}
                           {/* ADMIN + EXTERNE → Voir détail */}
@@ -642,7 +682,7 @@ export function Validation() {
                               to={`/app/validation/detail/${row.id}`}
                               className="px-3 py-1 bg-blue-600 text-white rounded-md text-xs hover:bg-blue-700"
                             >
-                              Voir
+                              {t("validation.actions.view")}
                             </Link>
                           )}
                         </td>

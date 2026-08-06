@@ -1,6 +1,5 @@
 export { Welcome } from "./Welcome";
 export { Login } from "./Login";
-export { SignUp } from "./SignUp";
 export { ForgotPassword } from "./ForgotPassword";
 export { Dashboard } from "./Dashboard";
 export { Users } from "./Users";
@@ -15,7 +14,6 @@ export { Validation } from "./Validation";
 export { ValidationConducteur } from "./ValidationConducteur";
 export { ValidationCharge } from "./ValidationCharge";
 export { ValidationDetail } from "./ValidationDetail";
-export { Reporting } from "./Reporting";
 export { Profile } from "./Profile";
 export { NotFound } from "./NotFound";
 export { Carburants } from "./Carburants";

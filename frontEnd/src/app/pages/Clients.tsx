@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import countries from "i18n-iso-countries";
 import fr from "i18n-iso-countries/langs/fr.json";
+import { useTranslation } from "react-i18next";
 
 countries.registerLocale(fr);
 
@@ -36,7 +37,7 @@ export function Clients() {
   const [filterActif, setFilterActif] = useState<"TOUS" | "ACTIF" | "INACTIF">(
     "TOUS",
   );
-
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit" | "view">("add");
   const [selected, setSelected] = useState<Client | null>(null);
@@ -102,7 +103,7 @@ export function Clients() {
           method: "POST",
           body: JSON.stringify(formData),
         });
-        toast.success("Client ajouté");
+        toast.success(t("cycles.createdSuccess"));
       } else if (modalMode === "edit" && selected?.id) {
         const updated = await authFetch(`/clients/${selected.id}`, {
           method: "PUT",
@@ -113,7 +114,7 @@ export function Clients() {
           prev.map((c) => (c.id === selected.id ? updated : c)),
         );
 
-        toast.success("Client modifié");
+        toast.success(t("cycles.updatedSuccess"));
       }
 
       setShowModal(false);
@@ -133,15 +134,15 @@ export function Clients() {
 
       setClients((prev) => prev.filter((c) => c.id !== id));
 
-      toast.success("Client supprimé avec succès !");
+      toast.success(t("cycles.deletedSuccess"));
     } catch (err: any) {
       console.error(err);
 
       const message =
         err?.message?.includes("constraint") ||
         err?.message?.includes("foreign key")
-          ? "Suppression impossible : ce client est utilisé dans d'autres données."
-          : "Erreur lors de la suppression du client.";
+          ? t("cycles.deleteConstraintError")
+          : t("cycles.deleteError");
 
       toast.error(message);
     }
@@ -151,10 +152,8 @@ export function Clients() {
       {/* HEADER */}
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-2xl font-semibold mb-2">Gestion des clients</h1>
-          <p className="text-muted-foreground">
-            Administration des clients et informations associées
-          </p>
+          <h1 className="text-2xl font-semibold mb-2"> {t("clients.title")}</h1>
+          <p className="text-muted-foreground">{t("clients.subtitle")}</p>
         </div>
 
         <button
@@ -166,7 +165,7 @@ export function Clients() {
           className="h-11 px-10 bg-[#B9032C] text-white rounded-lg flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
-          Nouveau client
+          {t("clients.add")}
         </button>
       </div>
 
@@ -178,7 +177,7 @@ export function Clients() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Recherche par nom"
+            placeholder={t("clients.searchPlaceholder")}
             className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
           />
         </div>
@@ -189,9 +188,9 @@ export function Clients() {
           onChange={(e) => setFilterActif(e.target.value as any)}
           className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
         >
-          <option value="TOUS">Statut (Tous)</option>
-          <option value="ACTIF">Actifs</option>
-          <option value="INACTIF">Inactifs</option>
+          <option value="TOUS">{t("clients.statusAll")}</option>
+          <option value="ACTIF">{t("clients.active")}</option>
+          <option value="INACTIF">{t("clients.inactive")}</option>
         </select>
       </div>
 
@@ -200,12 +199,12 @@ export function Clients() {
         <table className="w-full text-sm">
           <thead className="bg-[#B9032C] text-white">
             <tr>
-              <th className="p-4 text-left">Nom</th>
-              <th className="p-2 text-left">Pays</th>
-              <th className="p-4 text-left">Ville</th>
-              <th className="p-4 text-left">Email</th>
-              <th className="p-4 text-left">Statut</th>
-              <th className="text-right p-4">Actions</th>
+              <th className="p-4 text-left">{t("clients.name")}</th>
+              <th className="p-2 text-left">{t("clients.country")}</th>
+              <th className="p-4 text-left">{t("clients.city")}</th>
+              <th className="p-4 text-left">{t("clients.email")}</th>
+              <th className="p-4 text-left">{t("clients.status")}</th>
+              <th className="text-right p-4">{t("clients.actions")}</th>
             </tr>
           </thead>
 
@@ -233,7 +232,7 @@ export function Clients() {
                     ) : (
                       <XCircle className="w-3 h-3" />
                     )}
-                    {c.actif ? "Actif" : "Inactif"}
+                    {c.actif ? t("clients.active") : t("clients.inactive")}{" "}
                   </span>
                 </td>
 
@@ -281,7 +280,7 @@ export function Clients() {
 
         {filtered.length === 0 && (
           <div className="p-10 text-center text-gray-500">
-            Aucun client trouvé
+            {t("clients.noClient")}
           </div>
         )}
       </div>
@@ -290,10 +289,10 @@ export function Clients() {
         {/* On active le mode transparent ici */}
         <DialogContent className="max-w-md" hideOverlay={true}>
           <DialogHeader>
-            <DialogTitle>Confirmation de suppression</DialogTitle>
+            <DialogTitle>{t("clients.deleteConfirmation")}</DialogTitle>{" "}
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            Voulez-vous vraiment supprimer le véhicule{" "}
+            {t("clients.deleteQuestion")}{" "}
             <span className="font-bold">{selected?.nom}</span> ?
           </p>
           <div className="flex justify-end gap-4 mt-4">
@@ -301,7 +300,7 @@ export function Clients() {
               onClick={() => setShowConfirmDelete(false)}
               className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Non
+              {t("common.no")}
             </button>
             <button
               onClick={() => {
@@ -313,7 +312,7 @@ export function Clients() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              Confirmer suppression
+              {t("clients.confirmDeletion")}
             </button>
           </div>
         </DialogContent>
@@ -323,9 +322,9 @@ export function Clients() {
         <DialogContent className="bg-card w-[90vw] h-[90vh] px-4 overflow-hidden rounded-2xl shadow-2xl flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold text-foreground border-b border-border pb-2 px-2">
-              {modalMode === "add" && "Ajouter client"}
-              {modalMode === "edit" && "Modifier client"}
-              {modalMode === "view" && "Détails client"}
+              {modalMode === "add" && t("clients.add")}
+              {modalMode === "edit" && t("clients.edit")}
+              {modalMode === "view" && t("clients.details")}
             </DialogTitle>
           </DialogHeader>
           <form
@@ -337,7 +336,8 @@ export function Clients() {
               {/* NOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Nom <span className="text-red-500 ml-1">*</span>
+                  {t("clients.name")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   value={formData.nom}
@@ -354,7 +354,8 @@ export function Clients() {
               {/* PAYS */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Pays <span className="text-red-500 ml-1">*</span>
+                  {t("clients.country")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <select
                   value={formData.pays}
@@ -377,7 +378,8 @@ export function Clients() {
               {/* VILLE */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Ville <span className="text-red-500 ml-1">*</span>
+                  {t("clients.city")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   value={formData.ville}
@@ -394,7 +396,8 @@ export function Clients() {
               {/* EMAIL */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Email <span className="text-red-500 ml-1">*</span>
+                  {t("clients.email")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   type="email"
@@ -421,7 +424,10 @@ export function Clients() {
                 }
                 className="accent-red-600 w-4 h-4"
               />
-              <span className="text-sm font-medium">Actif</span>
+              <span className="text-sm font-medium">
+                {" "}
+                {t("clients.active")}
+              </span>
             </div>
 
             {/* ACTIONS */}
@@ -431,7 +437,7 @@ export function Clients() {
                 onClick={() => setShowModal(false)}
                 className="px-8 py-2 border rounded-lg"
               >
-                Annuler
+                {t("common.cancel")}
               </button>
 
               {modalMode !== "view" && (
@@ -439,7 +445,7 @@ export function Clients() {
                   type="submit"
                   className="px-8 py-2 bg-red-600 text-white rounded-lg"
                 >
-                  Enregistrer
+                  {t("common.save")}
                 </button>
               )}
             </div>

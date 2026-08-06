@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { authFetch } from "../api";
 import { CheckCircle, XCircle, AlertTriangle, Upload } from "lucide-react";
 import { toast } from "sonner";
-
+import { useTranslation } from "react-i18next";
 interface Vehicule {
   id: number;
   nomAppliImmat?: string;
@@ -246,7 +246,7 @@ export function ValidationCharge() {
   );
 
   const isReadOnly = isValidated;
-
+  const { t } = useTranslation();
   const [oetbChecked, setOetbChecked] = useState(false);
   const [fichierINCA, setFichierINCA] = useState<File | null>(null);
   const [fichierBaR, setFichierBaR] = useState<File | null>(null);
@@ -255,12 +255,12 @@ export function ValidationCharge() {
   const [clientFilter, setClientFilter] = useState<number | "Tous">("Tous");
   const handleSubmit = async () => {
     if (!selectedStatus) {
-      toast.warning("Veuillez sélectionner un statut avant de valider.");
+      toast.warning(t("validationCharge.messages.selectStatus"));
       return;
     }
 
     if (!fichierBaR && !demande?.validationCharge?.fichierBaRPath) {
-      toast.warning("Le fichier BàR est obligatoire avant la validation.");
+      toast.warning(t("validationCharge.messages.barRequired"));
       return;
     }
     try {
@@ -296,12 +296,10 @@ export function ValidationCharge() {
         body: formData,
       });
 
-      toast.success("Validation enregistrée");
-
+      toast.success(t("validationCharge.messages.validationSaved"));
       navigate("/app/validation");
     } catch (error) {
-      console.error("Erreur validation :", error);
-      toast.error("Erreur lors de la validation");
+      toast.error(t("validationCharge.messages.validationError"));
     }
   };
 
@@ -319,7 +317,7 @@ export function ValidationCharge() {
   }, [id]);
   useEffect(() => {
     if (isValidated) {
-      toast.success("Cet essai est déjà validé .");
+      toast.success(t("validationCharge.messages.alreadyValidated"));
     }
   }, [isValidated]);
 
@@ -359,7 +357,43 @@ export function ValidationCharge() {
       const blobUrl = URL.createObjectURL(blob);
       window.open(blobUrl, "_blank");
     } catch {
-      toast.error("Impossible d'ouvrir le fichier");
+      toast.error(t("validationCharge.messages.cannotOpenFile"));
+    }
+  };
+  const translateStatus = (status?: string) => {
+    switch (status) {
+      case "EN_COURS":
+        return t("validationCharge.status.inProgress");
+      case "FAIT":
+        return t("validationCharge.status.done");
+      case "PAS_FAIT":
+        return t("validationCharge.status.notDone");
+      default:
+        return status ?? "-";
+    }
+  };
+
+  const translateRequestStatus = (status?: string) => {
+    switch (status) {
+      case "EN_CREATION":
+        return t("validationCharge.requestStatus.inCreation");
+      case "VALIDEE":
+        return t("validationCharge.requestStatus.validated");
+      default:
+        return status ?? "-";
+    }
+  };
+
+  const translateShift = (shift?: string) => {
+    switch (shift) {
+      case "MATIN":
+        return t("validationCharge.shift.morning");
+      case "SOIR":
+        return t("validationCharge.shift.evening");
+      case "NUIT":
+        return t("validationCharge.shift.night");
+      default:
+        return shift ?? "-";
     }
   };
 
@@ -378,21 +412,29 @@ export function ValidationCharge() {
             <thead className="bg-[#B9032C] text-white">
               <tr className="text-xs uppercase tracking-wider text-white">
                 <th className="px-2 py-4 font-semibold text-white">
-                  Nom de demande
+                  {t("validationCharge.table.requestName")}
                 </th>
                 <th className="px-5 py-4 font-semibold text-white">
-                  N° de Projet
+                  {t("validationCharge.table.projectNumber")}
                 </th>
-                <th className="px-2 py-4 font-semibold text-white">Client</th>
+                <th className="px-2 py-4 font-semibold text-white">
+                  {t("validationCharge.table.client")}
+                </th>
                 <th className="px-4 py-4 font-semibold text-white">
-                  Demandeur
+                  {t("validationCharge.table.requester")}
                 </th>
-                <th className="px-3 py-4 font-semibold text-white">Statut</th>
+                <th className="px-3 py-4 font-semibold text-white">
+                  {t("validationCharge.table.status")}
+                </th>
                 <th className="px-5 py-4 font-semibold text-white">
-                  Validation
+                  {t("validationCharge.table.validation")}
                 </th>
-                <th className="px-3 py-4 font-semibold text-white">Date</th>
-                <th className="px-5 py-4 font-semibold text-white">Shift</th>
+                <th className="px-3 py-4 font-semibold text-white">
+                  {t("validationCharge.table.date")}
+                </th>
+                <th className="px-5 py-4 font-semibold text-white">
+                  {t("validationCharge.table.shift")}
+                </th>
               </tr>
             </thead>
 
@@ -442,7 +484,7 @@ export function ValidationCharge() {
       {/* Validation demandeur */}
       <div className="bg-card rounded-xl shadow-sm p-3">
         <h3 className="text-lg font-semibold mb-4">
-          Validation chargé d'essai
+          {t("validationCharge.validation.title")}
         </h3>
         <div className="grid grid-cols-3 gap-4">
           <button
@@ -455,7 +497,10 @@ export function ValidationCharge() {
             }`}
           >
             <CheckCircle className="w-8 h-8 text-[#2E7D32] mx-auto mb-2" />
-            <div className="font-medium">OK - Essai valide</div>
+            <div className="font-medium">
+              {" "}
+              {t("validationCharge.validation.ok")}
+            </div>
           </button>
 
           <button
@@ -468,7 +513,10 @@ export function ValidationCharge() {
             }`}
           >
             <XCircle className="w-8 h-8 text-[#C62828] mx-auto mb-2" />
-            <div className="font-medium">NOK - Essai non valide</div>
+            <div className="font-medium">
+              {" "}
+              {t("validationCharge.validation.nok")}
+            </div>
           </button>
 
           <button
@@ -481,7 +529,10 @@ export function ValidationCharge() {
             }`}
           >
             <AlertTriangle className="w-8 h-8 text-[#ED6C02] mx-auto mb-2" />
-            <div className="font-medium">OK sous réserve</div>
+            <div className="font-medium">
+              {" "}
+              {t("validationCharge.validation.okUnderReservation")}
+            </div>
           </button>
         </div>
         <label className="flex items-center gap-3 cursor-pointer p-6">
@@ -492,21 +543,27 @@ export function ValidationCharge() {
             onChange={(e) => setOetbChecked(e.target.checked)}
             className="w-5 h-5 text-black rounded focus:[#E30613]"
           />
-          <span className="text-sm">OETB</span>
+          <span className="text-sm">
+            {" "}
+            {t("validationCharge.validation.oetb")}
+          </span>
         </label>
       </div>
-      {/* OETB */}
       {/* Import fichiers */}
-      {/* Import fichiers */}
-
       <div className="bg-card rounded-xl shadow-sm px-3 py-2">
-        <h3 className="text-base font-semibold mb-3">Import des fichiers</h3>
+        <h3 className="text-base font-semibold mb-3">
+          {" "}
+          {t("validationCharge.files.title")}
+        </h3>
 
         <div className="grid grid-cols-3 gap-3">
           {/* INCA */}
           <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
-            <div className="text-xs font-medium mb-1">Acquisition INCA</div>
+            <div className="text-xs font-medium mb-1">
+              {" "}
+              {t("validationCharge.files.inca")}
+            </div>
             <div className="text-[10px] text-gray-500">.dat, .mf4</div>
 
             {/* Fichier déjà uploadé → bouton de visualisation */}
@@ -542,7 +599,10 @@ export function ValidationCharge() {
           {/* BaR */}
           <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
-            <div className="text-xs font-medium mb-1">Fichier BàR</div>
+            <div className="text-xs font-medium mb-1">
+              {" "}
+              {t("validationCharge.files.bar")}
+            </div>
             <div className="text-[10px] text-gray-500">.xlsx</div>
 
             {demande?.validationCharge?.fichierBaRPath && (
@@ -578,7 +638,10 @@ export function ValidationCharge() {
           {/* Checklist */}
           <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
-            <div className="text-xs font-medium mb-1">Checklist</div>
+            <div className="text-xs font-medium mb-1">
+              {" "}
+              {t("validationCharge.files.checklist")}
+            </div>
             <div className="text-[10px] text-gray-500">.xlsx</div>
 
             {demande?.validationCharge?.fichierChecklistPath && (
@@ -614,7 +677,7 @@ export function ValidationCharge() {
 
       <div className="bg-card rounded-xl shadow-sm p-6">
         <label className="block text-lg font-semibold mb-3">
-          Commentaire de chargé d'essai
+          {t("validationCharge.comment.title")}
         </label>
         <textarea
           disabled={isReadOnly}
@@ -622,7 +685,7 @@ export function ValidationCharge() {
           onChange={(e) => setComment(e.target.value)}
           rows={3}
           className="w-full px-4 py-3 border border-border rounded-lg bg-background focus:outline-none focus:border border-border resize-none"
-          placeholder="Décrivez le déroulement de l'essai, le comportement du véhicule, les problèmes rencontrés..."
+          placeholder={t("validationCharge.comment.placeholder")}
         />
       </div>
       {/* Boutons */}
@@ -631,16 +694,16 @@ export function ValidationCharge() {
           onClick={() => navigate("/app/validation")}
           className="px-8 py-2.5 bg-card border-2 border-border text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
         >
-          Annuler
+            {t("validationCharge.actions.cancel")}
+
         </button>
 
         {!isReadOnly && (
           <button
             onClick={handleSubmit}
-            
             className="px-10 py-2.5 bg-card border-2 border-border text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
           >
-            Valider l'essai
+  {t("validationCharge.actions.validate")}
           </button>
         )}
       </div>

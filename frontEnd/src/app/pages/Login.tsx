@@ -2,29 +2,30 @@ import { Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "../../assets/images/logo3.png";
- 
+import { useTranslation } from "react-i18next";
+
 export function Login() {
   const navigate = useNavigate();
- 
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
- 
+
   const [startAnimation, setStartAnimation] = useState(false);
- 
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setStartAnimation(true);
     }, 1000);
- 
+
     return () => clearTimeout(timer);
   }, []);
- 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
- 
+
     try {
       const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
@@ -36,17 +37,17 @@ export function Login() {
           motDePasse,
         }),
       });
- 
+
       let data;
- 
+
       const contentType = res.headers.get("content-type");
- 
+
       if (contentType && contentType.includes("application/json")) {
         data = await res.json();
       } else {
         data = await res.text();
       }
- 
+
       if (!res.ok) {
         throw new Error(
           typeof data === "string"
@@ -54,14 +55,14 @@ export function Login() {
             : data?.message || "Email ou mot de passe incorrect",
         );
       }
- 
+
       localStorage.setItem("token", data.token);
       navigate("/app");
     } catch (err: any) {
       setError(err.message || "Email ou mot de passe incorrect");
     }
   };
- 
+
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       <div className="flex items-center justify-center min-h-screen gap-2">
@@ -75,7 +76,7 @@ export function Login() {
         >
           <img src={logo} alt="Logo" className="w-[450px] max-w-[80%] h-auto" />
         </div>
- 
+
         {/* Partie Formulaire (50%) */}
         <div
           className={`
@@ -91,46 +92,46 @@ export function Login() {
           <div className="w-full max-w-md">
             <div className="bg-card shadow-2xl rounded-3xl p-80 md:p-10 border border-border">
               <h1 className="text-3xl font-extrabold text-[#E30613] text-center mb-8">
-                Connexion
+                {t("login.title")}
               </h1>
- 
+
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-semibold mb-2">
-                    Email professionnel
+                    {t("login.professionalEmail")}{" "}
                     <span className="text-[#E30613]"> *</span>
                   </label>
- 
+
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    placeholder="nom@entreprise.com"
+                    placeholder={t("login.emailPlaceholder")}
                     className="w-full h-12 px-4 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
- 
+
                 {/* Mot de passe */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
                     <label className="text-sm font-semibold">
-                      Mot de passe
+                      {t("login.password")}
                       <span className="text-[#E30613]"> *</span>
                     </label>
                   </div>
- 
+
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={motDePasse}
                       onChange={(e) => setMotDePasse(e.target.value)}
                       required
-                      placeholder="••••••••"
+                      placeholder={t("login.passwordPlaceholder")}
                       className="w-full h-12 px-4 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-ring"
                     />
- 
+
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
@@ -139,43 +140,43 @@ export function Login() {
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
- 
+
                   <Link
                     to="/forgot-password"
                     className="text-xs hover:text-[#E30613]"
                   >
-                    Mot de passe oublié ?
+                   {t("login.forgotPassword")}
                   </Link>
                 </div>
- 
+
                 {/* Erreur */}
                 <div className="min-h-[20px]">
                   {error && (
                     <p className="text-red-500 text-sm text-center">{error}</p>
                   )}
                 </div>
- 
+
                 {/* Bouton */}
                 <button
                   type="submit"
                   className="w-full py-3.5 bg-[#c40510] text-white rounded-xl font-bold text-lg hover:bg-[#E30613] transition-all"
                 >
-                  Se connecter
+                  {t("login.submit")}
                 </button>
               </form>
             </div>
- 
+
             <div className="text-center mt-4">
               <Link
                 to="/"
                 className="text-sm text-foreground-600 hover:text-black"
               >
-                ← Retour à l'accueil
+                {t("login.backHome")}
               </Link>
             </div>
           </div>
         </div>
- 
+
         {/* Logo au centre pendant 2 secondes */}
         {!startAnimation && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-background">
@@ -190,5 +191,3 @@ export function Login() {
     </div>
   );
 }
- 
- 

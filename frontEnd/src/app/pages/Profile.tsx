@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { authFetch } from "../api";
 import { toast } from "sonner";
-
+import { useTranslation } from "react-i18next";
 export function Profile() {
   const [isEditingPhoto, setIsEditingPhoto] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -32,6 +32,7 @@ export function Profile() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { t } = useTranslation();
   interface Client {
     id?: number;
     nom: string;
@@ -84,13 +85,13 @@ export function Profile() {
 
     // ❌ 1. Vérifier taille (2 Mo)
     if (newImageFile.size > 2 * 1024 * 1024) {
-      setImageError("L'image ne doit pas dépasser 2 Mo");
+      setImageError(t("profile.photo.sizeError"));
       return;
     }
 
     // ❌ 2. Vérifier type
     if (!["image/jpeg", "image/png", "image/jpg"].includes(newImageFile.type)) {
-      setImageError("Format invalide (jpg ou png uniquement)");
+      setImageError(t("profile.photo.formatError"));
       return;
     }
 
@@ -112,7 +113,7 @@ export function Profile() {
       // ❌ si backend renvoie erreur
       if (!res.ok) {
         const errorText = await res.text();
-        toast.error(errorText || "Erreur upload image");
+        toast.error(errorText || t("profile.photo.uploadError"));
         return;
       }
 
@@ -123,12 +124,11 @@ export function Profile() {
         image: "http://localhost:8080" + updatedUser.image,
       });
 
-      toast.success("Image mise à jour avec succès");
-
+      toast.success(t("profile.messages.photoUpdated"));
       setIsEditingPhoto(false);
     } catch (err) {
       console.error("Erreur update photo", err);
-      toast.error("Erreur serveur lors de l'upload");
+      toast.error(t("profile.messages.photoUploadError"));
     }
   };
 
@@ -136,17 +136,15 @@ export function Profile() {
     setOldPasswordError("");
 
     if (!oldPassword || !newPassword || !confirmPassword) {
-      toast.error("Tous les champs sont obligatoires");
+      toast.error(t("profile.password.required"));
       return;
     }
-
     if (newPassword.length < 8) {
-      toast.error("Minimum 8 caractères");
+      toast.error(t("profile.password.minimum"));
       return;
     }
-
     if (newPassword !== confirmPassword) {
-      toast.error("Les mots de passe ne correspondent pas");
+      toast.error(t("profile.password.mismatch"));
       return;
     }
 
@@ -161,8 +159,7 @@ export function Profile() {
         }),
       });
 
-      toast.success("Mot de passe modifié avec succès");
-
+      toast.success(t("profile.password.updated"));
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -171,8 +168,7 @@ export function Profile() {
     } catch (err: any) {
       console.error("Password error:", err);
 
-      const message =
-        err.message || "Erreur lors du changement de mot de passe";
+      const message = err.message || t("profile.password.changeError");
 
       if (message.includes("Ancien mot de passe")) {
         setOldPasswordError(message);
@@ -187,9 +183,9 @@ export function Profile() {
     <div className="max-w-6xl mx-auto space-y-6">
       {/* TITLE */}
       <div>
-        <h1 className="text-2xl font-bold">Mon Profil</h1>
+        <h1 className="text-2xl font-bold"> {t("profile.title")}</h1>
         <p className="text-muted-foreground-500 text-sm">
-          Gestion de vos informations personnelles
+          {t("profile.subtitle")}
         </p>
       </div>
 
@@ -229,13 +225,21 @@ export function Profile() {
           <div>
             <h3 className="font-semibold mb-4 flex items-center gap-2">
               <User className="w-4 h-4" />
-              Informations personnelles
+              {t("profile.personalInformation")}
             </h3>
 
             <div className="grid md:grid-cols-3 gap-6 text-foreground">
               {" "}
-              <Info label="Prénom" value={profileData.prenom} icon={User} />
-              <Info label="Nom" value={profileData.nom} icon={User} />
+              <Info
+                label={t("profile.firstName")}
+                value={profileData.prenom}
+                icon={User}
+              />
+              <Info
+                label={t("profile.lastName")}
+                value={profileData.nom}
+                icon={User}
+              />
               {/* PHONE */}
               <div className="border border-border rounded-lg p-3 flex items-center justify-between bg-card">
                 <div className="flex items-center gap-2">
@@ -243,7 +247,7 @@ export function Profile() {
 
                   <div>
                     <p className="text-xs text-muted-foreground-500">
-                      Téléphone
+                      {t("profile.phone")}
                     </p>
 
                     {isEditingPhone ? (
@@ -283,10 +287,9 @@ export function Profile() {
                           setPhone(updatedUser.numeroTelephone);
                           setIsEditingPhone(false);
 
-                          toast.success("Téléphone mis à jour !");
+                          toast.success(t("profile.messages.phoneUpdate"));
                         } catch (err) {
-                          console.error("Erreur update téléphone", err);
-                          toast.error("Erreur lors de la mise à jour");
+                          toast.error(t("profile.phoneUpdate.error"));
                         }
                       }}
                     />
@@ -298,10 +301,18 @@ export function Profile() {
                   )}
                 </div>
               </div>
-              <Info label="Email" value={profileData.email} icon={Mail} />
-              <Info label="Role" value={profileData.role} icon={Shield} />
               <Info
-                label="Société"
+                label={t("profile.email")}
+                value={profileData.email}
+                icon={Mail}
+              />
+              <Info
+                label={t("profile.role")}
+                value={profileData.role}
+                icon={Shield}
+              />
+              <Info
+                label={t("profile.company")}
                 value={profileData.client}
                 icon={Building}
               />
@@ -318,7 +329,7 @@ export function Profile() {
                   onClick={() => setIsChangingPassword(true)}
                   className="text-[#E30613] text-sm font-medium hover:underline"
                 >
-                  Modifier le mot de passe
+                  {t("profile.password.change")}
                 </button>
               )}
             </div>
@@ -330,13 +341,16 @@ export function Profile() {
       {isChangingPassword && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-card p-5 rounded-xl w-[500px] space-y-3">
-            <h2 className="font-bold text-lg">Changer mot de passe</h2>
+            <h2 className="font-bold text-lg">
+              {" "}
+              {t("profile.password.title")}
+            </h2>
 
             {/* ancien mot de passe */}
             <div className="relative">
               <input
                 type={showOldPassword ? "text" : "password"}
-                placeholder="Ancien mot de passe"
+                placeholder={t("profile.password.old")}
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
                 className="w-full border border-border rounded px-3 py-2 pr-10 bg-background text-foreground outline-none focus:ring-2 focus:ring-ring/40"
@@ -358,7 +372,7 @@ export function Profile() {
             <div className="relative">
               <input
                 type={showNewPassword ? "text" : "password"}
-                placeholder="Nouveau mot de passe"
+                placeholder={t("profile.password.new")}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full border border-border rounded px-3 py-2 pr-10 bg-background text-foreground outline-none focus:ring-2 focus:ring-ring/40"
@@ -378,7 +392,7 @@ export function Profile() {
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirmer le nouveau mot de passe"
+                placeholder={t("profile.password.confirm")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full border border-border rounded px-3 py-2 pr-10 bg-background text-foreground outline-none focus:ring-2 focus:ring-ring/40"
@@ -396,13 +410,13 @@ export function Profile() {
             {/* erreurs */}
             {newPassword && newPassword.length < 8 && (
               <p className="text-red-500 text-sm">
-                Minimum 8 caractères requis
+                {t("profile.password.minimum")}
               </p>
             )}
 
             {confirmPassword && newPassword !== confirmPassword && (
               <p className="text-red-500 text-sm">
-                Les mots de passe ne correspondent pas
+                {t("profile.password.mismatch")}
               </p>
             )}
 
@@ -416,7 +430,7 @@ export function Profile() {
                 }}
                 className="px-3 py-1 border rounded"
               >
-                Annuler
+                {t("profile.actions.cancel")}
               </button>
 
               <button
@@ -428,7 +442,7 @@ export function Profile() {
                 }
                 className="px-3 py-1 bg-red-600 text-white rounded disabled:opacity-50"
               >
-                {loadingPwd ? "..." : "Mettre à jour"}
+                {loadingPwd ? "..." : t("profile.actions.update")}{" "}
               </button>
             </div>
           </div>
@@ -439,11 +453,10 @@ export function Profile() {
       {isEditingPhoto && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-card p-4 rounded-xl border space-y-3 w-[400px]">
-            <h2 className="font-bold text-lg">Changer photo de profil</h2>
+            <h2 className="font-bold text-lg"> {t("profile.photo.change")}</h2>
 
             <label className="bg-card cursor-pointer flex items-center justify-center w-full border  p-2 rounded  hover:bg-card-100">
-              {newImageFile ? newImageFile.name : "Sélectionner une image"}
-
+              {newImageFile ? newImageFile.name : t("profile.photo.select")}
               <input
                 type="file"
                 className="hidden"
@@ -468,14 +481,14 @@ export function Profile() {
                 onClick={() => setIsEditingPhoto(false)}
                 className="px-3 py-1 border rounded"
               >
-                Annuler
+                {t("profile.actions.cancel")}
               </button>
 
               <button
                 onClick={handleSavePhoto}
                 className="px-3 py-1 bg-red-600 text-white rounded"
               >
-                Mettre à jour
+                {t("profile.photo.update")}
               </button>
             </div>
           </div>

@@ -17,7 +17,7 @@ import {
   DialogTitle,
 } from "../components/ui/Dialog";
 import { toast } from "sonner";
-
+import { useTranslation } from "react-i18next";
 export enum FamilleTest {
   CYCLE_NORMEE = "CYCLE_NORMEE",
   RDE = "RDE",
@@ -73,6 +73,7 @@ export function Cycles() {
   const [allClients, setAllClients] = useState<{ id: number; nom: string }[]>(
     [],
   );
+  const { t } = useTranslation();
 
   type CycleForm = {
     nom: string;
@@ -220,7 +221,7 @@ export function Cycles() {
 
     setCycles([...cycles, created]);
     setShowModal(false);
-    toast.success("Cycle ajouté avec succès");
+    toast.success(t("cycles.createdSuccess"));
     resetForm();
   };
 
@@ -263,7 +264,7 @@ export function Cycles() {
     );
 
     setShowModal(false);
-    toast.success("Cycle modifié avec succès");
+    toast.success(t("cycles.updatedSuccess"));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -280,13 +281,13 @@ export function Cycles() {
     try {
       await authFetch(`/cycles/${id}`, { method: "DELETE" });
       setCycles((prev) => prev.filter((c) => c.id !== id));
-      toast.success("Cycle supprimé avec succès");
+      toast.success(t("cycles.deletedSuccess"));
     } catch (err: any) {
       const message =
         err?.message?.includes("constraint") ||
         err?.message?.includes("foreign key")
-          ? "Suppression impossible : ce cycle est utilisé dans d'autres données."
-          : "Erreur lors de la suppression du cycle.";
+          ? t("cycles.deleteConstraintError")
+          : t("cycles.deleteError");
 
       toast.error(message);
     }
@@ -325,11 +326,9 @@ export function Cycles() {
         {/* Header */}
         <div>
           <h1 className="text-2xl font-semibold text-foreground mb-2">
-            Gestion des cycles
+            {t("cycles.title")}
           </h1>
-          <p className="text-muted-foreground">
-            Gérer les cycles de roulage pour les essais
-          </p>
+          <p className="text-muted-foreground">{t("cycles.subtitle")}</p>
         </div>
         {canEdit && (
           <button
@@ -337,7 +336,7 @@ export function Cycles() {
             className="ml-auto h-11 px-8 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            <span>Ajouter un cycle</span>
+            <span>{t("cycles.add")}</span>{" "}
           </button>
         )}
       </div>
@@ -350,10 +349,10 @@ export function Cycles() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-400  transition-colors" />
             <input
               type="text"
-              placeholder="Rechercher par nom..."
+              placeholder={t("cycles.searchPlaceholder")}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="w-full h-11 pl-19 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
+              className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
             />
           </div>
           <div className="relative w-60">
@@ -369,8 +368,7 @@ export function Cycles() {
                   )
                 }
               >
-                <option value="Tous">Client (Tous)</option>
-
+                <option value="Tous">{t("cycles.allClients")}</option>
                 {allClients.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.nom}
@@ -386,8 +384,7 @@ export function Cycles() {
               onChange={(e) => setFamilleFilter(e.target.value)}
               className="w-full bg-background border border-border rounded-lg px-3 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring appearance-none transition"
             >
-              <option value="Tous">Toutes les familles</option>
-
+              <option value="Tous">{t("cycles.allFamilies")}</option>{" "}
               {Object.values(FamilleTest).map((f) => (
                 <option key={f} value={f}>
                   {f}
@@ -419,10 +416,10 @@ export function Cycles() {
             {" "}
             <DialogContent className="max-w-md" hideOverlay={true}>
               <DialogHeader>
-                <DialogTitle>Confirmation de suppression</DialogTitle>
+                <DialogTitle>{t("cycles.deleteConfirmation")}</DialogTitle>{" "}
               </DialogHeader>
               <p className="py-4 text-muted-foreground-700">
-                Voulez-vous vraiment supprimer le cycle{" "}
+                {t("cycles.deleteQuestion")}{" "}
                 <span className="font-bold">{selectedCycle?.nom}</span> ?
               </p>
               <div className="flex justify-end gap-4 mt-4">
@@ -430,7 +427,7 @@ export function Cycles() {
                   onClick={() => setShowConfirmDelete(false)}
                   className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Non
+                  {t("common.no")}{" "}
                 </button>
                 <button
                   onClick={() => {
@@ -442,7 +439,7 @@ export function Cycles() {
                   }}
                   className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
                 >
-                  Confirmer suppression
+                  {t("common.confirm")}{" "}
                 </button>
               </div>
             </DialogContent>
@@ -458,31 +455,31 @@ export function Cycles() {
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Nom du cycle
+                  {t("cycles.cycleName")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Client
+                  {t("cycles.client")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Famille
+                  {t("cycles.family")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Durée (s)
+                  {t("cycles.duration")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Nombre de phases
+                  {t("cycles.numberOfPhases")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Trace
+                  {t("cycles.trace")}
                 </th>
 
                 <th className="px-6 py-5 text-left font-semibold text-white">
-                  Actions
+                  {t("cycles.actions")}
                 </th>
               </tr>
             </thead>
@@ -494,7 +491,7 @@ export function Cycles() {
                     colSpan={8}
                     className="text-center py-6 text-muted-foreground-500 font-medium"
                   >
-                    Aucun cycle trouvé
+                    {t("cycles.noCycle")}
                   </td>
                 </tr>
               ) : (
@@ -546,7 +543,9 @@ export function Cycles() {
                             rel="noreferrer"
                             className="text-blue-600 underline truncate"
                           >
-                            Voir le fichier
+                            
+                                              {t("cycles.viewFile")}
+
                           </a>
                         </div>
                       ) : (
@@ -610,9 +609,9 @@ export function Cycles() {
             {/* HEADER */}
             <div className="px-6 py-3.5 border-b border-slate-300 flex justify-between items-center bg-card">
               <h2 className="text-xl font-semibold text-muted-foreground-800">
-                {modalMode === "add" && "Ajouter un cycle"}
-                {modalMode === "edit" && "Modifier un cycle"}
-                {modalMode === "view" && "Détails d'un cycle"}
+                {modalMode === "add" && t("cycles.add")}
+                {modalMode === "edit" && t("cycles.edit")}
+                {modalMode === "view" && t("cycles.details")}
               </h2>
 
               <button
@@ -627,20 +626,20 @@ export function Cycles() {
               {/* Section 1: Identification */}
               <section>
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-1">
-                  Identification
+                  {t("cycles.identification")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Nom du cycle
+                      {t("cycles.cycleName")}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       value={form.nom}
                       disabled={modalMode === "view"}
                       required
-                      placeholder="Nom du cycle"
+                      placeholder={t("cycles.namePlaceholder")}
                       onChange={(e) =>
                         setForm({
                           ...form,
@@ -654,7 +653,8 @@ export function Cycles() {
 
                   <div className="flex flex-col gap-1.5 ">
                     <label className="text-sm font-medium text-muted-foreground-530">
-                      Client <span className="text-red-500 ml-1">*</span>
+                      {t("cycles.client")}{" "}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
 
                     <select
@@ -671,7 +671,7 @@ export function Cycles() {
                       required
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground"
                     >
-                      <option value="">Sélectionner un client</option>
+                      <option value=""> {t("cycles.selectClient")}</option>
 
                       {activeClients.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -683,7 +683,7 @@ export function Cycles() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Famille
+                      {t("cycles.family")}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
                     <select
@@ -699,7 +699,7 @@ export function Cycles() {
                       className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
     focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
-                      <option value="">Sélectionner une famille</option>
+                      <option value=""> {t("cycles.selectFamily")}</option>
 
                       {Object.values(FamilleTest).map((f) => (
                         <option key={f} value={f}>
@@ -715,13 +715,14 @@ export function Cycles() {
 
               <section>
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-[#E30613] uppercase tracking-wider mb-1">
-                  Caractéristiques
+                  {t("cycles.characteristics")}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Durée (s) <span className="text-red-500 ml-1">*</span>
+                      {t("cycles.duration")}{" "}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="number"
@@ -739,7 +740,8 @@ export function Cycles() {
                   {/* Nombre de phases */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Nombre Phase <span className="text-red-500 ml-1">*</span>
+                      {t("cycles.numberOfPhases")}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
                     <input
                       type="number"
@@ -757,7 +759,7 @@ export function Cycles() {
                   {/* Nombre de stabilités */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-medium text-muted-foreground-900">
-                      Nombre stabilités
+                      {t("cycles.numberOfStabilities")}
                     </label>
                     <input
                       type="number"
@@ -772,7 +774,7 @@ export function Cycles() {
                   </div>
                   <div className="md:col-span-4">
                     <h4 className="text-sm font-medium text-muted-foreground-900 mb-2 ">
-                      Données de trace{" "}
+                      {t("cycles.traceData")}
                       <span className="text-red-500 ml-1">*</span>
                     </h4>
 
@@ -785,7 +787,7 @@ export function Cycles() {
                           rel="noreferrer"
                           className="text-blue-600 underline mt-2"
                         >
-                          Voir le fichier actuel
+                          {t("cycles.viewCurrentFile")}{" "}
                         </a>
                       </div>
                     )}
@@ -824,7 +826,7 @@ export function Cycles() {
                                   {traceFile.name}
                                 </span>
                                 <span className="text-emerald-500 text-[10px] mt-0.5">
-                                  Fichier prêt à l'import
+                                  {t("cycles.fileReady")}
                                 </span>
                               </>
                             ) : (
@@ -833,7 +835,7 @@ export function Cycles() {
                                   <Upload className="w-4 h-4" />
                                 </div>
                                 <span className="text-muted-foreground text-sm font-medium text-center mt-2">
-                                  Importer un fichier (.xls, .xlsx, .csv){" "}
+                                  {t("cycles.importFile")}
                                 </span>
                               </>
                             )}
@@ -843,7 +845,7 @@ export function Cycles() {
                         {/* ✅ MESSAGE ERREUR ICI (PAS DANS LE LABEL) */}
                         {fileError && !traceFile && (
                           <p className="text-red-500 text-sm mt-2 font-medium">
-                            ⚠️ Veuillez téléverser un fichier de trace
+                            ⚠️ {t("cycles.uploadTraceFile")}
                           </p>
                         )}
                       </>
@@ -853,7 +855,7 @@ export function Cycles() {
               </section>
               <section>
                 <h3 className="text-sm font-medium text-muted-foreground-900 mb">
-                  Commentaire
+                  {t("cycles.comment")}
                 </h3>
 
                 <textarea
@@ -865,7 +867,7 @@ export function Cycles() {
                       commentaire: e.target.value,
                     })
                   }
-                  placeholder="Informations complémentaires..."
+                  placeholder={t("cycles.commentPlaceholder")}
                   className="w-full h-28 p-4 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
                 />
@@ -882,14 +884,16 @@ focus:outline-none focus:ring-2 focus:ring-ring transition resize-none"
                       }}
                       className="px-8 py-2 border rounded-lg"
                     >
-                      Annuler
+                      {t("common.cancel")}
                     </button>
 
                     <button
                       type="submit"
                       className="px-8 py-2 bg-[#E30613] text-white rounded-lg"
                     >
-                      {modalMode === "edit" ? "Modifier" : "Enregistrer"}
+                      {modalMode === "edit"
+                        ? t("common.edit")
+                        : t("common.save")}
                     </button>
                   </div>
                 )}

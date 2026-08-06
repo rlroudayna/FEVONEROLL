@@ -8,6 +8,7 @@ import {
 } from "../components/ui/Dialog";
 import { authFetch } from "../api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 // --- Types ---
 
 export enum TypeMotorisation {
@@ -92,6 +93,10 @@ export function Vehicules() {
   const [allClients, setAllClients] = useState<{ id: number; nom: string }[]>(
     [],
   );
+  const { t, i18n } = useTranslation();
+
+  console.log("LANGUE :", i18n.language);
+  console.log("TITLE :", t("vehicles.title"));
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -180,7 +185,7 @@ export function Vehicules() {
       });
       setVehicles((prev) => [...prev, created]);
       setShowModal(false);
-      toast.success("Véhicule créé avec succès !");
+      toast.success(t("vehicles.createdSuccess"));
     } catch (err) {
       console.error(err);
       toast.error("Erreur lors de la création du véhicule !");
@@ -190,15 +195,15 @@ export function Vehicules() {
     try {
       await authFetch(`/vehicules/${id}`, { method: "DELETE" });
       setVehicles((prev) => prev.filter((v) => v.id !== id));
-      toast.success("Véhicule supprimé avec succès !");
+      toast.success(t("vehicles.deleteSuccess"));
     } catch (err: any) {
       console.error(err);
 
       const message =
         err?.message?.includes("constraint") ||
         err?.message?.includes("foreign key")
-          ? "Suppression impossible : ce véhicule est utilisé dans d'autres données."
-          : "Erreur lors de la suppression du véhicule.";
+          ? t("vehicles.deleteConstraintError")
+          : t("vehicles.deleteError");
 
       toast.error(message);
     }
@@ -210,10 +215,10 @@ export function Vehicules() {
         method: "POST",
       });
       setVehicles((prev) => [...prev, duplicated]);
-      toast.success("Véhicule dupliqué  avec succès!");
+      toast.success(t("vehicles.duplicatedSuccess"));
     } catch (err) {
       console.error(err);
-      toast.error("Erreur lors de la duplication !");
+      toast.error(t("vehicles.duplicateError"));
     }
   };
 
@@ -247,7 +252,7 @@ export function Vehicules() {
           prev.map((v) => (v.id === updated.id ? updated : v)),
         );
 
-        toast.success("Véhicule modifié avec succès !");
+        toast.success(t("vehicles.updatedSuccess"));
       } else {
         await addVehicle(vehicleData);
       }
@@ -266,9 +271,9 @@ export function Vehicules() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-2xl font-semibold text-foreground mb-2 text-left">
-            Gestion des véhicules
+            {t("vehicles.title")}
           </h1>
-          <p className="text-muted-foreground">Gérer vos véhicules</p>
+          <p className="text-muted-foreground">{t("vehicles.subtitle")}</p>
         </div>
 
         {canEdit && (
@@ -281,7 +286,7 @@ export function Vehicules() {
             className="ml-auto h-11 px-6 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            Ajouter un véhicule
+            {t("vehicles.addVehicle")}
           </button>
         )}
       </div>
@@ -294,7 +299,7 @@ export function Vehicules() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-600 transition-colors group-focus-within:text-[#E30613]" />
             <input
               type="text"
-              placeholder="Recherche par nom, identificateur, immatriculation, marque"
+              placeholder={t("vehicles.searchPlaceholder")}
               className="w-full h-11 pl-10 pr-8 bg-background text-foreground border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -315,7 +320,7 @@ export function Vehicules() {
               value={clientFilter}
               onChange={(e) => setClientFilter(e.target.value)}
             >
-              <option value="Tous">Client (Tous)</option>
+              <option value="Tous">{t("vehicles.allClients")}</option>
 
               {allClients.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -338,7 +343,7 @@ export function Vehicules() {
 "
             onChange={(e) => setFilterLocalisation(e.target.value)}
           >
-            <option value="Tous">Localisation (Toutes)</option>
+            <option value="Tous">{t("vehicles.allLocations")}</option>
             <option value="PARK_FEV_CA">Park FEV CA</option>
             <option value="BAR">BAR</option>
             <option value="HORS_FEV">Hors FEV</option>
@@ -353,22 +358,30 @@ export function Vehicules() {
             {/* Header */}
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
-                <th className="px-6 py-5 font-semibold text-white">Véhicule</th>
-                <th className="px-6 py-5  font-semibold text-white">
-                  Identificateur
+                <th className="px-6 py-5 font-semibold text-white">
+                  {t("vehicles.vehicle")}
                 </th>
-                <th className="px-6 py-5  font-semibold text-white">Client</th>
+                <th className="px-6 py-5  font-semibold text-white">
+                  {t("vehicles.identifier")}
+                </th>
+                <th className="px-6 py-5  font-semibold text-white">
+                  {t("vehicles.client")}
+                </th>
 
                 <th className="px-4 py-5 font-semibold text-white">
-                  Immatriculation
+                  {t("vehicles.registration")}
                 </th>
-                <th className="px-6 py-5 font-semibold text-white">Marque</th>
+                <th className="px-6 py-5 font-semibold text-white">
+                  {t("vehicles.brand")}
+                </th>
 
                 <th className="px-6 py-5 font-semibold text-white">
-                  Localisation
+                  {t("vehicles.location")}
                 </th>
 
-                <th className="px-6 py-5 font-semibold text-white">Actions</th>
+                <th className="px-6 py-5 font-semibold text-white">
+                  {t("vehicles.actions")}
+                </th>
               </tr>
             </thead>
 
@@ -479,7 +492,7 @@ export function Vehicules() {
                     colSpan={7}
                     className="text-center py-10 text-muted-foreground-400"
                   >
-                    Aucun véhicule trouvé
+                    {t("vehicles.noVehicle")}{" "}
                   </td>
                 </tr>
               )}
@@ -491,10 +504,10 @@ export function Vehicules() {
         {/* On active le mode transparent ici */}
         <DialogContent className="max-w-md" hideOverlay={true}>
           <DialogHeader>
-            <DialogTitle>Confirmation de suppression</DialogTitle>
+            <DialogTitle> {t("vehicles.deleteConfirmation")}</DialogTitle>
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            Voulez-vous vraiment supprimer le véhicule{" "}
+            {t("vehicles.deleteQuestionWithName")}{" "}
             <span className="font-bold">{selectedVehicle?.nomAppliImmat}</span>{" "}
             ?
           </p>
@@ -503,7 +516,7 @@ export function Vehicules() {
               onClick={() => setShowConfirmDelete(false)}
               className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Non
+              {t("common.no")}
             </button>
             <button
               onClick={() => {
@@ -515,7 +528,7 @@ export function Vehicules() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              Confirmer suppression
+              {t("vehicles.confirmDeletion")}
             </button>
           </div>
         </DialogContent>
@@ -526,9 +539,9 @@ export function Vehicules() {
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold text-foreground">
               <div className="flex justify-between items-center p-2 border-b bg-card border-b border-border">
-                {modalMode === "add" && "Ajouter un véhicule"}
-                {modalMode === "edit" && "Modifier un véhicule"}
-                {modalMode === "view" && "Détails du véhicule"}
+                {modalMode === "add" && t("vehicles.addVehicle")}
+                {modalMode === "edit" && t("vehicles.editVehicle")}
+                {modalMode === "view" && t("vehicles.details")}
               </div>
             </DialogTitle>
           </DialogHeader>
@@ -539,40 +552,40 @@ export function Vehicules() {
               <p className="text-sm text-muted-foreground-500"></p>
               <div>
                 <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                  Identification du véhicule
+                  {t("vehicles.identification")}{" "}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                   {[
                     {
-                      label: "Nom (Appli_Immat)",
+                      label: t("vehicles.name"),
                       key: "nomAppliImmat",
                       required: true,
                     },
                     {
-                      label: "Identificateur",
+                      label: t("vehicles.identifier"),
                       key: "identificateur",
                       placeholder: "Automatique",
                       required: true,
                     },
                     {
-                      label: "Immatriculation",
+                      label: t("vehicles.registrationNumber"),
                       key: "immatriculation",
                       required: true,
                     },
                     {
-                      label: "Marque",
+                      label: t("vehicles.brand"),
                       key: "marque",
                       required: true,
                     },
-                    { label: "VIN", key: "vin", required: true },
+                    { label: t("vehicles.vin"), key: "vin", required: true },
                     {
-                      label: "Site",
+                      label: t("vehicles.site"),
                       key: "site",
                       required: true,
                     },
                     {
-                      label: "Responsable",
+                      label: t("vehicles.responsible"),
                       key: "responsable",
                     },
                   ].map((field) => (
@@ -604,7 +617,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   {/* Client */}
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-muted-foreground-500">
-                      Client <span className="text-red-500 ml-1">*</span>
+                      {t("vehicles.client")}
+                      <span className="text-red-500 ml-1">*</span>
                     </label>
                     <select
                       name="clientId"
@@ -615,7 +629,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                      focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                        Sélectionner un client
+                        {t("vehicles.selectClient")}
                       </option>
 
                       {activeClients.map((c) => (
@@ -628,8 +642,9 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   {/* Localisation */}
                   <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-muted-foreground">
-                      Localisation
+                    <label className="text-sm font-medium text-muted-foreground-500">
+                      {t("vehicles.location")}
+
                       <span className="text-red-500 ml-1">*</span>
                     </label>
                     <select
@@ -641,7 +656,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                        Sélectionner
+                        {t("vehicles.select")}
                       </option>
 
                       {["HORS_FEV", "BAR", " PARC_FEV_CA"].map((s) => (
@@ -656,13 +671,13 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               {/* MOTORISATION */}
               <div>
                 <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                  Motorisation
+                  {t("vehicles.motorisation")}{" "}
                 </h3>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-muted-foreground-500">
-                      Type moteur
+                      {t("vehicles.engineType")}{" "}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -675,7 +690,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                        Sélectionner
+                          {t("vehicles.select")}
+
                       </option>
 
                       {["ICE", "HEV", "PHEV", "BEV"].map((opt) => (
@@ -688,7 +704,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-muted-foreground-500">
-                      Carburant
+                      {t("vehicles.fuel")}{" "}
                       <span className="text-red-500 ml-1">*</span>
                     </label>
 
@@ -701,7 +717,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                        Sélectionner
+                          {t("vehicles.select")}
+
                       </option>
 
                       {["ESSENCE", "DIESEL", "GNV"].map((opt) => (
@@ -714,12 +731,12 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                   {[
                     {
-                      label: "Code moteur",
+                      label: t("vehicles.engineCode"),
                       key: "moteur",
                       required: true,
                     },
                     {
-                      label: "Boite vitesse",
+                      label: t("vehicles.gearbox"),
                       key: "boiteVitesse",
                       required: true,
                     },
@@ -751,33 +768,34 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               {/* CARACTERISTIQUES */}
               <div>
                 <h3 className="text-sm font-semibold text-[#E30613] mb-2 uppercase tracking-wide">
-                  Caractéristiques
+                  {t("vehicles.characteristics")}{" "}
                 </h3>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                   {[
                     {
-                      label: "dimensions de pneus (mm)",
+                      label: t("vehicles.tireDimensions"),
                       key: "dimensionsPneus",
                     },
-
                     {
-                      
-                      label: "Puissance (kW)",
+                      label: t("vehicles.power"),
                       key: "puissance",
                     },
                     {
-                      label: "Empattement (mm)",
+                      label: t("vehicles.wheelbase"),
                       key: "empattement",
                       required: true,
                     },
-                    { label: "Couleur", key: "couleur" },
                     {
-                      label: "Plateforme véhicule",
+                      label: t("vehicles.color"),
+                      key: "couleur",
+                    },
+                    {
+                      label: t("vehicles.vehiclePlatform"),
                       key: "plateformeVehicule",
                     },
                     {
-                      label: "Architecture électrique",
+                      label: t("vehicles.electricArchitecture"),
                       key: "architectureElectrique",
                     },
                   ].map((field) => (
@@ -824,7 +842,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
               </div>
               <div className="mt-5 flex flex-col gap-1 w-full">
                 <label className="text-sm font-medium text-muted-foreground-500">
-                  Commentaire
+                  {t("vehicles.comment")}
                 </label>
 
                 <textarea
@@ -834,7 +852,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                   disabled={modalMode === "view"}
                   className="w-full px-3 py-3 rounded-lg border border-border bg-background text-foreground
     focus:outline-none focus:ring-2 focus:ring-ring transition resize-y"
-                  placeholder="Saisir un commentaire..."
+                  placeholder={t("vehicles.commentPlaceholder")}
                 />
               </div>
               {/* FOOTER */}
@@ -849,7 +867,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     }}
                     className="px-8 py-2 border rounded-lg hover:bg-muted"
                   >
-                    Annuler
+                      {t("common.cancel")}
+
                   </button>
 
                   <button
@@ -857,7 +876,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     className="px-8 py-2 bg-[#E30613] text-white rounded-lg
             hover:brightness-110 transition shadow"
                   >
-                    Enregistrer
+                      {t("common.save")}
+
                   </button>
                 </div>
               )}

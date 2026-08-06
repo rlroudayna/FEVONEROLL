@@ -1,0 +1,819 @@
+{
+  "common": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "cancel": "Cancel",
+    "save": "Save",
+    "confirm": "Confirm",
+    "search": "Search",
+    "select": "Select",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "vehicles": {
+    "title": "Vehicle Management",
+    "subtitle": "Manage your vehicles",
+    "addVehicle": "Add a vehicle",
+    "editVehicle": "Edit a vehicle",
+    "details": "Vehicle details",
+    "vehicle": "Vehicle",
+    "identifier": "Identifier",
+    "client": "Client",
+    "registration": "Registration",
+    "brand": "Brand",
+    "location": "Location",
+    "actions": "Actions",
+    "searchPlaceholder": "Search by name, identifier, registration, brand",
+    "noVehicle": "No vehicle found",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the vehicle?",
+    "deleteQuestionWithName": "Do you really want to delete the vehicle",
+    "deleteSuccess": "Vehicle deleted successfully!",
+    "deleteError": "Error while deleting the vehicle.",
+    "deleteConstraintError": "Deletion impossible: this vehicle is used in other data.",
+    "createdSuccess": "Vehicle created successfully!",
+    "createdError": "Error while creating the vehicle!",
+    "updatedSuccess": "Vehicle updated successfully!",
+    "duplicatedSuccess": "Vehicle duplicated successfully!",
+    "duplicateError": "Error while duplicating!",
+    "genericError": "Error!",
+    "identification": "Vehicle identification",
+    "motorisation": "Motorization",
+    "characteristics": "Characteristics",
+    "engineType": "Engine type",
+    "fuel": "Fuel",
+    "engineCode": "Engine code",
+    "gearbox": "Gearbox",
+    "comment": "Comment",
+    "commentPlaceholder": "Enter a comment...",
+    "name": "Name ",
+    "automatic": "Automatic",
+    "registrationNumber": "Registration",
+    "vin": "VIN",
+    "site": "Site",
+    "responsible": "Responsible",
+    "selectClient": "Select a client",
+    "select": "Select",
+    "allClients": "Client (All)",
+    "allLocations": "Location (All)",
+    "locationPark": "FEV CA Park",
+    "locationBar": "BAR",
+    "locationOutside": "Outside FEV",
+    "tireDimensions": "Tire dimensions (mm)",
+    "power": "Power (kW)",
+    "wheelbase": "Wheelbase (mm)",
+    "color": "Color",
+    "vehiclePlatform": "Vehicle platform",
+    "electricArchitecture": "Electric architecture",
+    "confirmDeletion": "Confirm deletion"
+  },
+  "roadLaws": {
+    "title": "Road Laws Management",
+    "subtitle": "Configure road laws",
+    "add": "Add a road law",
+    "edit": "Edit the road law",
+    "details": "Road law details",
+    "searchName": "Search by name",
+    "searchInertia": "Search by inertia",
+    "allClients": "Client (All)",
+    "allStandards": "Standard (All)",
+    "allDrivingModes": "Driving mode (All)",
+    "lawName": "Law name",
+    "client": "Client",
+    "standard": "Standard",
+    "drivingMode": "Driving mode",
+    "temperature": "Temperature",
+    "inertia": "Inertia",
+    "testMass": "Test mass",
+    "actions": "Actions",
+    "identification": "Identification",
+    "inertiaParameters": "Inertia parameters",
+    "resistanceCoefficients": "Resistance coefficients",
+    "comments": "Comment",
+    "lawNamePlaceholder": "Law_Client_Standard (auto)",
+    "commentPlaceholder": "Additional information...",
+    "selectClient": "Select a client",
+    "traction": "Traction",
+    "fourByFour": "4×4",
+    "propulsion": "Propulsion",
+    "noLaw": "No road law found",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the road  law",
+    "confirmDeletion": "Confirm deletion",
+    "createdSuccess": "Road  law created successfully!",
+    "updatedSuccess": "Road  law updated successfully!",
+    "deletedSuccess": "Road  law deleted successfully!",
+    "createError": "Error while creating the road law!",
+    "updateError": "Error while updating the road law!",
+    "deleteError": "Error while deleting the road law.",
+    "deleteConstraintError": "Deletion impossible: this road law is used in other data.",
+    "saveError": "Error while saving!"
+  },
+  "calages": {
+    "title": "Calibration Management",
+    "subtitle": "Manage calibration configurations for tests",
+    "add": "Add a calibration",
+    "edit": "Edit the calibration",
+    "details": "Calibration details",
+    "searchName": "Search by name",
+    "allClients": "Client (All)",
+    "allVehicles": "All vehicles",
+    "allRoadLaws": "Road laws (All)",
+    "calageName": "Calibration name",
+    "client": "Client",
+    "vehicle": "Vehicle",
+    "roadLaw": "Road law",
+    "drivingMode": "Driving mode",
+    "temperature": "Temperature",
+    "coefficientA": "A",
+    "coefficientB": "B",
+    "coefficientC": "C",
+    "actions": "Actions",
+    "identification": "Identification",
+    "associations": "Associations",
+    "provisionalCoefficients": "Provisional coefficients",
+    "comment": "Comment",
+    "calageNamePlaceholder": "ClioV_WLTP_01",
+    "commentPlaceholder": "Additional information...",
+    "selectClient": "Select a client",
+    "selectVehicle": "Select a vehicle",
+    "selectRoadLaw": "Select a road law",
+    "selectDrivingMode": "Select",
+    "traction": "Traction",
+    "fourByFour": "4×4",
+    "propulsion": "Propulsion",
+    "noCalage": "No calibration found",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the calibration",
+    "confirmDeletion": "Confirm deletion",
+    "createdSuccess": "Calibration created successfully!",
+    "updatedSuccess": "Calibration updated successfully!",
+    "deletedSuccess": "Calibration deleted successfully!",
+    "createError": "Error while creating the calibration!",
+    "updateError": "Error while updating the calibration!",
+    "deleteError": "Error while deleting the calibration.",
+    "deleteConstraintError": "Deletion impossible: this calibration is used in other data.",
+    "saveError": "Error while saving!"
+  },
+  "cycles": {
+    "title": "Cycle Management",
+    "subtitle": "Manage driving cycles for tests",
+    "add": "Add a cycle",
+    "edit": "Edit the cycle",
+    "details": "Cycle details",
+    "searchPlaceholder": "Search by name...",
+    "allFamilies": "Family (All)",
+    "allClients": "Client (All)",
+    "cycleName": "Cycle name",
+    "client": "Client",
+    "family": "Family",
+    "duration": "Duration (s)",
+    "numberOfPhases": "Number of phases",
+    "numberOfStabilities": "Number of stabilities",
+    "trace": "Trace",
+    "traceData": "Trace data",
+    "actions": "Actions",
+    "identification": "Identification",
+    "characteristics": "Characteristics",
+    "comment": "Comment",
+    "selectClient": "Select a client",
+    "selectFamily": "Select a family",
+    "cycleFamilies": {
+      "CYCLE_NORMEE": "Standardized cycle",
+      "RDE": "RDE",
+      "CONCEPTION_SPECIFIQUE": "Specific design"
+    },
+    "viewFile": "View file",
+    "viewCurrentFile": "View current file",
+    "importFile": "Import a file (.xls, .xlsx, .csv)",
+    "fileReady": "File ready for import",
+    "uploadTraceFile": "Please upload a trace file",
+    "noCycle": "No cycle found",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the cycle",
+    "confirmDeletion": "Confirm deletion",
+    "createdSuccess": "Cycle created successfully!",
+    "updatedSuccess": "Cycle updated successfully!",
+    "deletedSuccess": "Cycle deleted successfully!",
+    "deleteError": "Error while deleting the cycle.",
+    "deleteConstraintError": "Deletion impossible: this cycle is used in other data.",
+    "namePlaceholder": "Cycle name",
+    "commentPlaceholder": "Additional information..."
+  },
+  "carburants": {
+    "title": "Fuel Management",
+    "subtitle": "Manage available fuels",
+    "add": "Add a fuel",
+    "edit": "Edit the fuel",
+    "details": "Fuel details",
+    "searchPlaceholder": "Search...",
+    "allCompositions": "All compositions",
+    "allStatuses": "All statuses",
+    "name": "Name",
+    "density": "Density (kg/m³)",
+    "referenceTemperature": "Reference temperature (°C)",
+    "composition": "Composition",
+    "h2o": "H₂O (%)",
+    "co2": "CO₂ (%)",
+    "ethanol": "Ethanol (%)",
+    "nhv": "NHV (J/kg)",
+    "status": "Status",
+    "actions": "Actions",
+    "physicalProperties": "Physical properties",
+    "atomicComposition": "Atomic composition",
+    "content": "Content",
+    "state": "State",
+    "comment": "Comment",
+    "carbon": "Carbon",
+    "hydrogen": "Hydrogen",
+    "oxygen": "Oxygen",
+    "nitrogen": "Nitrogen",
+    "sulfur": "Sulfur",
+    "namePlaceholder": "Ex: Diesel B7",
+    "commentPlaceholder": "Add a comment...",
+    "select": "Select",
+    "compositionValues": {
+      "MassRatio": "Mass ratio"
+    },
+    "statusValues": {
+      "Published": "Published"
+    },
+    "noFuel": "No fuel found",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete this fuel?",
+    "confirmDeletion": "Confirm deletion",
+    "createdSuccess": "Fuel added successfully!",
+    "updatedSuccess": "Fuel updated successfully!",
+    "deletedSuccess": "Fuel deleted successfully!",
+    "createError": "Error while adding the fuel!",
+    "updateError": "Error while updating the fuel!",
+    "deleteError": "Error while deleting the fuel."
+  },
+  "clients": {
+    "title": "Client Management",
+    "subtitle": "Manage clients and associated information",
+    "add": "Add a client",
+    "edit": "Edit client",
+    "details": "Client details",
+    "searchPlaceholder": "Search by name",
+    "statusAll": "Status (All)",
+    "active": "Active",
+    "inactive": "Inactive",
+    "name": "Name",
+    "country": "Country",
+    "city": "City",
+    "email": "Email",
+    "status": "Status",
+    "actions": "Actions",
+    "selectCountry": "Select a country",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the client",
+    "confirmDeletion": "Confirm deletion",
+    "noClient": "No client found",
+    "createdSuccess": "Client added successfully!",
+    "updatedSuccess": "Client updated successfully!",
+    "deletedSuccess": "Client deleted successfully!",
+    "operationError": "Error during client operation.",
+    "deleteError": "Error while deleting the client.",
+    "deleteConstraintError": "Deletion impossible: this client is used in other data."
+  },
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage platform accounts and access",
+    "add": "Add a user",
+    "edit": "Edit User",
+    "details": "User Details",
+    "searchPlaceholder": "Search by name, email",
+    "allClients": "All Clients",
+    "allRoles": "Role (All)",
+    "user": "User",
+    "role": "Role",
+    "client": "Client",
+    "email": "Email",
+    "phone": "Phone",
+    "actions": "Actions",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "password": "Password",
+    "selectRole": "Select a role",
+    "selectClient": "Select a client",
+    "admin": "ADMIN",
+    "testManager": "CHARGE_ESSAI",
+    "testTechnician": "TECHNICIEN_ESSAI",
+    "external": "EXTERNE",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteQuestion": "Do you really want to delete the user",
+    "confirmDeletion": "Confirm deletion",
+    "noUser": "No user found",
+    "createdSuccess": "User added successfully!",
+    "updatedSuccess": "User updated successfully!",
+    "deletedSuccess": "User deleted successfully!",
+    "operationError": "Error during user operation.",
+    "deleteError": "Error while deleting the user.",
+    "deleteConstraintError": "Deletion impossible: this user is linked to other data.",
+    "requiredFields": "Please fill in the required fields"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Overview of activity",
+    "allClients": "All clients",
+    "cards": {
+      "vehicles": "Vehicles",
+      "vehiclesCount": "Number of vehicles",
+      "roadLaws": "Road laws",
+      "roadLawsCount": "Number of road laws",
+      "calibrations": "Calibrations",
+      "calibrationsCount": "Number of calibrations",
+      "drivingCycles": "Driving cycles",
+      "drivingCyclesCount": "Number of cycles",
+      "tests": "Tests",
+      "testsCount": "Number of tests"
+    },
+    "charts": {
+      "testDistribution": "Test distribution",
+      "testsEvolution12Months": "Test evolution over 12 months",
+      "testsEvolutionByWeek": "Test evolution by week",
+      "technicianValidation": "Test technician validation",
+      "testManagerValidation": "Test manager validation"
+    },
+    "filters": {
+      "allTechnicians": "All technicians",
+      "allTestManagers": "All test managers"
+    },
+    "status": {
+      "done": "Done",
+      "notDone": "Not done",
+      "inProgress": "In progress",
+      "ok": "OK",
+      "nok": "NOK",
+      "underReserve": "Under reservation"
+    },
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    }
+  },
+  "planning": {
+    "title": "Weekly schedule",
+    "subtitle": "View of planned tests",
+    "weekOf": "Week of",
+    "today": "Today",
+    "filters": {
+      "technician": "Technician",
+      "allTechnicians": "All technicians",
+      "projectNumber": "Project number",
+      "projectNumberPlaceholder": "Search by project number",
+      "date": "Date"
+    },
+    "views": {
+      "calendar": "Calendar",
+      "list": "List"
+    },
+    "slot": {
+      "project": "Project",
+      "technician": "Technician",
+      "unassigned": "Unassigned"
+    },
+    "shifts": {
+      "MATIN": "Morning",
+      "APRES_MIDI": "Afternoon",
+      "SOIR": "Evening",
+      "NUIT": "Night"
+    },
+    "noTests": "No planned tests"
+  },
+  "validation": {
+    "title": "Validation Management",
+    "subtitle": "Validate your tests",
+    "search": {
+      "placeholder": "Search by test request name"
+    },
+    "filters": {
+      "client": "Client",
+      "allClients": "All",
+      "vehicle": "Vehicle",
+      "allVehicles": "All vehicles",
+      "projectNumber": "Project number",
+      "date": "Date",
+      "resetDate": "Reset date"
+    },
+    "table": {
+      "testRequest": "Test request",
+      "date": "Date",
+      "projectNumber": "Project number",
+      "client": "Client",
+      "vehicle": "Vehicle",
+      "technicianValidation": "Technician Validation",
+      "chargeValidation": "Test Manager Validation",
+      "globalStatus": "Global Status",
+      "validation": "Validation"
+    },
+    "status": {
+      "done": "Done",
+      "inProgress": "In_progress",
+      "notDone": "Not done"
+    },
+    "decision": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okReservation": "OK under reservation"
+    },
+    "actions": {
+      "validate": "Validate",
+      "view": "View"
+    },
+    "messages": {
+      "noRequestFound": "No request found"
+    }
+  },
+  "validationDetail": {
+    "title": "Validation Details",
+    "subtitle": "Complete validation overview",
+    "table": {
+      "name": "Name",
+      "project": "Project",
+      "client": "Client",
+      "requester": "Requester",
+      "date": "Date",
+      "shift": "Shift",
+      "status": "Status"
+    },
+    "technician": {
+      "title": "Technician Validation",
+      "decision": "Decision",
+      "comment": "Comment"
+    },
+    "charge": {
+      "title": "Test Manager Validation",
+      "decision": "Decision",
+      "comment": "Comment"
+    },
+    "files": {
+      "title": "Files provided by the test manager",
+      "inca": "INCA Acquisition",
+      "bar": "BàR File",
+      "checklist": "Checklist",
+      "noFile": "No file",
+      "view": "View"
+    },
+    "messages": {
+      "notProvided": "Not provided",
+      "noComment": "No comment",
+      "cannotOpenFile": "Unable to open the file"
+    },
+    "decision": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okUnderReservation": "OK under reservation"
+    },
+    "status": {
+      "done": "Done",
+      "inProgress": "In progress",
+      "rejected": "Rejected",
+      "notDone": "Not done"
+    },
+    "actions": {
+      "back": "Back"
+    }
+  },
+  "validationCharge": {
+    "title": "Test Manager Validation",
+    "table": {
+      "requestName": "Request Name",
+      "projectNumber": "Project No.",
+      "client": "Client",
+      "requester": "Requester",
+      "status": "Status",
+      "validation": "Validation",
+      "date": "Date",
+      "shift": "Shift"
+    },
+    "validation": {
+      "title": "Test Manager Validation",
+      "ok": "OK - Test valid",
+      "nok": "NOK - Test invalid",
+      "okUnderReservation": "OK under reservation",
+      "oetb": "OETB"
+    },
+    "files": {
+      "title": "File Import",
+      "inca": "INCA Acquisition",
+      "bar": "BàR File",
+      "checklist": "Checklist",
+      "viewFile": "View file"
+    },
+    "comment": {
+      "title": "Test Manager Comment",
+      "placeholder": "Describe the test procedure, vehicle behavior, issues encountered..."
+    },
+    "messages": {
+      "selectStatus": "Please select a status before validating.",
+      "barRequired": "The BàR file is required before validation.",
+      "validationSaved": "Validation saved",
+      "validationError": "Error during validation",
+      "alreadyValidated": "This test has already been validated.",
+      "loadRequestError": "Error loading request",
+      "loadClientsError": "Error loading clients",
+      "cannotOpenFile": "Unable to open the file"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "validate": "Validate test"
+    },
+    "status": {
+      "inProgress": "In progress",
+      "done": "Done",
+      "rejected": "Rejected",
+      "notDone": "Not done"
+    },
+    "requestStatus": {
+      "inCreation": "In creation",
+      "validated": "Validated"
+    },
+    "shift": {
+      "morning": "Morning",
+      "evening": "Evening",
+      "night": "Night"
+    }
+  },
+  "validationTechnicien": {
+    "title": "Test Technician Validation",
+    "table": {
+      "name": "Name",
+      "project": "Project No.",
+      "client": "Client",
+      "requester": "Requester",
+      "status": "Status",
+      "validation": "Validation",
+      "date": "Date",
+      "shift": "Shift"
+    },
+    "decisions": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okUnderReservation": "OK under reservation"
+    },
+    "decisionDescriptions": {
+      "ok": "Test completed without any issues",
+      "nok": "Test interrupted or not performed",
+      "okUnderReservation": "Test completed but with complications"
+    },
+    "status": {
+      "inProgress": "In progress",
+      "done": "Done",
+      "rejected": "Rejected",
+      "notDone": "Not done",
+      "validated": "Validated",
+      "inCreation": "In creation"
+    },
+    "comment": {
+      "title": "Test Technician Comment",
+      "placeholder": "Describe the test procedure, vehicle behavior, issues encountered..."
+    },
+    "messages": {
+      "selectStatus": "Please select a status before validating.",
+      "alreadyValidated": "This test has already been validated and is read-only.",
+      "validationError": "Error during validation"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "validate": "Validate test"
+    },
+    "shifts": {
+      "morning": "Morning",
+      "evening": "Evening",
+      "night": "Night"
+    }
+  },
+  "welcome": {
+    "title": "Welcome to FevOneRoll",
+    "subtitle": "Complete management of your test bench activities",
+    "accessPlatform": "Access the platform"
+  },
+  "login": {
+    "title": "Login",
+    "professionalEmail": "Professional email",
+    "emailPlaceholder": "name@company.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "backHome": "← Back to home",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your personal information",
+    "personalInformation": "Personal information",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "email": "Email",
+    "role": "Role",
+    "company": "Company",
+    "password": {
+      "change": "Change password",
+      "title": "Change password",
+      "old": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "update": "Update",
+      "minimum": "At least 8 characters required",
+      "mismatch": "Passwords do not match"
+    },
+    "photo": {
+      "change": "Change profile picture",
+      "select": "Select an image",
+      "update": "Update",
+      "sizeError": "The image must not exceed 2 MB",
+      "formatError": "Invalid format (jpg or png only)"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "update": "update"
+    },
+    "messages": {
+      "photoUpdated": "Image updated successfully",
+      "photoUploadError": "Server error while uploading",
+      "phoneUpdated": "Phone number updated!",
+      "phoneUpdateError": "Error while updating",
+      "requiredFields": "All fields are required",
+      "passwordMinimum": "Minimum 8 characters",
+      "passwordMismatch": "Passwords do not match",
+      "passwordUpdated": "Password changed successfully",
+      "passwordChangeError": "Error while changing password",
+      "invalidOldPassword": "Incorrect current password"
+    }
+  },
+  "title": "Test Request Management",
+  "subtitle": "Manage your test requests",
+  "add": "Add a request",
+  "filters": {
+    "searchName": "Test request name...",
+    "client": "Client",
+    "all": "All",
+    "requester": "Requester name...",
+    "projectNumber": "Project No...",
+    "status": "Status",
+    "allStatuses": "All",
+    "date": "Date"
+  },
+
+  "demandesEssai": {
+    "title": "Test Request Management",
+    "subtitle": "Manage your test requests",
+    "add": "Add a request",
+
+    "filters": {
+      "searchName": "Test request name...",
+      "client": "Client",
+      "all": "All",
+      "requester": "Requester name...",
+      "projectNumber": "Project No...",
+      "status": "Status",
+      "allStatuses": "All",
+      "date": "Date"
+    },
+    "table": {
+      "requestName": "Test Request Name",
+      "projectNumber": "Project No.",
+      "client": "Client",
+      "requester": "Requester",
+      "status": "Status",
+      "date": "Date",
+      "shift": "Shift",
+      "actions": "Actions"
+    },
+    "deleteConfirmation": {
+      "title": "Delete Confirmation",
+      "message": "Are you sure you want to delete this test request",
+      "cancel": "No",
+      "confirm": "Confirm Deletion"
+    },
+    "loading": "Loading test requests...",
+    "noResults": "No test requests found",
+    "modal": {
+      "view": "View a test request",
+      "edit": "Edit a test request",
+      "create": "Create a test request"
+    },
+
+    "tabs": {
+      "general": "General"
+    },
+
+    "general": {
+      "vehicle": "Vehicle",
+      "selectVehicle": "Select a vehicle",
+      "cycle": "Cycle",
+      "selectCycle": "Select a cycle",
+      "calibration": "Calibration",
+      "selectCalibration": "Select a calibration",
+      "roadLaw": "Road Law",
+      "selectRoadLaw": "Select a road law",
+      "requestName": "Request Name",
+      "status": "Status",
+      "selectStatus": "Select status",
+      "inProgress": "In Progress",
+      "done": "Done",
+      "requester": "Requester",
+      "enterRequester": "Enter requester name",
+      "client": "Client",
+      "selectClient": "Select a client",
+      "testTechnician": "Test Technician",
+      "selectTechnician": "Select technician",
+      "projectNumber": "Project No.",
+      "bench": "Bench",
+      "oneBenchAvailable": "Only one bench is currently available",
+      "fuelType": "Fuel Type",
+      "selectFuel": "Select a fuel type"
+    },
+
+    "planning": {
+      "title": "Scheduling",
+      "testDate": "Test Date",
+      "shift": "Shift",
+      "select": "Select",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "night": "Night"
+    },
+
+    "testConditions": {
+      "title": "Test Conditions",
+      "maceration": "Maceration Required",
+      "macerationTemperature": "Maceration Temperature (°C)",
+      "waterTemperature": "Water Temperature (°C)",
+      "ambientPressure": "Ambient Pressure (mbar, hPa)",
+      "ambientTemperature": "Ambient Temperature (°C)",
+      "humidity": "Humidity (%)",
+      "sttActivation": "STT Activation",
+      "batteryManagement": "12V Battery Management",
+      "charging": "Charging",
+      "socStart": "12V Start SOC (%)",
+      "airConditioning": "Air Conditioning Activation",
+      "regulationTemperature": "Regulation Temperature (°C)",
+      "cabinHeating": "Cabin Heating",
+      "testType": "Test Type",
+      "time": "Time (s)",
+      "coastDownVerification": "Coast Down Verification",
+      "decelerationCount": "Number of Decelerations"
+    },
+
+    "comments": {
+      "label": "Comment",
+      "optional": "Optional",
+      "placeholder": "Specific comments for the test driver..."
+    },
+
+    "vehicleCharacteristics": "Vehicle Characteristics",
+    "roadLawCharacteristics": "Road Law Characteristics",
+    "calibrationCharacteristics": "Calibration Characteristics",
+    "cycleCharacteristics": "Cycle Characteristics"
+  },
+  "rawGases": {
+    "title": "Raw Gas Configuration",
+    "ftirLines": "FTIR Lines",
+    "standardSamplingLines": "Standard Sampling Lines",
+    "specificAnalyses": "Specific Analyses",
+    "samplingPoint": "Sampling Point",
+    "select": "-- Select --",
+    "engineOutlet": "Engine Outlet",
+    "cataInlet": "CATA Inlet",
+    "cataOutlet": "CATA Outlet",
+    "cannula": "Cannula",
+    "egrMeasurement": "EGR Measurement",
+    "line1": "Line 1",
+    "line2": "Line 2",
+    "ftir": "FTIR",
+    "microsoot": "Microsoot"
+  },
+"dilutedGases": {
+  "cvsPhasesConfiguration": "CVS & Phase Configuration",
+  "bagMeasurement": "Bag Measurement",
+  "flowRatesByPhase": "Flow Rates by Phase (m³/min)",
+  "phase": "Phase",
+  "particleMeasurements": "Particle Measurements (PN/PM)",
+  "pmWeighing": "PM Weighing (Mass)",
+  "samplingFlowRate": "Sampling Flow Rate (L/min)",
+  "pn23nm": "PN 23 nm",
+  "pn10nm": "PN 10 nm",
+  "dilutionFactor": "Dilution Factor (PNDF)",
+  "cvs": "CVS"
+}
+
+}

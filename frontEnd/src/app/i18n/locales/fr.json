@@ -1,0 +1,928 @@
+{
+  "common": {
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "view": "Voir",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "confirm": "Confirmer",
+    "search": "Rechercher",
+    "select": "Sélectionner",
+    "yes": "Oui",
+    "no": "Non"
+  },
+
+  "vehicles": {
+    "title": "Gestion des véhicules",
+    "subtitle": "Gérer vos véhicules",
+    "addVehicle": "Ajouter un véhicule",
+    "editVehicle": "Modifier un véhicule",
+    "details": "Détails du véhicule",
+
+    "vehicle": "Véhicule",
+    "identifier": "Identificateur",
+    "client": "Client",
+    "registration": "Immatriculation",
+    "brand": "Marque",
+    "location": "Localisation",
+    "actions": "Actions",
+
+    "searchPlaceholder": "Recherche par nom, identificateur, immatriculation, marque",
+    "noVehicle": "Aucun véhicule trouvé",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer le véhicule ?",
+    "deleteQuestionWithName": "Voulez-vous vraiment supprimer le véhicule",
+    "deleteSuccess": "Véhicule supprimé avec succès !",
+    "deleteError": "Erreur lors de la suppression du véhicule.",
+    "deleteConstraintError": "Suppression impossible : ce véhicule est utilisé dans d'autres données.",
+
+    "createdSuccess": "Véhicule créé avec succès !",
+    "createdError": "Erreur lors de la création du véhicule !",
+    "updatedSuccess": "Véhicule modifié avec succès !",
+    "duplicatedSuccess": "Véhicule dupliqué avec succès !",
+    "duplicateError": "Erreur lors de la duplication !",
+    "genericError": "Erreur !",
+
+    "identification": "Identification du véhicule",
+    "motorisation": "Motorisation",
+    "characteristics": "Caractéristiques",
+    "engineType": "Type moteur",
+    "fuel": "Carburant",
+    "engineCode": "Code moteur",
+    "gearbox": "Boîte de vitesse",
+    "comment": "Commentaire",
+    "commentPlaceholder": "Saisir un commentaire...",
+
+    "name": "Nom (Appli_Immat)",
+    "automatic": "Automatique",
+    "registrationNumber": "Immatriculation",
+    "vin": "VIN",
+    "site": "Site",
+    "responsible": "Responsable",
+
+    "selectClient": "Sélectionner un client",
+    "select": "Sélectionner",
+    "allClients": "Client (Tous)",
+    "allLocations": "Localisation (Toutes)",
+
+    "locationPark": "Park FEV CA",
+    "locationBar": "BAR",
+    "locationOutside": "Hors FEV",
+
+    "tireDimensions": "Dimensions de pneus (mm)",
+    "power": "Puissance (kW)",
+    "wheelbase": "Empattement (mm)",
+    "color": "Couleur",
+    "vehiclePlatform": "Plateforme véhicule",
+    "electricArchitecture": "Architecture électrique",
+
+    "confirmDeletion": "Confirmer suppression"
+  },
+  "roadLaws": {
+    "title": "Gestion des lois de route",
+    "subtitle": "Paramétrer les lois de route",
+
+    "add": "Ajouter une loi de route",
+    "edit": "Modifier la loi de route",
+    "details": "Détails de la loi de route",
+
+    "searchName": "Rechercher par nom",
+    "searchInertia": "Rechercher par inertie",
+
+    "allClients": "Client (Tous)",
+    "allStandards": "Norme (Toutes)",
+    "allDrivingModes": "Mode de conduite (Tous)",
+
+    "lawName": "Nom de la loi",
+    "client": "Client",
+    "standard": "Norme",
+    "drivingMode": "Mode de conduite",
+    "temperature": "Température",
+    "inertia": "Inertie",
+    "testMass": "Masse d'essai",
+    "actions": "Actions",
+
+    "identification": "Identification",
+    "inertiaParameters": "Paramètres d'inertie",
+    "resistanceCoefficients": "Coefficients de résistance",
+    "comments": "Commentaire",
+
+    "lawNamePlaceholder": "Loi_Client_Norme (auto)",
+    "commentPlaceholder": "Informations additionnelles...",
+
+    "selectClient": "Sélectionner un client",
+
+    "traction": "Traction",
+    "fourByFour": "4×4",
+    "propulsion": "Propulsion",
+
+    "noLaw": "Aucune loi de route trouvée",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer la loi de route",
+    "confirmDeletion": "Confirmer suppression",
+
+    "createdSuccess": "Loi de route créée avec succès !",
+    "updatedSuccess": "Loi de route modifiée avec succès !",
+    "deletedSuccess": "Loi de route supprimée avec succès !",
+
+    "createError": "Erreur lors de la création de la loi de route !",
+    "updateError": "Erreur lors de la modification de la loi de route !",
+    "deleteError": "Erreur lors de la suppression de la loi de route.",
+    "deleteConstraintError": "Suppression impossible : cette loi de route est utilisée dans d'autres données.",
+    "saveError": "Erreur lors de l'enregistrement !"
+  },
+  "calages": {
+    "title": "Gestion des calages",
+    "subtitle": "Gérer les configurations de calage pour les essais",
+    "add": "Ajouter un calage",
+    "edit": "Modifier le calage",
+    "details": "Détails du calage",
+
+    "searchName": "Rechercher par nom",
+
+    "allClients": "Client (Tous)",
+    "allVehicles": "Tous les véhicules",
+    "allRoadLaws": "Lois de route (Toutes)",
+
+    "calageName": "Nom du calage",
+    "client": "Client",
+    "vehicle": "Véhicule",
+    "roadLaw": "Loi de route",
+    "drivingMode": "Mode de conduite",
+    "temperature": "Température",
+    "coefficientA": "A",
+    "coefficientB": "B",
+    "coefficientC": "C",
+    "actions": "Actions",
+
+    "identification": "Identification",
+    "associations": "Associations",
+    "provisionalCoefficients": "Coefficients provisoires",
+    "comment": "Commentaire",
+
+    "calageNamePlaceholder": "ClioV_WLTP_01",
+    "commentPlaceholder": "Informations supplémentaires...",
+
+    "selectClient": "Sélectionner un client",
+    "selectVehicle": "Sélectionner un véhicule",
+    "selectRoadLaw": "Sélectionner une loi",
+    "selectDrivingMode": "Sélectionner",
+
+    "traction": "Traction",
+    "fourByFour": "4×4",
+    "propulsion": "Propulsion",
+
+    "noCalage": "Aucun calage trouvé",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer le calage",
+    "confirmDeletion": "Confirmer suppression",
+
+    "createdSuccess": "Calage ajouté avec succès !",
+    "updatedSuccess": "Calage modifié avec succès !",
+    "deletedSuccess": "Calage supprimé avec succès !",
+
+    "createError": "Erreur lors de la création du calage !",
+    "updateError": "Erreur lors de la modification du calage !",
+    "deleteError": "Erreur lors de la suppression du calage.",
+    "deleteConstraintError": "Suppression impossible : ce calage est utilisé dans d'autres données.",
+    "saveError": "Erreur lors de l'enregistrement !"
+  },
+  "cycles": {
+    "title": "Gestion des cycles",
+    "subtitle": "Gérer les cycles de roulage pour les essais",
+
+    "add": "Ajouter un cycle",
+    "edit": "Modifier le cycle",
+    "details": "Détails d'un cycle",
+
+    "searchPlaceholder": "Rechercher par nom...",
+    "allFamilies": "familles (Tous)",
+    "allClients": "Client (Tous)",
+
+    "cycleName": "Nom du cycle",
+    "client": "Client",
+    "family": "Famille",
+    "duration": "Durée (s)",
+    "numberOfPhases": "Nombre de phases",
+    "numberOfStabilities": "Nombre de stabilités",
+    "trace": "Trace",
+    "traceData": "Données de trace",
+    "actions": "Actions",
+
+    "identification": "Identification",
+    "characteristics": "Caractéristiques",
+    "comment": "Commentaire",
+
+    "selectClient": "Sélectionner un client",
+    "selectFamily": "Sélectionner une famille",
+
+    "cycleFamilies": {
+      "CYCLE_NORMEE": "Cycle normalisé",
+      "RDE": "RDE",
+      "CONCEPTION_SPECIFIQUE": "Conception spécifique"
+    },
+
+    "viewFile": "Voir le fichier",
+    "viewCurrentFile": "Voir le fichier actuel",
+    "importFile": "Importer un fichier (.xls, .xlsx, .csv)",
+    "fileReady": "Fichier prêt à l'import",
+    "uploadTraceFile": "Veuillez téléverser un fichier de trace",
+
+    "noCycle": "Aucun cycle trouvé",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer le cycle",
+    "confirmDeletion": "Confirmer suppression",
+
+    "createdSuccess": "Cycle ajouté avec succès !",
+    "updatedSuccess": "Cycle modifié avec succès !",
+    "deletedSuccess": "Cycle supprimé avec succès !",
+
+    "deleteError": "Erreur lors de la suppression du cycle.",
+    "deleteConstraintError": "Suppression impossible : ce cycle est utilisé dans d'autres données.",
+
+    "namePlaceholder": "Nom du cycle",
+    "commentPlaceholder": "Informations complémentaires..."
+  },
+  "carburants": {
+    "title": "Gestion des carburants",
+    "subtitle": "Gérer les carburants disponibles",
+
+    "add": "Ajouter un carburant",
+    "edit": "Modifier le carburant",
+    "details": "Détails du carburant",
+
+    "searchPlaceholder": "Rechercher...",
+    "allCompositions": "Toutes les compositions",
+    "allStatuses": "Tous les statuts",
+
+    "name": "Nom",
+    "density": "Densité (kg/m³)",
+    "referenceTemperature": "Température de référence (°C)",
+    "composition": "Composition",
+    "h2o": "H₂O (%)",
+    "co2": "CO₂ (%)",
+    "ethanol": "Éthanol (%)",
+    "nhv": "PCI (J/kg)",
+    "status": "Statut",
+    "actions": "Actions",
+
+    "physicalProperties": "Propriétés physiques",
+    "atomicComposition": "Composition atomique",
+    "content": "Contenu",
+    "state": "État",
+    "comment": "Commentaire",
+
+    "carbon": "Carbone",
+    "hydrogen": "Hydrogène",
+    "oxygen": "Oxygène",
+    "nitrogen": "Azote",
+    "sulfur": "Soufre",
+
+    "namePlaceholder": "Ex : Diesel B7",
+    "commentPlaceholder": "Ajouter un commentaire...",
+
+    "select": "Sélectionner",
+
+    "compositionValues": {
+      "MassRatio": "Rapport massique"
+    },
+
+    "statusValues": {
+      "Published": "Publié"
+    },
+
+    "noFuel": "Aucun carburant trouvé",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer ce carburant ?",
+    "confirmDeletion": "Confirmer la suppression",
+
+    "createdSuccess": "Carburant ajouté avec succès !",
+    "updatedSuccess": "Carburant modifié avec succès !",
+    "deletedSuccess": "Carburant supprimé avec succès !",
+
+    "createError": "Erreur lors de l'ajout du carburant !",
+    "updateError": "Erreur lors de la modification du carburant !",
+    "deleteError": "Erreur lors de la suppression du carburant."
+  },
+  "clients": {
+    "title": "Gestion des clients",
+    "subtitle": "Administration des clients et informations associées",
+
+    "add": "Nouveau client",
+    "edit": "Modifier client",
+    "details": "Détails client",
+
+    "searchPlaceholder": "Recherche par nom",
+    "statusAll": "Statut (Tous)",
+    "active": "Actif",
+    "inactive": "Inactif",
+
+    "name": "Nom",
+    "country": "Pays",
+    "city": "Ville",
+    "email": "Email",
+    "status": "Statut",
+    "actions": "Actions",
+
+    "selectCountry": "Sélectionner un pays",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer le client",
+    "confirmDeletion": "Confirmer suppression",
+
+    "noClient": "Aucun client trouvé",
+
+    "createdSuccess": "Client ajouté avec succès !",
+    "updatedSuccess": "Client modifié avec succès !",
+    "deletedSuccess": "Client supprimé avec succès !",
+
+    "operationError": "Erreur lors de l'opération client.",
+    "deleteError": "Erreur lors de la suppression du client.",
+    "deleteConstraintError": "Suppression impossible : ce client est utilisé dans d'autres données."
+  },
+  "users": {
+    "title": "Gestion des utilisateurs",
+    "subtitle": "Administrez les comptes et les accès de la plateforme",
+
+    "add": "Nouvel utilisateur",
+    "edit": "Modifier un utilisateur",
+    "details": "Détails utilisateur",
+
+    "searchPlaceholder": "Recherche par nom, email",
+
+    "allClients": "Tous les clients",
+    "allRoles": "Rôle (Tous)",
+
+    "user": "Utilisateur",
+    "role": "Rôle",
+    "client": "Client",
+    "email": "Email",
+    "phone": "Téléphone",
+    "actions": "Actions",
+
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "password": "Mot de passe",
+
+    "selectRole": "Choisir un rôle",
+    "selectClient": "Choisir un client",
+
+    "admin": "ADMIN",
+    "testManager": "CHARGE_ESSAI",
+    "testTechnician": "TECHNICIEN_ESSAI",
+    "external": "EXTERNE",
+
+    "deleteConfirmation": "Confirmation de suppression",
+    "deleteQuestion": "Voulez-vous vraiment supprimer l'utilisateur",
+    "confirmDeletion": "Confirmer suppression",
+
+    "noUser": "Aucun utilisateur trouvé",
+
+    "createdSuccess": "Utilisateur ajouté avec succès !",
+    "updatedSuccess": "Utilisateur modifié avec succès !",
+    "deletedSuccess": "Utilisateur supprimé avec succès !",
+
+    "operationError": "Erreur lors de l'opération utilisateur.",
+    "deleteError": "Erreur lors de la suppression de l'utilisateur.",
+    "deleteConstraintError": "Suppression impossible : cet utilisateur est lié à d'autres données.",
+
+    "requiredFields": "Veuillez remplir les champs obligatoires"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "subtitle": "Vue d'ensemble de l'activité",
+
+    "allClients": "Tous les clients",
+
+    "cards": {
+      "vehicles": "Véhicules",
+      "vehiclesCount": "Nombre de véhicules",
+      "roadLaws": "Lois de route",
+      "roadLawsCount": "Nombre de lois de route",
+      "calibrations": "Calages",
+      "calibrationsCount": "Nombre de calages",
+      "drivingCycles": "Cycles de conduite",
+      "drivingCyclesCount": "Nombre de cycles",
+      "tests": "Essais",
+      "testsCount": "Nombre d'essais"
+    },
+
+    "charts": {
+      "testDistribution": "Répartition des essais",
+      "testsEvolution12Months": "Évolution des essais sur 12 mois",
+      "testsEvolutionByWeek": "Évolution des essais par semaine",
+      "technicianValidation": "Validation technicien d'essai",
+      "testManagerValidation": "Validation chargé d'essai"
+    },
+
+    "filters": {
+      "allTechnicians": "Tous les techniciens",
+      "allTestManagers": "Tous les chargés d'essai"
+    },
+
+    "status": {
+      "done": "Fait",
+      "notDone": "Pas fait",
+      "inProgress": "En cours",
+      "ok": "OK",
+      "nok": "NOK",
+      "underReserve": "Sous réserve"
+    },
+    "months": {
+      "1": "Janvier",
+      "2": "Fevrier",
+      "3": "Mars",
+      "4": "Avril",
+      "5": "Mai",
+      "6": "Juin",
+      "7": "Juillet",
+      "8": "Août",
+      "9": "Septembre",
+      "10": "Octobre",
+      "11": "Novembre",
+      "12": "Décembre"
+    }
+  },
+  "planning": {
+    "title": "Planning hebdomadaire",
+    "subtitle": "Visualisation des essais planifiés",
+
+    "weekOf": "Semaine du",
+    "today": "Aujourd'hui",
+    "filters": {
+      "technician": "Technicien",
+      "allTechnicians": "Tous les techniciens",
+      "projectNumber": "Numéro de projet",
+      "projectNumberPlaceholder": "Rechercher par numéro de projet",
+      "date": "Date"
+    },
+
+    "views": {
+      "calendar": "Calendrier",
+      "list": "Liste"
+    },
+
+    "slot": {
+      "project": "Projet",
+      "technician": "Technicien",
+      "unassigned": "Non assigné"
+    },
+
+    "shifts": {
+      "MATIN": "Matin",
+      "APRES_MIDI": "Après-midi",
+      "SOIR": "Soir",
+      "NUIT": "Nuit"
+    },
+
+    "noTests": "Aucun essai planifié"
+  },
+
+  "validation": {
+    "title": "Gestion des validations",
+    "subtitle": "Valider vos essais",
+
+    "search": {
+      "placeholder": "Recherche par nom de demande"
+    },
+
+    "filters": {
+      "client": "Client",
+      "allClients": "Tous",
+      "vehicle": "Véhicule",
+      "allVehicles": "Tous les véhicules",
+      "projectNumber": "N° de projet",
+      "date": "Date",
+      "resetDate": "Réinitialiser la date"
+    },
+
+    "table": {
+      "testRequest": "Demande d'essai",
+      "date": "Date",
+      "projectNumber": "N° Projet",
+      "client": "Client",
+      "vehicle": "Véhicule",
+      "technicianValidation": "Validation Technicien",
+      "chargeValidation": "Validation Chargé",
+      "globalStatus": "Statut Global",
+      "validation": "Validation"
+    },
+
+    "status": {
+      "done": "Fait",
+      "inProgress": "En cours",
+      "notDone": "Pas fait"
+    },
+
+    "decision": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okReservation": "OK sous réserve"
+    },
+
+    "actions": {
+      "validate": "Valider",
+      "view": "Voir"
+    },
+
+    "messages": {
+      "noRequestFound": "Aucune demande trouvée"
+    }
+  },
+
+  "validationDetail": {
+    "title": "Détail de la validation",
+    "subtitle": "Consultation complète des validations",
+
+    "table": {
+      "name": "Nom",
+      "project": "Projet",
+      "client": "Client",
+      "requester": "Demandeur",
+      "date": "Date",
+      "shift": "Shift",
+      "status": "Statut"
+    },
+
+    "technician": {
+      "title": "Validation technicien",
+      "decision": "Décision",
+      "comment": "Commentaire"
+    },
+
+    "charge": {
+      "title": "Validation chargé d'essai",
+      "decision": "Décision",
+      "comment": "Commentaire"
+    },
+
+    "files": {
+      "title": "Fichiers transmis par le chargé",
+      "inca": "Acquisition INCA",
+      "bar": "Fichier BàR",
+      "checklist": "Checklist",
+      "noFile": "Aucun fichier",
+      "view": "Voir"
+    },
+
+    "messages": {
+      "notProvided": "Non renseigné",
+      "noComment": "Aucun commentaire",
+      "cannotOpenFile": "Impossible d'ouvrir le fichier"
+    },
+
+    "decision": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okUnderReservation": "OK sous réserve"
+    },
+
+    "status": {
+      "done": "Fait",
+      "inProgress": "En_cours",
+      "notDone": "Pas fait"
+    },
+
+    "actions": {
+      "back": "Retour"
+    }
+  },
+
+  "validationCharge": {
+    "title": "Validation chargé d'essai",
+
+    "table": {
+      "requestName": "Nom de demande",
+      "projectNumber": "N° de Projet",
+      "client": "Client",
+      "requester": "Demandeur",
+      "status": "Statut",
+      "validation": "Validation",
+      "date": "Date",
+      "shift": "Shift"
+    },
+
+    "validation": {
+      "title": "Validation chargé d'essai",
+      "ok": "OK - Essai valide",
+      "nok": "NOK - Essai non valide",
+      "okUnderReservation": "OK sous réserve",
+      "oetb": "OETB"
+    },
+
+    "files": {
+      "title": "Import des fichiers",
+      "inca": "Acquisition INCA",
+      "bar": "Fichier BàR",
+      "checklist": "Checklist",
+      "viewFile": "Voir le fichier"
+    },
+
+    "comment": {
+      "title": "Commentaire de chargé d'essai",
+      "placeholder": "Décrivez le déroulement de l'essai, le comportement du véhicule, les problèmes rencontrés..."
+    },
+
+    "messages": {
+      "selectStatus": "Veuillez sélectionner un statut avant de valider.",
+      "barRequired": "Le fichier BàR est obligatoire avant la validation.",
+      "validationSaved": "Validation enregistrée",
+      "validationError": "Erreur lors de la validation",
+      "alreadyValidated": "Cet essai est déjà validé.",
+      "loadRequestError": "Erreur chargement demande",
+      "loadClientsError": "Erreur chargement clients",
+      "cannotOpenFile": "Impossible d'ouvrir le fichier"
+    },
+
+    "actions": {
+      "cancel": "Annuler",
+      "validate": "Valider l'essai"
+    },
+
+    "status": {
+      "inProgress": "En cours",
+      "done": "Fait",
+      "rejected": "Rejetée",
+      "notDone": "Pas fait"
+    },
+
+    "requestStatus": {
+      "inCreation": "En création",
+      "validated": "Validée"
+    },
+
+    "shift": {
+      "morning": "Matin",
+      "evening": "Soir",
+      "night": "Nuit"
+    }
+  },
+
+  "validationTechnicien": {
+    "title": "Validation technicien d'essai",
+    "table": {
+      "name": "Nom",
+      "project": "N° de projet",
+      "client": "Client",
+      "requester": "Demandeur",
+      "status": "Statut",
+      "validation": "Validation",
+      "date": "Date",
+      "shift": "Shift"
+    },
+    "decisions": {
+      "ok": "OK",
+      "nok": "NOK",
+      "okUnderReservation": "OK sous réserve"
+    },
+    "decisionDescriptions": {
+      "ok": "Essai réalisé sans problèmes",
+      "nok": "Essai interrompu ou non réalisé",
+      "okUnderReservation": "Essai réalisé mais avec complications"
+    },
+    "status": {
+      "inProgress": "En cours",
+      "done": "Fait",
+      "rejected": "Rejetée",
+      "notDone": "Pas fait",
+      "validated": "Validée",
+      "inCreation": "En création"
+    },
+    "comment": {
+      "title": "Commentaire du technicien d'essai",
+      "placeholder": "Décrivez le déroulement de l'essai, le comportement du véhicule, les problèmes rencontrés..."
+    },
+    "messages": {
+      "selectStatus": "Veuillez sélectionner un statut avant de valider.",
+      "alreadyValidated": "Cet essai a déjà été validé et est en lecture seule.",
+      "validationError": "Erreur lors de la validation"
+    },
+    "actions": {
+      "cancel": "Annuler",
+      "validate": "Valider l'essai"
+    },
+    "shifts": {
+      "morning": "Matin",
+      "evening": "Soir",
+      "night": "Nuit"
+    }
+  },
+  "welcome": {
+    "title": "Bienvenue sur FevOneRoll",
+    "subtitle": "Gestion complète de vos essais sur bancs d'essai",
+    "accessPlatform": "Accéder à la plateforme"
+  },
+  "login": {
+    "title": "Connexion",
+    "professionalEmail": "Email professionnel",
+    "emailPlaceholder": "nom@entreprise.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Mot de passe oublié ?",
+    "submit": "Se connecter",
+    "backHome": "← Retour à l'accueil",
+    "errors": {
+      "invalidCredentials": "Email ou mot de passe incorrect"
+    }
+  },
+
+  "profile": {
+    "title": "Mon Profil",
+    "subtitle": "Gestion de vos informations personnelles",
+
+    "personalInformation": "Informations personnelles",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "email": "Email",
+    "role": "Rôle",
+    "company": "Société",
+
+    "password": {
+      "change": "Modifier le mot de passe",
+      "title": "Changer le mot de passe",
+      "old": "Ancien mot de passe",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le nouveau mot de passe",
+      "update": "Mettre à jour",
+      "minimum": "Minimum 8 caractères requis",
+      "mismatch": "Les mots de passe ne correspondent pas"
+    },
+
+    "photo": {
+      "change": "Changer la photo de profil",
+      "select": "Sélectionner une image",
+      "update": "Mettre à jour",
+      "sizeError": "L'image ne doit pas dépasser 2 Mo",
+      "formatError": "Format invalide (jpg ou png uniquement)"
+    },
+
+    "actions": {
+      "cancel": "Annuler",
+      "update": "Mettre à jour"
+    },
+
+    "messages": {
+      "photoUpdated": "Image mise à jour avec succès",
+      "photoUploadError": "Erreur serveur lors de l'upload",
+      "phoneUpdated": "Numéro de téléphone mis à jour !",
+      "phoneUpdateError": "Erreur lors de la mise à jour",
+      "requiredFields": "Tous les champs sont obligatoires",
+      "passwordMinimum": "Minimum 8 caractères",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "passwordUpdated": "Mot de passe modifié avec succès",
+      "passwordChangeError": "Erreur lors du changement de mot de passe",
+      "invalidOldPassword": "Ancien mot de passe incorrect"
+    }
+  },
+
+  "demandesEssai": {
+    "title": "Gestion des demandes d'essai",
+    "subtitle": "Gérer vos demandes d'essai",
+    "add": "Ajouter une demande",
+
+    "filters": {
+      "searchName": "Nom de la demande...",
+      "client": "Client",
+      "all": "Tous",
+      "requester": "Nom du demandeur...",
+      "projectNumber": "N° de projet...",
+      "status": "Statut",
+      "allStatuses": "Tous",
+      "date": "Date"
+    },
+    "table": {
+      "requestName": "Nom de demande d'essai",
+      "projectNumber": "N° de Projet",
+      "client": "Client",
+      "requester": "Demandeur",
+      "status": "Statut",
+      "date": "Date",
+      "shift": "Shift",
+      "actions": "Actions"
+    },
+    "deleteConfirmation": {
+      "title": "Confirmation de suppression",
+      "message": "Voulez-vous vraiment supprimer cette demande d'essai",
+      "cancel": "Non",
+      "confirm": "Confirmer la suppression"
+    },
+    "loading": "Chargement des demandes...",
+    "noResults": "Aucune demande trouvée",
+    "modal": {
+      "view": "Visualiser une demande d'essai",
+      "edit": "Modifier une demande d'essai",
+      "create": "Créer une demande d'essai"
+    },
+
+    "tabs": {
+      "general": "Général"
+    },
+
+    "general": {
+      "vehicle": "Véhicule",
+      "selectVehicle": "Sélectionner un véhicule",
+      "cycle": "Cycle",
+      "selectCycle": "Sélectionner un cycle",
+      "calibration": "Calage",
+      "selectCalibration": "Sélectionner un calage",
+      "roadLaw": "Loi de route",
+      "selectRoadLaw": "Sélectionner une loi",
+      "requestName": "Nom de la demande",
+      "status": "Statut",
+      "selectStatus": "Sélectionner le statut",
+      "inProgress": "En cours",
+      "done": "Fait",
+      "requester": "Demandeur",
+      "enterRequester": "Entrer le nom du demandeur",
+      "client": "Client",
+      "selectClient": "Sélectionner un client",
+      "testTechnician": "Technicien d'essai",
+      "selectTechnician": "Choisir un technicien",
+      "projectNumber": "N° de projet",
+      "bench": "Banc",
+      "oneBenchAvailable": "Un seul banc est actuellement disponible",
+      "fuelType": "Type de carburant",
+      "selectFuel": "Sélectionner un carburant"
+    },
+
+    "planning": {
+      "title": "Planification",
+      "testDate": "Date de l'essai",
+      "shift": "Shift",
+      "select": "Sélectionner",
+      "morning": "Matin",
+      "afternoon": "Après-midi",
+      "night": "Nuit"
+    },
+
+    "testConditions": {
+      "title": "Conditions d'essai",
+      "maceration": "Besoin de macération",
+      "macerationTemperature": "Température de macération (°C)",
+      "waterTemperature": "Température de l'eau (°C)",
+      "ambientPressure": "Pression ambiante (mbar, hPa)",
+      "ambientTemperature": "Température ambiante (°C)",
+      "humidity": "Hygrométrie (%)",
+      "sttActivation": "Activation STT",
+      "batteryManagement": "Gestion de la batterie 12V",
+      "charging": "Chargement",
+      "socStart": "SOC de départ 12V (%)",
+      "airConditioning": "Activation de la climatisation",
+      "regulationTemperature": "Température de régulation (°C)",
+      "cabinHeating": "Chauffage habitacle",
+      "testType": "Type d'essai",
+      "time": "Temps (s)",
+      "coastDownVerification": "Vérification Coast Down",
+      "decelerationCount": "Nombre de décélérations"
+    },
+
+    "comments": {
+      "label": "Commentaire",
+      "optional": "Optionnel",
+      "placeholder": "Commentaires spécifiques pour le conducteur d'essai..."
+    },
+
+    "vehicleCharacteristics": "Caractéristiques du véhicule",
+    "roadLawCharacteristics": "Caractéristiques de la loi de route",
+    "calibrationCharacteristics": "Caractéristiques du calage",
+    "cycleCharacteristics": "Caractéristiques du cycle"
+  },
+  "rawGases": {
+    "title": "Configuration des gaz bruts",
+    "ftirLines": "Lignes FTIR",
+    "standardSamplingLines": "Lignes de prélèvement standard",
+    "specificAnalyses": "Analyses spécifiques",
+    "samplingPoint": "Point de prélèvement",
+    "select": "-- Sélectionner --",
+    "engineOutlet": "Sortie moteur",
+    "cataInlet": "Amont CATA",
+    "cataOutlet": "Aval CATA",
+    "cannula": "Canule",
+    "egrMeasurement": "Mesure EGR",
+    "line1": "Ligne 1",
+    "line2": "Ligne 2",
+    "ftir": "FTIR",
+    "microsoot": "Microsoot"
+  },
+"dilutedGases": {
+  "cvsPhasesConfiguration": "Configuration CVS & Phases",
+  "bagMeasurement": "Mesure des sacs",
+  "flowRatesByPhase": "Débits par phase (m³/min)",
+  "phase": "Phase",
+  "particleMeasurements": "Mesures particulaires (PN/PM)",
+  "pmWeighing": "Pesée PM (Masse)",
+  "samplingFlowRate": "Débit de prélèvement (L/min)",
+  "pn23nm": "PN 23 nm",
+  "pn10nm": "PN 10 nm",
+  "dilutionFactor": "Facteur de dilution (PNDF)",
+  "cvs": "CVS"
+}
+
+}

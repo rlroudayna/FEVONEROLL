@@ -613,7 +613,7 @@ public class DemandeEssaiService {
                 : demandRepository.countByMonthAndStatutAndClient(year, client);
         Map<Integer, Map<String, Object>> data = new HashMap<>();
 
-        String[] mois = {"Jan","Fév","Mars","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"};
+        String[] mois = {"Jan","Fev","Mars","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"};
 
         for (int i = 1; i <= 12; i++) {
             Map<String, Object> m = new HashMap<>();

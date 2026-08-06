@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { Button } from "@headlessui/react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useTranslation } from "react-i18next";
 
 const roleColors: Record<string, string> = {
   ADMIN: "bg-purple-100 text-purple-700",
@@ -80,6 +81,8 @@ export function Users() {
   const [allClients, setAllClients] = useState<{ id: number; nom: string }[]>(
     [],
   );
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -183,7 +186,7 @@ export function Users() {
           body: JSON.stringify(payload),
         });
 
-        toast.success("Utilisateur ajouté avec succès");
+        toast.success(t("users.createdSuccess"));
       } else if (modalMode === "edit" && selectedUser?.id) {
         const updated = await authFetch(`/users/${selectedUser.id}`, {
           method: "PUT",
@@ -194,7 +197,7 @@ export function Users() {
           prev.map((u) => (u.id === selectedUser.id ? updated : u)),
         );
 
-        toast.success("Utilisateur modifié avec succès");
+        toast.success(t("users.updatedSuccess"));
       }
 
       setShowModal(false);
@@ -210,15 +213,14 @@ export function Users() {
     try {
       await authFetch(`/users/${id}`, { method: "DELETE" });
       setUsers((prev) => prev.filter((u) => u.id !== id));
-      toast.success("Utilisateur supprimé avec succès !");
+      toast.success(t("users.deletedSuccess"));
     } catch (err: any) {
-      const message =
+      toast.error(
         err?.message?.includes("constraint") ||
-        err?.message?.includes("foreign key")
-          ? "Suppression impossible : cet utilisateur est lié à d'autres données."
-          : "Erreur lors de la suppression !";
-
-      toast.error(message);
+          err?.message?.includes("foreign key")
+          ? t("users.deleteConstraintError")
+          : t("users.deleteError"),
+      );
     }
   };
   useEffect(() => {
@@ -261,10 +263,10 @@ export function Users() {
             className="text-2xl font-semibold text-foreground
  mb-2 text-left mb-2"
           >
-            Gestion des utilisateurs
+            {t("users.title")}
           </h1>
           <p className="text-muted-foreground text-left">
-            Administrez les comptes et les accès de la plateforme
+            {t("users.subtitle")}
           </p>
         </div>
         {isAdmin && (
@@ -278,7 +280,7 @@ export function Users() {
             className="h-11 px-6 bg-[#B9032C] text-white rounded-lg hover:brightness-110 flex items-center gap-2 transition-all shadow-md"
           >
             <Plus className="w-5 h-5" />
-            Nouvel Utilisateur
+            {t("users.add")}
           </button>
         )}
       </div>
@@ -291,7 +293,7 @@ export function Users() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground-400" />
           <input
             type="text"
-            placeholder="Recherche par nom ,email"
+            placeholder={t("users.searchPlaceholder")}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             className="w-full h-11 pl-10 pr-3 bg-background border border-border text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-ring transition"
@@ -303,7 +305,7 @@ export function Users() {
           onChange={(e) => setClientFilter(e.target.value)}
           className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted"
         >
-          <option value="Tous">Tous les clients</option>
+          <option value="Tous">{t("users.allClients")}</option>
 
           {allClients.map((c) => (
             <option key={c.id} value={c.nom}>
@@ -317,7 +319,7 @@ export function Users() {
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
         >
-          <option value="Tous">Role (Tous)</option>
+          <option value="Tous">{t("users.allRoles")}</option>
           {roles.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}
@@ -333,16 +335,25 @@ export function Users() {
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
                 <th className="px-8 py-5 font-semibold text-white">
-                  Utilisateur
+                  {t("users.user")}
                 </th>
-                <th className="px-9 py-5 font-semibold text-white">Rôle</th>
-                <th className="px-4 py-5 font-semibold text-white">Client</th>
-                <th className="px-8 py-5 font-semibold text-white">Email</th>
+                <th className="px-9 py-5 font-semibold text-white">
+                  {" "}
+                  {t("users.role")}
+                </th>
+                <th className="px-4 py-5 font-semibold text-white">
+                  {" "}
+                  {t("users.client")}
+                </th>
+                <th className="px-8 py-5 font-semibold text-white">
+                  {" "}
+                  {t("users.email")}
+                </th>
                 <th className="px-10 py-5 font-semibold text-white">
-                  Téléphone
+                  {t("users.phone")}
                 </th>
                 <th className="px-8 py-5 text-right font-semibold text-white">
-                  Actions
+                  {t("users.actions")}
                 </th>
               </tr>
             </thead>
@@ -482,7 +493,7 @@ export function Users() {
         {/* Message si aucun résultat */}
         {filteredUsers.length === 0 && (
           <div className="p-10 text-center text-muted-foreground-500">
-            Aucun utilisateur trouvé.
+            {t("users.noUser")}
           </div>
         )}
       </div>
@@ -490,10 +501,10 @@ export function Users() {
         {/* On active le mode transparent ici */}
         <DialogContent className="max-w-md" hideOverlay={true}>
           <DialogHeader>
-            <DialogTitle>Confirmation de suppression</DialogTitle>
+            <DialogTitle> {t("users.deleteConfirmation")}</DialogTitle>
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            Voulez-vous vraiment supprimer l'utilisateur{" "}
+            {t("users.deleteQuestion")}{" "}
             <span className="font-bold">
               {selectedUser?.nom} {selectedUser?.prenom}
             </span>{" "}
@@ -504,7 +515,7 @@ export function Users() {
               onClick={() => setShowConfirmDelete(false)}
               className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Non
+              {t("common.no")}
             </button>
             <button
               onClick={() => {
@@ -516,7 +527,7 @@ export function Users() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              Confirmer suppression
+              {t("common.confirm")}
             </button>
           </div>
         </DialogContent>
@@ -530,9 +541,9 @@ export function Users() {
           <DialogHeader>
             <DialogTitle className="text-2xl font-semibold text-foreground border-b border-border pb-2">
               {" "}
-              {modalMode === "add" && "Ajouter un utilisateur"}
-              {modalMode === "edit" && "Modifier un utilisateur"}
-              {modalMode === "view" && "Détails utilisateur"}
+              {modalMode === "add" && t("users.add")}
+              {modalMode === "edit" && t("users.edit")}
+              {modalMode === "view" && t("users.details")}
             </DialogTitle>
           </DialogHeader>
           {/* FORMULAIRE UNIQUE */}
@@ -546,7 +557,8 @@ export function Users() {
               {/* PRENOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Prénom <span className="text-red-500 ml-1">*</span>
+                  {t("users.firstName")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   value={formData.prenom}
@@ -563,7 +575,8 @@ export function Users() {
               {/* NOM */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Nom <span className="text-red-500 ml-1">*</span>
+                  {t("users.lastName")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   value={formData.nom}
@@ -578,7 +591,8 @@ export function Users() {
               </div>
               <div className="flex flex-col gap-1.5 ">
                 <label className="text-sm font-medium">
-                  Email <span className="text-red-500 ml-1">*</span>
+                  {t("users.email")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
                 <input
                   type="email"
@@ -595,11 +609,12 @@ export function Users() {
             </div>
             <div className="grid grid-cols-3 gap-8">
               {/* EMAIL */}
-              
+
               {/* TELEPHONE */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">
-                  Téléphone <span className="text-red-500 ml-1">*</span>
+                  {t("users.phone")}{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </label>
 
                 <div className="flex gap-6">
@@ -615,11 +630,11 @@ export function Users() {
                   />
                 </div>
               </div>
-               {/* ROLE + CLIENT */}
+              {/* ROLE + CLIENT */}
               {/* ROLE */}
               <div className="flex flex-col gap-1.5 w-full">
                 <label className="text-sm font-medium">
-                  Rôle <span className="text-red-500">*</span>
+                  {t("users.role")} <span className="text-red-500">*</span>
                 </label>
 
                 <select
@@ -658,7 +673,7 @@ export function Users() {
               {/* CLIENT */}
               <div className="flex flex-col gap-1.5 w-full">
                 <label className="text-sm font-medium">
-                  Client <span className="text-red-500">*</span>
+                  {t("users.client")} <span className="text-red-500">*</span>
                 </label>
 
                 <select
@@ -676,7 +691,7 @@ export function Users() {
                   className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
     disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <option value="">Client</option>
+                  <option value="">{t("users.selectClient")}</option>
 
                   {activeClients.map((c) => (
                     <option key={c.id} value={String(c.id)}>
@@ -688,13 +703,13 @@ export function Users() {
                 </select>
               </div>
             </div>
-           
             {/* PASSWORD */}
             {modalMode === "add" && (
               <div className="grid grid-cols-3 gap-8 mt-4">
                 <div className="flex flex-col gap-1.5 ">
                   <label className="text-sm font-medium">
-                    Mot de passe <span className="text-red-500 ml-1">*</span>
+                    {t("users.password")}{" "}
+                    <span className="text-red-500 ml-1">*</span>
                   </label>
                   <input
                     type="password"
@@ -716,7 +731,7 @@ export function Users() {
                 onClick={() => setShowModal(false)}
                 className="px-8 py-3 border rounded-lg"
               >
-                Annuler
+                {t("common.cancel")}
               </button>
 
               {modalMode !== "view" && (
@@ -724,7 +739,7 @@ export function Users() {
                   type="submit"
                   className="px-8 py-3 bg-red-600 text-white rounded-lg"
                 >
-                  Enregistrer
+                  {t("common.save")}
                 </button>
               )}
             </div>

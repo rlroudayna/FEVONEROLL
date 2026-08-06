@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Calendar, List } from "lucide-react";
 import { authFetch } from "../api";
+import { useTranslation } from "react-i18next";
 
 /* ================= TYPES ================= */
 interface DemandeEssai {
@@ -200,8 +201,7 @@ function getWeekDateRange(offsetWeeks = 0) {
     `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
   return { monday: fmt(monday), sunday: fmt(sunday) };
 }
-
-function getWeekDays(offsetWeeks = 0) {
+function getWeekDays(offsetWeeks = 0, language = "fr-FR") {
   const now = new Date();
   const monday = new Date(now);
   const day = monday.getDay();
@@ -212,7 +212,7 @@ function getWeekDays(offsetWeeks = 0) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
     return {
-      dayName: d.toLocaleDateString("fr-FR", { weekday: "long" }),
+      dayName: d.toLocaleDateString(language, { weekday: "long" }),
       date: d.toISOString().split("T")[0],
       label: `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`,
     };
@@ -242,6 +242,8 @@ function CalendarView({
   planning: DayPlanning[];
   technicienMap: Map<number, string>;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="grid grid-cols-7 gap-2 bg-card rounded-xl border border-border overflow-hidden shadow-sm">
       {planning.map((day) => (
@@ -255,7 +257,7 @@ function CalendarView({
           <div className="p-2 space-y-2 overflow-y-auto">
             {day.slots.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[180px] text-muted-foreground text-xs">
-                <span>Aucun essai</span>
+                <span>{t("planning.noTests")}</span>
               </div>
             ) : (
               day.slots.map((slot, i) => (
@@ -265,21 +267,21 @@ function CalendarView({
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/5 dark:bg-white/10 text-foreground/70">
-                      {slot.shift}
+                      {slot.shift && t(`planning.shifts.${slot.shift}`)}
                     </span>
                   </div>
                   <div className="text-xs font-semibold text-foreground line-clamp-4 break-words">
                     {slot.NomDemande}
                   </div>
                   <div className="text-[11px] text-muted-foreground mt-0.5">
-                    Projet : {slot.numeroProjet}
+                    {t("planning.slot.project")} : {slot.numeroProjet}
                   </div>
                   <div className="mt-1 text-[11px] text-muted-foreground flex items-center gap-1">
                     👤{" "}
                     {slot.technicienId != null
                       ? (technicienMap.get(Number(slot.technicienId)) ??
-                        "Non assigné")
-                      : "Non assigné"}
+                        t("planning.slot.unassigned"))
+                      : t("planning.slot.unassigned")}
                   </div>
                 </div>
               ))
@@ -298,6 +300,8 @@ function ListView({
   planning: DayPlanning[];
   technicienMap: Map<number, string>;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4">
       {planning.map((day) => (
@@ -312,7 +316,11 @@ function ListView({
               className={`p-2 mb-2 rounded border border-border bg-background text-foreground ${getSlotColor(slot.shift)}`}
             >
               <span className="text-xs font-semibold text-foreground/90">
-                {slot.time}
+                {slot.shift && t(`planning.shifts.${slot.shift}`)}
+              </span>
+              {" - "}
+              <span className="text-sm font-medium text-foreground">
+                {slot.numeroProjet}
               </span>
               {" - "}
               <span className="text-sm font-medium text-foreground">
@@ -322,8 +330,8 @@ function ListView({
               <span className="text-xs text-muted-foreground">
                 {slot.technicienId != null
                   ? (technicienMap.get(Number(slot.technicienId)) ??
-                    "Non assigné")
-                  : "Non assigné"}
+                    t("planning.slot.unassigned"))
+                  : t("planning.slot.unassigned")}
               </span>
             </div>
           ))}
@@ -345,10 +353,14 @@ export function Planning() {
   const [selectedTechnicienId, setSelectedTechnicienId] = useState<number | "">(
     "",
   );
+  const { t, i18n } = useTranslation();
 
   const { monday } = getWeekDateRange(weekOffset);
-  const weekDays = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
 
+  const weekDays = useMemo(
+    () => getWeekDays(weekOffset, i18n.language === "fr" ? "fr-FR" : "en-US"),
+    [weekOffset, i18n.language],
+  );
   /* ── Fetch demandes ── */
   useEffect(() => {
     authFetch("/demandes-essai")
@@ -400,34 +412,34 @@ export function Planning() {
   };
   /* ── Transform ── */
   const planningData: DayPlanning[] = useMemo(
-  () =>
-    weekDays.map((day) => {
-      const daySlots = demandes
-        .filter((dem) => dem.datePlanification?.startsWith(day.date))
-        .map((dem) => ({
-          time: dem.shift ?? "MATIN",
-          numeroProjet: dem.numeroProjet?.toString() ?? "",
-          date: dem.datePlanification ?? "",
-          NomDemande: dem.nomAuto ?? "",
-          technicienId:
-            dem.technicienId != null ? Number(dem.technicienId) : null,
-          shift: dem.shift,
-        }));
+    () =>
+      weekDays.map((day) => {
+        const daySlots = demandes
+          .filter((dem) => dem.datePlanification?.startsWith(day.date))
+          .map((dem) => ({
+            time: dem.shift ?? "MATIN",
+            numeroProjet: dem.numeroProjet?.toString() ?? "",
+            date: dem.datePlanification ?? "",
+            NomDemande: dem.nomAuto ?? "",
+            technicienId:
+              dem.technicienId != null ? Number(dem.technicienId) : null,
+            shift: dem.shift,
+          }));
 
-      // Tri chronologique : MATIN (1) -> APRES_MIDI/SOIR (2) -> NUIT (3)
-      daySlots.sort((a, b) => {
-        const orderA = SHIFT_ORDER[a.shift ?? "MATIN"] ?? 99;
-        const orderB = SHIFT_ORDER[b.shift ?? "MATIN"] ?? 99;
-        return orderA - orderB;
-      });
+        // Tri chronologique : MATIN (1) -> APRES_MIDI/SOIR (2) -> NUIT (3)
+        daySlots.sort((a, b) => {
+          const orderA = SHIFT_ORDER[a.shift ?? "MATIN"] ?? 99;
+          const orderB = SHIFT_ORDER[b.shift ?? "MATIN"] ?? 99;
+          return orderA - orderB;
+        });
 
-      return {
-        day: `${day.dayName} ${day.label}`,
-        slots: daySlots,
-      };
-    }),
-  [demandes, weekDays],
-);
+        return {
+          day: `${day.dayName} ${day.label}`,
+          slots: daySlots,
+        };
+      }),
+    [demandes, weekDays],
+  );
   /* ── Filter ── */
   const filteredPlanning = planningData.map((day) => ({
     ...day,
@@ -451,11 +463,9 @@ export function Planning() {
     <div className="space-y-6 p-3">
       <div>
         <h1 className="text-2xl font-semibold text-foreground mb-2">
-          Planning hebdomadaire
+          {t("planning.title")}
         </h1>
-        <p className="text-muted-foreground">
-          Visualisation des essais planifiés
-        </p>
+        <p className="text-muted-foreground">{t("planning.subtitle")}</p>
       </div>
 
       {/* FILTER BAR */}
@@ -470,7 +480,9 @@ export function Planning() {
           </button>
           <div className="flex items-center gap-2 bg-background px-6 py-2 rounded-lg border border-border">
             <Calendar className="w-6 h-8 text-muted-foreground" />
-            <span className="text-sm font-medium">Semaine du {monday}</span>
+            <span className="text-sm font-medium">
+              {t("planning.weekOf")} {monday}
+            </span>
           </div>
           <button
             onClick={() => setWeekOffset(weekOffset + 1)}
@@ -483,13 +495,12 @@ export function Planning() {
           onClick={() => setWeekOffset(0)}
           className="h-12 px-6 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm font-medium shrink-0 w-full lg:w-auto"
         >
-          Aujourd'hui
-        </button>
+{t("planning.today")}        </button>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full flex-1">
           {" "}
           <input
             type="text"
-            placeholder="Projet"
+            placeholder={t("planning.filters.projectNumberPlaceholder")}
             value={numeroProjetFilter}
             onChange={(e) => setNumeroProjetFilter(e.target.value)}
             className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
@@ -509,7 +520,7 @@ export function Planning() {
             }
             className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
           >
-            <option value="">Tous techniciens</option>
+            <option value="">{t("planning.filters.allTechnicians")}</option>
             {techniciens.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.nom} {t.prenom}
@@ -523,7 +534,10 @@ export function Planning() {
             className="h-12 px-4 bg-background text-foreground border border-border rounded-lg flex items-center justify-center gap-2 hover:bg-muted transition w-full"
           >
             <List className="w-4 h-4" />
-            <span className="text-sm capitalize">{viewMode}</span>
+            <span className="text-sm capitalize">
+              {" "}
+              {t(`planning.views.${viewMode}`)}
+            </span>
           </button>
         </div>
       </div>
