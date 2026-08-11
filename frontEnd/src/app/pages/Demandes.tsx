@@ -123,12 +123,7 @@ export function Demandes() {
     [],
   );
   // Déclarer DANS le composant, avant le return
-  const mesureItems: { id: MesureKey; label: string }[] = [
-    { id: "mesureCourant", label: "Mesure Courant" },
-    { id: "mesureTension", label: "Mesure Tension" },
-    { id: "thermocouples", label: "Thermocouples" },
-    { id: "sondeLambdaLA4", label: "Sonde Lambda LA4" },
-  ];
+
   // ✅ Correction du state
   const [files, setFiles] = useState<{
     software1: File | null;
@@ -244,7 +239,7 @@ export function Demandes() {
 
     banc?: string;
     datePlanification?: string;
-    shift: "MATIN" | "SOIR" | "NUIT" | undefined;
+    shift: "MATIN" | "APRES_MIDI" | "NUIT" | undefined;
 
     besoinMaceration?: boolean;
     temperatureMaceration?: number;
@@ -687,12 +682,30 @@ export function Demandes() {
         </a>
       ) : (
         <div className="w-full text-sm border border-dashed border-border text-muted-foreground p-2 rounded-lg">
-          Aucun fichier
+          t("demandesEssai.files.noFile"),
         </div>
       )}
     </div>
   );
   const { t } = useTranslation();
+  const mesureItems: { id: MesureKey; label: string }[] = [
+    {
+      id: "mesureCourant",
+      label: t("demandesEssai.auxiliaryMeasurements.currentMeasurement"),
+    },
+    {
+      id: "mesureTension",
+      label: t("demandesEssai.auxiliaryMeasurements.voltageMeasurement"),
+    },
+    {
+      id: "thermocouples",
+      label: t("demandesEssai.auxiliaryMeasurements.thermocouples"),
+    },
+    {
+      id: "sondeLambdaLA4",
+      label: t("demandesEssai.auxiliaryMeasurements.lambdaProbeLA4"),
+    },
+  ];
   const buildMesures = (key: MesureKey, type: TypeMesureAux): MesureDTO[] =>
     mesuresRows[key]
       .filter((row) => row.indice || row.numero || row.type)
@@ -999,15 +1012,14 @@ export function Demandes() {
   ]);
 
   const tabs = [
-    { id: "general", label: "Informations générales" },
-    { id: "vehicle", label: "Véhicule/Calage" },
-    { id: "gazDilues", label: "Gaz dilués" },
-    { id: "gazBruts", label: "Gaz bruts" },
-    { id: "inca", label: "Données INCA" },
-    { id: "mesuresAux", label: "Mesures auxiliaires" },
+    { id: "general", label: t("demandesEssai.tab.general") },
+    { id: "vehicle", label: t("demandesEssai.tab.vehicle") },
+    { id: "gazDilues", label: t("demandesEssai.tab.gazDilues") },
+    { id: "gazBruts", label: t("demandesEssai.tab.gazBruts") },
+    { id: "inca", label: t("demandesEssai.tab.inca") },
+    { id: "mesuresAux", label: t("demandesEssai.tab.mesuresAux") },
   ];
 
-  // etc.
   // Fonction pour récupérer les véhicules
   const fetchVehicules = async () => {
     try {
@@ -1076,7 +1088,7 @@ export function Demandes() {
       });
 
       setDemandes((prev) => prev.filter((d) => d.id !== id));
-      toast.success("Demande supprimée avec succès");
+      toast.success(t("demandesEssai.messages.deleteSuccess"));
     } catch (error: any) {
       console.error("Erreur suppression :", error);
 
@@ -1085,8 +1097,8 @@ export function Demandes() {
         error?.message?.includes("foreign key");
 
       const message = isConstraint
-        ? "Suppression impossible : cette demande est liée à d'autres données."
-        : "Erreur lors de la suppression de la demande.";
+        ? t("demandesEssai.messages.deleteConstraint")
+        : t("demandesEssai.messages.deleteError");
 
       toast.error(message);
     }
@@ -1100,10 +1112,9 @@ export function Demandes() {
       );
 
       setDemandes((prev) => [newDemande, ...prev]);
-      toast.success("Demande dupliquée avec succès");
+      toast.success(t("demandesEssai.messages.duplicateSuccess"));
     } catch (error) {
-      console.error("Erreur duplication :", error);
-      toast.error("Erreur lors de la duplication");
+      toast.error(t("demandesEssai.messages.duplicateError"));
     }
   };
   const getStatutStyle = (status?: string) => {
@@ -1116,6 +1127,34 @@ export function Demandes() {
         return "bg-[#FFEBEE] text-[#C62828]";
       default:
         return "bg-gray-100 text-muted-foreground-600";
+    }
+  };
+
+  const translateShift = (shift?: "MATIN" | "APRES_MIDI" | "NUIT") => {
+    switch (shift) {
+      case "MATIN":
+        return t("demandesEssai.planning.morning");
+
+      case "APRES_MIDI":
+        return t("demandesEssai.planning.afternoon");
+
+      case "NUIT":
+        return t("demandesEssai.planning.night");
+
+      default:
+        return "-";
+    }
+  };
+  const translateStatutDemande = (statut?: StatutDemande) => {
+    switch (statut) {
+      case StatutDemande.En_cours:
+        return t("demandesEssai.general.inProgress");
+
+      case StatutDemande.Fait:
+        return t("demandesEssai.general.done");
+
+      default:
+        return "-";
     }
   };
 
@@ -1268,20 +1307,20 @@ export function Demandes() {
           prev.map((d) => (d.id === selectedDemande.id ? updated : d)),
         );
 
-        toast.success("Demande modifiée avec succès");
+        toast.success(t("demandesEssai.messages.updateSuccess"));
       } else {
         const created = await authFetch("/demandes-essai", {
           method: "POST",
           body: formData,
         });
         setDemandes((prev) => [created, ...prev]);
-        toast.success("Demande créée avec succès");
+        toast.success(t("demandesEssai.messages.createSuccess"));
       }
 
       setShowModal(false);
     } catch (error) {
       console.error("Erreur :", error);
-      toast.error("Erreur lors de l'enregistrement");
+      toast.error(t("demandesEssai.messages.saveError"));
     }
   };
 
@@ -1342,12 +1381,12 @@ export function Demandes() {
         ),
       );
 
-      toast.success("Demande mise à jour avec succès !");
+      toast.success(t("demandesEssai.messages.updateSuccessAlt"));
       setShowModal(false);
       setSelectedDemande(null);
     } catch (error) {
       console.error(error);
-      toast.error("Erreur lors de la mise à jour");
+      toast.error(t("demandesEssai.messages.updateError"));
     }
   };
 
@@ -1426,9 +1465,9 @@ export function Demandes() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 bg-card p-4 rounded-xl shadow-md">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 bg-card p-4 rounded-xl shadow-md">
         {/* Recherche par nom */}
-        <div className="flex items-center bg-background border border-border rounded-lg px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-ring transition">
+        <div className="flex items-center bg-background border border-border rounded-lg px-3 py-2 gap-2 text-sm text-foreground outline-none focus:ring-ring transition">
           <Search size={16} className="text-muted-foreground-400" />
           <input
             placeholder={t("demandesEssai.filters.searchName")}
@@ -1457,14 +1496,6 @@ export function Demandes() {
           </select>
         )}
 
-        {/* Filtre Demandeur */}
-        <input
-          placeholder={t("demandesEssai.filters.projectNumber")}
-          className="bg-background border border-border rounded-lg px-3 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition"
-          value={filterDemandeur}
-          onChange={(e) => setFilterDemandeur(e.target.value)}
-        />
-
         {/* Filtre Projet */}
         <input
           placeholder={t("demandesEssai.filters.projectNumber")}
@@ -1492,7 +1523,13 @@ export function Demandes() {
           <Calendar size={16} className="text-muted-foreground" />
           <input
             type="date"
-            className="outline-none w-full text-sm text-muted-foreground-700"
+            className="
+      outline-none w-full text-sm
+      text-foreground
+      bg-transparent
+      [color-scheme:light]
+      dark:[color-scheme:dark]
+    "
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
           />
@@ -1501,88 +1538,53 @@ export function Demandes() {
 
       {/* --- TABLEAU --- */}
       <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
-        <table className="w-full min-w-[800px] text-sm text-left border-collapse">
-          {/* Header */}
+        <table className="w-full min-w-[800px] table-fixed text-sm text-left border-collapse">
           <thead className="bg-[#B9032C] border-b border-border">
             <tr>
-              <th className="px-8 py-5 font-semibold text-white">
+              <th className="w-[26%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.requestName")}
               </th>
-              <th className="px-2 py-5 font-semibold text-white">
+
+              <th className="w-[10%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.projectNumber")}
               </th>
-              <th className="px-5 py-5 font-semibold text-white">
-                {" "}
+
+              <th className="w-[12%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.client")}
               </th>
-              <th className="px-4 py-5 font-semibold text-white">
-                {" "}
+
+              <th className="w-[16%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.requester")}
               </th>
-              <th className="px-5 py-5 font-semibold text-white">
-                {" "}
+
+              <th className="w-[10%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.status")}
               </th>
-              <th className="px-3 py-5 font-semibold text-white">
-                {" "}
+
+              <th className="w-[10%] px-4 py-5 font-semibold text-white">
                 {t("demandesEssai.table.date")}
               </th>
-              <th className="px-5 py-5 font-semibold text-white">
-                {" "}
+
+              <th className="w-[8%] px-2 py-5 font-semibold text-white">
                 {t("demandesEssai.table.shift")}
               </th>
-              <th className="px-10 py-5 text-right font-semibold text-white">
+
+              <th className="w-[12%] px-4 py-5 text-center font-semibold text-white">
                 {t("demandesEssai.table.actions")}
               </th>
             </tr>
           </thead>
-          <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
-            {/* On active le mode transparent ici */}
-            <DialogContent className="max-w-md" hideOverlay={true}>
-              <DialogHeader>
-                <DialogTitle>
-                  {" "}
-                  {t("demandesEssai.deleteConfirmation.title")}
-                </DialogTitle>
-              </DialogHeader>
-              <p className="py-4 text-muted-foreground-700 break-words">
-                {t("demandesEssai.deleteConfirmation.message")}{" "}
-                <span className="font-bold">{selectedDemande?.nomAuto}</span> ?
-              </p>
-
-              <div className="flex justify-end gap-4 mt-4">
-                <button
-                  onClick={() => setShowConfirmDelete(false)}
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  {t("common.cancel")}
-                </button>
-                <button
-                  onClick={() => {
-                    if (selectedDemande?.id != null) {
-                      deleteDemande(selectedDemande.id);
-                    }
-                    setShowConfirmDelete(false);
-                    setSelectedDemande(null);
-                  }}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
-                >
-                  {t("demandesEssai.deleteConfirmation.confirm")}
-                </button>
-              </div>
-            </DialogContent>
-          </Dialog>
           <tbody className="divide-y">
             {loading ? (
               <tr>
-                <td colSpan={9} className="text-center py-6">
+                <td colSpan={8} className="text-center py-6">
                   {t("demandesEssai.loading")}
                 </td>
               </tr>
             ) : filteredDemandes.length === 0 ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={8}
                   className="text-center py-6 text-muted-foreground-500 font-medium"
                 >
                   {t("demandesEssai.noResults")}
@@ -1594,50 +1596,38 @@ export function Demandes() {
                   key={d.id}
                   className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                 >
-                  <td className="px-5 py-4 font-medium text-sm text-foreground">
+                  <td className="px-4 py-4 font-medium text-sm text-foreground-900">
                     {d.nomAuto}
                   </td>
 
-                  <td className="px-3 py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      {d.numeroProjet}
-                    </div>
+                  <td className="px-4 py-4 text-muted-foreground-700">
+                    {d.numeroProjet}
                   </td>
 
-                  <td className="px-2 py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      {d.client?.nom}
-                    </div>
+                  <td className="px-4 py-4 text-muted-foreground-700">
+                    {d.client?.nom}
                   </td>
 
-                  <td className="px-4 py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">{d.demandeur}</div>
+                  <td className="px-4 py-4 text-muted-foreground-700">
+                    {d.demandeur}
                   </td>
 
-                  <td className="px-3 py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      {d.statutDemande}
-                    </div>
+                  <td className="px-4 py-4 text-muted-foreground-700">
+                    {translateStatutDemande(d.statutDemande)}
                   </td>
 
-                  <td className="py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      {d.datePlanification}
-                    </div>
+                  <td className="px-4 py-4 text-muted-foreground-700">
+                    {d.datePlanification}
                   </td>
 
-                  <td className="px-5 py-4 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">{d.shift}</div>
+                  <td className="px-2 py-4 text-muted-foreground-700">
+                    {translateShift(d.shift)}
                   </td>
 
-                  {/* Actions */}
-                  <td className="px-1 py-4">
-                    <div className="flex items-center gap-2">
-                      {/* Voir */}
-
+                  <td className="px-4 py-4">
+                    <div className="flex items-center justify-center gap-2">
                       {canEdit && (
                         <>
-                          {/* Modifier */}
                           <button
                             onClick={() => openModal("edit", d)}
                             className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
@@ -1645,7 +1635,6 @@ export function Demandes() {
                             <Edit className="w-4 h-4 text-green-700" />
                           </button>
 
-                          {/* Dupliquer */}
                           <button
                             onClick={() => d.id && duplicateDemande(d.id)}
                             className="p-1 rounded-lg bg-gray-200 hover:bg-gray-400"
@@ -1653,7 +1642,6 @@ export function Demandes() {
                             <Copy className="w-4 h-4 text-gray-700" />
                           </button>
 
-                          {/* Supprimer */}
                           <button
                             onClick={() => {
                               setSelectedDemande(d);
@@ -1665,6 +1653,7 @@ export function Demandes() {
                           </button>
                         </>
                       )}
+
                       <button
                         onClick={() => openModal("view", d)}
                         className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200"
@@ -1679,17 +1668,52 @@ export function Demandes() {
           </tbody>
         </table>
       </div>
+      <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
+        {/* On active le mode transparent ici */}
+        <DialogContent className="max-w-md" hideOverlay={true}>
+          <DialogHeader>
+            <DialogTitle>
+              {" "}
+              {t("demandesEssai.deleteConfirmation.title")}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="py-4 text-muted-foreground-700 break-words">
+            {t("demandesEssai.deleteConfirmation.message")}{" "}
+            <span className="font-bold">{selectedDemande?.nomAuto}</span> ?
+          </p>
 
+          <div className="flex justify-end gap-4 mt-4">
+            <button
+              onClick={() => setShowConfirmDelete(false)}
+              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              {t("common.no")}
+            </button>
+            <button
+              onClick={() => {
+                if (selectedDemande?.id != null) {
+                  deleteDemande(selectedDemande.id);
+                }
+                setShowConfirmDelete(false);
+                setSelectedDemande(null);
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+            >
+              {t("common.confirm")}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
       {showModal && (
         <div className="fixed inset-0 bg-foreground/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-card w-[95vw] h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col">
             <div className="flex justify-between items-center p-6 border-b bg-card">
               <h2 className="text-xl font-bold text-foreground">
                 {modalMode === "view"
-                  ? "Visualiser une demande d'essai"
+                  ? t("demandesEssai.modal.view")
                   : modalMode === "edit"
-                    ? "Modifier une demande d'essai"
-                    : "Créer une demande d'essai"}
+                    ? t("demandesEssai.modal.edit")
+                    : t("demandesEssai.modal.create")}
               </h2>
               <X
                 className="cursor-pointer hover:bg-gray-200 rounded-full p-1"
@@ -2397,13 +2421,13 @@ export function Demandes() {
                     {/* ... (Sondes Lambda déjà faites) ... */}
 
                     <section className="bg-card p-6 rounded-xl border border-border">
-                      <h3 className="text-md font-bold text-muted-foreground-700 mb-4 uppercase tracking-tight">
-                        Configuration Physique du Banc
+                      <h3 className="text-lg font-bold text-foreground mb-4 border-b pb-2">
+                        {t("demandesEssai.benchConfiguration.title")}
                       </h3>
                       <div className="grid grid-cols-3 gap-6">
                         <div className="space-y-2">
                           <label className="text-sm font-bold text-muted-foreground-500">
-                            Capot
+                            {t("demandesEssai.benchConfiguration.hood")}
                             <span className="text-red-500 ml-1">*</span>
                           </label>
                           <select
@@ -2414,14 +2438,20 @@ export function Demandes() {
                             onChange={handleChange}
                             className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           >
-                            <option value="">Sélectionner</option>
-                            <option value="FERME">Fermé</option>
-                            <option value="OUVERT">Ouvert</option>
+                            <option value="">
+                              {t("demandesEssai.benchConfiguration.select")}
+                            </option>
+                            <option value="FERME">
+                              {t("demandesEssai.benchConfiguration.closed")}
+                            </option>
+                            <option value="OUVERT">
+                              {t("demandesEssai.benchConfiguration.open")}
+                            </option>
                           </select>
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-bold text-muted-foreground-500">
-                            Soufflante
+                            {t("demandesEssai.benchConfiguration.blower")}
                             <span className="text-red-500 ml-1">*</span>
                           </label>
 
@@ -2438,10 +2468,16 @@ export function Demandes() {
                             }
                             className="w-full border border-border bg-background text-foreground rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 transition"
                           >
-                            <option value="">Sélectionner</option>
+                            <option value="">
+                              {t("demandesEssai.benchConfiguration.select")}
+                            </option>
 
-                            <option value="VMAX_SYNCHRO">Vmax</option>
-                            <option value="FIXE">Fixe</option>
+                            <option value="VMAX_SYNCHRO">
+                              {t("demandesEssai.benchConfiguration.maxSpeed")}
+                            </option>
+                            <option value="FIXE">
+                              {t("demandesEssai.benchConfiguration.fixed")}
+                            </option>
                           </select>
                         </div>
 
@@ -2477,7 +2513,7 @@ export function Demandes() {
                             }
                           />
                           <label className="text-sm font-bold text-muted-foreground-500">
-                            Carflow
+                            {t("demandesEssai.benchConfiguration.carflow")}
                           </label>
                         </div>
                       </div>
@@ -2492,7 +2528,10 @@ export function Demandes() {
                       <section>
                         <div>
                           <h4 className="text-sm font-foreground text-foreground uppercase mb-4 flex items-center gap-2">
-                            <Settings size={14} /> {t("dilutedGases.cvsPhasesConfiguration")}
+                            <Settings size={14} />{" "}
+                            {t(
+                              "demandesEssai.dilutedGases.cvsPhasesConfiguration",
+                            )}
                           </h4>
 
                           <div className="p-4 bg-card border border-red-100 rounded-xl shadow-sm space-y-4">
@@ -2516,14 +2555,16 @@ export function Demandes() {
                                 htmlFor="mesureSAC"
                                 className="text-sm font-black text-foreground uppercase cursor-pointer"
                               >
-                               {t("dilutedGases.bagMeasurement")} 
+                                {t("demandesEssai.dilutedGases.bagMeasurement")}
                               </label>
                             </div>
 
                             {form.mesureSAC && (
                               <div className="grid grid-cols-3 gap-3 animate-in slide-in-from-top-2 duration-300">
                                 <p className="col-span-full text-[10px] font-bold text-foreground uppercase tracking-tight mb-1">
-                                {t("dilutedGases.flowRatesByPhase")} 
+                                  {t(
+                                    "demandesEssai.dilutedGases.flowRatesByPhase",
+                                  )}
                                 </p>
 
                                 {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => {
@@ -2570,12 +2611,11 @@ export function Demandes() {
                                           className="w-4 h-4 accent-red-600 rounded cursor-pointer"
                                         />
                                         <label
-                                          htmlFor={`checkPhase${num}`}
-                                          className="text-[10px] font-bold text-muted-foreground-400 uppercase cursor-pointer"
-                                        >
-                                  {t("dilutedGases.phase")} 
-
-                                        </label>
+  htmlFor={`checkPhase${num}`}
+  className="text-[10px] font-bold text-muted-foreground-400 uppercase cursor-pointer"
+>
+  {t("demandesEssai.dilutedGases.phase")} {num}
+</label>
                                       </div>
 
                                       <div className="relative">
@@ -2610,7 +2650,8 @@ export function Demandes() {
                       {/* Section 2 : Particules (PM & PN) */}
                       <section className="space-y-6">
                         <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
-                          <Activity size={14} />  {t("dilutedGases.flowRatesByPhase")} 
+                          <Activity size={14} />{" "}
+                          {t("demandesEssai.dilutedGases.flowRatesByPhase")}
                         </h4>
 
                         <div className="space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2634,14 +2675,15 @@ export function Demandes() {
                             />
 
                             <label htmlFor="pm" className="p-4">
-                             {t("dilutedGases.pmWeighing")} 
-
+                              {t("demandesEssai.dilutedGases.pmWeighing")}
                             </label>
 
                             {form.pm && (
                               <div className="pl-7 animate-in slide-in-from-top-2">
                                 <label className="text-[10px] font-bold text-foreground uppercase">
-                          {t("dilutedGases.samplingFlowRate")}                                   
+                                  {t(
+                                    "demandesEssai.dilutedGases.samplingFlowRate",
+                                  )}
                                 </label>
 
                                 <input
@@ -2687,7 +2729,9 @@ export function Demandes() {
                             {form.pn23Nano && (
                               <div className="pl-7 animate-in slide-in-from-top-2">
                                 <label className="text-[10px] font-bold text-foreground uppercase">
-                                {t("dilutedGases.dilutionFactor")} 
+                                  {t(
+                                    "demandesEssai.dilutedGases.dilutionFactor",
+                                  )}
                                 </label>
 
                                 <input
@@ -2733,8 +2777,9 @@ export function Demandes() {
                             {form.pn10Nano && (
                               <div className="pl-7 animate-in slide-in-from-top-2">
                                 <label className="text-[10px] font-bold text-foreground uppercase">
-                                {t("dilutedGases.dilutionFactor")} 
-
+                                  {t(
+                                    "demandesEssai.dilutedGases.dilutionFactor",
+                                  )}
                                 </label>
 
                                 <input
@@ -2965,7 +3010,7 @@ export function Demandes() {
                 {activeTab === "gazBruts" && (
                   <div className="space-y-8 animate-in fade-in px-3">
                     <h3 className="text-lg font-bold text-foreground mb-3 border-b pb-3">
-                      {t("rawGases.title")}
+                      {t("demandesEssai.rawGases.title")}
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-1 gap-8 pl-4   ">
@@ -2973,7 +3018,8 @@ export function Demandes() {
                       <section className="space-y-2">
                         <div>
                           <h4 className="text-sm font-black text-foreground uppercase mb-4 flex items-center gap-2">
-                            <Activity size={14} /> {t("rawGases.ftirLines")}
+                            <Activity size={14} />{" "}
+                            {t("demandesEssai.rawGases.ftirLines")}
                           </h4>
                           <div className="grid grid-cols-3 gap-4">
                             {/* FTIR — accès direct, pas de tableau inline */}
@@ -2998,7 +3044,7 @@ export function Demandes() {
                               {!!form.fitr && (
                                 <div className="pl-7 animate-in slide-in-from-left-2">
                                   <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                    {t("rawGases.samplingPoint")}
+                                    {t("demandesEssai.rawGases.samplingPoint")}
                                   </label>
                                   <select
                                     name="pointPrelevementFITR"
@@ -3008,8 +3054,7 @@ export function Demandes() {
                                     className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition overflow-y-auto overflow-x-hidden"
                                   >
                                     <option value="">
-                                      {" "}
-                                      {t("rawGases.select")}
+                                      {t("demandesEssai.rawGases.select")}
                                     </option>
                                     <option value="Amont CATA">
                                       sortie moteur
@@ -3052,7 +3097,7 @@ export function Demandes() {
                               {!!form.microsot && (
                                 <div className="pl-7 animate-in slide-in-from-left-2">
                                   <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-                                    {t("rawGases.samplingPoint")}
+                                    {t("demandesEssai.rawGases.samplingPoint")}
                                   </label>
                                   <select
                                     name="pointPrelevementMicrosot"
@@ -3061,7 +3106,9 @@ export function Demandes() {
                                     onChange={handleChange}
                                     className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                   >
-                                    <option value="">  {t("rawGases.select")}</option>
+                                    <option value="">
+                                      {t("demandesEssai.rawGases.select")}
+                                    </option>
                                     <option value="Amont CATA">
                                       sortie moteur
                                     </option>
@@ -3084,7 +3131,7 @@ export function Demandes() {
                             {/* Analyses Spécifiques */}
                             <div className="p-4 border rounded-xl space-y-4 border-red-200 shadow-sm">
                               <h5 className="text-[11px] font-bold text-foreground uppercase flex items-center gap-2">
-  {t("rawGases.specificAnalyses")}
+                                {t("demandesEssai.rawGases.specificAnalyses")}
                               </h5>
                               <div className="flex flex-col gap-3">
                                 {/* egr — accès direct, pas de tableau inline */}
@@ -3099,7 +3146,7 @@ export function Demandes() {
                                     className="w-4 h-4 accent-red-600"
                                   />
                                   <span className="text-sm font-bold text-muted-foreground-500 uppercase">
-  {t("rawGases.egrMeasurement")}
+                                    {t("demandesEssai.rawGases.egrMeasurement")}
                                   </span>
                                 </div>
                               </div>
@@ -3111,7 +3158,8 @@ export function Demandes() {
                       <section className="space-y-8">
                         <div>
                           <h4 className="text-sm font-black text-foreground uppercase mb-4 -1 flex items-center gap-2">
-                            <Settings size={14} />{t("rawGases.standardSamplingLines")}
+                            <Settings size={14} />
+                            {t("demandesEssai.rawGases.standardSamplingLines")}
                           </h4>
                           <div className="grid grid-cols-3 gap-4 ">
                             {/* Ligne 1 */}
@@ -3130,13 +3178,13 @@ export function Demandes() {
                                   htmlFor="ligne1"
                                   className="text-sm font-bold text-muted-foreground-700 uppercase"
                                 >
-  {t("rawGases.line1")}
+                                  {t("demandesEssai.rawGases.line1")}
                                 </label>
                               </div>
                               {!!form.ligne1 && (
                                 <div className="pl-7 animate-in slide-in-from-left-2">
                                   <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-  {t("rawGases.samplingPoint")}
+                                    {t("demandesEssai.rawGases.samplingPoint")}
                                   </label>
                                   <select
                                     name="pointPrelevementL1"
@@ -3145,8 +3193,10 @@ export function Demandes() {
                                     onChange={handleChange}
                                     className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                   >
-                                    <option value="">  {t("rawGases.select")}
-</option>
+                                    <option value="">
+                                      {" "}
+                                      {t("demandesEssai.rawGases.select")}
+                                    </option>
                                     <option value="Amont CATA">
                                       Amont CATA
                                     </option>
@@ -3173,13 +3223,13 @@ export function Demandes() {
                                   htmlFor="ligne2"
                                   className="text-sm font-bold text-muted-foreground-700 uppercase"
                                 >
-  {t("rawGases.line2")}
+                                  {t("demandesEssai.rawGases.line2")}
                                 </label>
                               </div>
                               {!!form.ligne2 && (
                                 <div className="pl-7 animate-in slide-in-from-left-2">
                                   <label className="text-[10px] font-bold text-muted-foreground-400 uppercase">
-  {t("rawGases.samplingPoint")}
+                                    {t("demandesEssai.rawGases.samplingPoint")}
                                   </label>
                                   <select
                                     name="pointPrelevementL2"
@@ -3188,7 +3238,10 @@ export function Demandes() {
                                     onChange={handleChange}
                                     className="w-full mt-1 border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                   >
-                                    <option value="">  {t("rawGases.select")}</option>
+                                    <option value="">
+                                      {" "}
+                                      {t("demandesEssai.rawGases.select")}
+                                    </option>
                                     <option value="Amont CATA">
                                       Amont CATA
                                     </option>
@@ -3209,7 +3262,7 @@ export function Demandes() {
                 {activeTab === "inca" && (
                   <div className="space-y-8 animate-in fade-in p-4">
                     <h3 className="text-lg font-bold text-foreground mb-4 border-b pb-2">
-                      Configuration INCA
+                      {t("demandesEssai.inca.title")}
                     </h3>
                     <div className="grid grid-cols-2 gap-8">
                       {/* XCU 1 */}
@@ -3237,14 +3290,16 @@ export function Demandes() {
                             {/* Software 1 */}
                             <div className="space-y-1">
                               <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">
-                                Software1 (.a2l, .srh)
+                                {t("demandesEssai.inca.software")} (.a2l, .srh)
                               </label>
                               {/* Fichier existant */}
                               {(isView || modalMode === "edit") &&
                                 selectedDemande?.software1FileName && (
                                   <FileDisplay
                                     label={
-                                      isView ? "Software1" : "Fichier actuel"
+                                      isView
+                                        ? "Software1"
+                                        : t("inca.currentFile")
                                     }
                                     fileName={selectedDemande.software1FileName}
                                     filePath={selectedDemande.software1FilePath}
@@ -3265,13 +3320,16 @@ export function Demandes() {
                             {/* Calibration 1 */}
                             <div className="space-y-1">
                               <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">
-                                Calibration1 (.hex, .s19)
+                                {t("demandesEssai.inca.calibration")} (.hex,
+                                .s19)
                               </label>
                               {(isView || modalMode === "edit") &&
                                 selectedDemande?.calibration1FileName && (
                                   <FileDisplay
                                     label={
-                                      isView ? "Calibration1" : "Fichier actuel"
+                                      isView
+                                        ? "Calibration1"
+                                        : t("inca.currentFile")
                                     }
                                     fileName={
                                       selectedDemande.calibration1FileName
@@ -3295,13 +3353,15 @@ export function Demandes() {
                             {/* Experiment 1 */}
                             <div className="space-y-1">
                               <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">
-                                Experiment1 (.exp)
+                                {t("demandesEssai.inca.experiment")} (.exp)
                               </label>
                               {(isView || modalMode === "edit") &&
                                 selectedDemande?.experiment1FileName && (
                                   <FileDisplay
                                     label={
-                                      isView ? "Experiment1" : "Fichier actuel"
+                                      isView
+                                        ? "Experiment1"
+                                        : t("inca.currentFile")
                                     }
                                     fileName={
                                       selectedDemande.experiment1FileName
@@ -3369,7 +3429,8 @@ export function Demandes() {
                                 {/* Software N */}
                                 <div className="space-y-1">
                                   <label className="text-[10px] font-bold text-muted-foreground-500 uppercase">
-                                    Software{num}
+                                    {t("demandesEssai.inca.software")}
+                                    {num}
                                   </label>
                                   {(isView || modalMode === "edit") &&
                                     selectedDemande?.[swFileName] && (
@@ -3377,7 +3438,7 @@ export function Demandes() {
                                         label={
                                           isView
                                             ? `Software${num}`
-                                            : "Fichier actuel"
+                                            : t("inca.currentFile")
                                         }
                                         fileName={
                                           selectedDemande[swFileName] as string
@@ -3409,7 +3470,7 @@ export function Demandes() {
                                         label={
                                           isView
                                             ? `Calibration${num}`
-                                            : "Fichier actuel"
+                                            : t("inca.currentFile")
                                         }
                                         fileName={
                                           selectedDemande[calFileName] as string
@@ -3451,13 +3512,13 @@ export function Demandes() {
                             htmlFor="acquisitionEOBD"
                             className="font-black text-foreground uppercase"
                           >
-                            Acquisition EOBD
+                            {t("demandesEssai.inca.acquisitionEobd")}
                           </label>
                         </div>
                         {form.acquisitionEOBD && (
                           <div className="pl-8 animate-in slide-in-from-top-2">
                             <label className="text-[10px] font-bold text-foreground uppercase">
-                              Type d'acquisition *
+                              {t("demandesEssai.inca.acquisitionType")}
                             </label>
                             <select
                               name="typeAcquisition"
@@ -3467,7 +3528,9 @@ export function Demandes() {
                               disabled={isView}
                               className="w-full md:w-1/2 border p-2 rounded-lg bg-card outline-none focus:ring-2 focus:ring-red-200"
                             >
-                              <option value="">-- Sélectionner --</option>
+                              <option value="">
+                                {t("demandesEssai.inca.select")}
+                              </option>
                               <option value="DiagRa">DiagRa</option>
                               <option value="Scantool">Scantool</option>
                               <option value="DDT 2000">DDT 2000</option>
@@ -3513,8 +3576,10 @@ export function Demandes() {
                     </section>
                     {/* Section 2 : Détails dynamiques pour CHAQUE mesure sélectionnée */}
                     <section className="space-y-6">
-                      <h3 className="text-sm font-bold text-muted-foreground-700 border-b pb-2 uppercase tracking-tight">
-                        Configuration des mesures sélectionnées
+                      <h3 className="text-lg font-bold text-foreground mb-4 border-b pb-2">
+                        {t(
+                          "demandesEssai.auxiliaryMeasurements.configuration",
+                        )}{" "}
                       </h3>
 
                       <div className="space-y-4">
@@ -3537,7 +3602,9 @@ export function Demandes() {
                                       onClick={() => addRow(item.id)}
                                       className="px-2 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                                     >
-                                      + Ajouter
+                                      {t(
+                                        "demandesEssai.auxiliaryMeasurements.add",
+                                      )}
                                     </button>
                                   )}
                                 </div>
@@ -3559,7 +3626,9 @@ export function Demandes() {
                                   >
                                     <div className="flex flex-col gap-1">
                                       <label className="text-[10px] font-black text-muted-foreground-400 uppercase">
-                                        Indice
+                                        {t(
+                                          "demandesEssai.auxiliaryMeasurements.index",
+                                        )}
                                       </label>
                                       <input
                                         value={row.indice}
@@ -3571,7 +3640,6 @@ export function Demandes() {
                                             e.target.value,
                                           )
                                         }
-                                        placeholder="Ex: idx-01"
                                         disabled={isView}
                                         className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       />
@@ -3579,7 +3647,9 @@ export function Demandes() {
 
                                     <div className="flex flex-col gap-1">
                                       <label className="text-[10px] font-black text-muted-foreground-400 uppercase">
-                                        Numéro
+                                        {t(
+                                          "demandesEssai.auxiliaryMeasurements.number",
+                                        )}
                                       </label>
 
                                       <input
@@ -3594,14 +3664,15 @@ export function Demandes() {
                                             e.target.value,
                                           )
                                         }
-                                        placeholder="Ex: 102"
                                         className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       />
                                     </div>
 
                                     <div className="flex flex-col gap-1">
                                       <label className="text-[10px] font-black text-muted-foreground-400 uppercase">
-                                        Type de mesure
+                                        {t(
+                                          "demandesEssai.auxiliaryMeasurements.measurementType",
+                                        )}
                                       </label>
                                       <select
                                         value={row.type}
@@ -3617,18 +3688,26 @@ export function Demandes() {
                                         className="w-full border border-border bg-background text-foreground p-2 rounded-lg text-sm outline-none focus:ring-2 focus:ring-ring transition"
                                       >
                                         <option value="">
-                                          Sélectionner...
+                                          {t(
+                                            "demandesEssai.auxiliaryMeasurements.select",
+                                          )}{" "}
                                         </option>
                                         <option value={TypeMusure.ANALOGIQUE}>
-                                          Analogique
+                                          {t(
+                                            "demandesEssai.auxiliaryMeasurements.analog",
+                                          )}
                                         </option>
                                         <option value={TypeMusure.CAN}>
-                                          CAN
+                                          {t(
+                                            "demandesEssai.auxiliaryMeasurements.can",
+                                          )}
                                         </option>
                                         <option
                                           value={TypeMusure.FIBRE_OPTIQUE}
                                         >
-                                          Fibre Optique
+                                          {t(
+                                            "demandesEssai.auxiliaryMeasurements.opticalFiber",
+                                          )}
                                         </option>
                                       </select>
                                     </div>
@@ -3661,7 +3740,9 @@ export function Demandes() {
                           !form.sondeLambdaLA4 && (
                             <div className="text-center py-10 border-2 border-dashed border-border rounded-xl">
                               <p className="text-sm text-muted-foreground-400 font-medium">
-                                Cochez une mesure pour configurer ses détails.
+                                {t(
+                                  "demandesEssai.auxiliaryMeasurements.selectMeasurement",
+                                )}{" "}
                               </p>
                             </div>
                           )}
@@ -3684,7 +3765,7 @@ export function Demandes() {
                     : "text-muted-foreground-600 "
                 }`}
               >
-                Précédent
+                {t("demandesEssai.navigation.previous")}
               </button>
               <div className="flex gap-3">
                 {activeTab !== tabs[tabs.length - 1].id && (
@@ -3693,7 +3774,7 @@ export function Demandes() {
                     onClick={handleNextTab}
                     className="px-10 py-2 bg-[#E30613] text-white rounded-lg font-medium transition-all hover:brightness-110"
                   >
-                    Suivant
+                    {t("demandesEssai.navigation.next")}
                   </button>
                 )}
 
@@ -3703,7 +3784,7 @@ export function Demandes() {
                     form="demandeForm"
                     className="px-6 py-2 bg-[#E30613] text-white rounded-lg font-bold shadow-lg hover:brightness-110"
                   >
-                    Enregistrer la demande
+                    {t("demandesEssai.navigation.saveRequest")}
                   </button>
                 )}
               </div>

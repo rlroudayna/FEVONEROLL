@@ -27,7 +27,6 @@ interface Lois {
   id?: number;
   nom: string;
   temperature: number | null;
-
   client?: Client;
   clientId: number;
   norme: Norme | "";
@@ -108,6 +107,8 @@ export function LoisDeRoute() {
     const fetchVehicles = async () => {
       try {
         const data = await authFetch("/lois-route");
+        console.log("LOIS ROUTE :", data);
+
         setLois(data ?? []); // ⚡ Si data est null, on met un tableau vide
       } catch (err) {
         console.error("Erreur fetch véhicules :", err);
@@ -179,7 +180,6 @@ export function LoisDeRoute() {
 
     const loisToSave: Lois = {
       ...newLois,
-      clientId: newLois.client?.id ?? 0,
     };
 
     try {
@@ -191,7 +191,6 @@ export function LoisDeRoute() {
 
         setLois((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
         toast.success(t("roadLaws.updatedSuccess"));
-
       } else {
         const created = await authFetch("/lois-route", {
           method: "POST",
@@ -232,7 +231,7 @@ export function LoisDeRoute() {
     nom: "",
     temperature: 0,
     clientId: 0,
-    norme: Norme.WLTP,
+    norme: "",
     inertieKg: 0,
     masseEssaiKg: 0,
     modeConduite: "",
@@ -263,20 +262,46 @@ export function LoisDeRoute() {
 
   useEffect(() => {
     if (modalMode === "view") return;
-    if (!newLois.client || !newLois.norme || !newLois.masseEssaiKg) return;
 
-    const prefix = `LDR_${newLois.client.nom}_${newLois.norme}_${newLois.masseEssaiKg}Kg`;
-    const regex = new RegExp(`^${prefix}_(\\d{4})$`);
+    if (!newLois.clientId || !newLois.norme || !newLois.masseEssaiKg) {
+      return;
+    }
+
+    const selectedClient = activeClients.find(
+      (client) => client.id === newLois.clientId,
+    );
+
+    if (!selectedClient) return;
+
+    const prefix = `LDR_${selectedClient.nom}_${newLois.norme}_${newLois.masseEssaiKg}Kg`;
+
+    const regex = new RegExp(
+      `^${prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}_(\\d{4})$`,
+    );
+
     const numbers = lois
       .map((l) => {
         const match = l.nom?.match(regex);
         return match ? parseInt(match[1], 10) : null;
       })
       .filter((n): n is number => n !== null);
+
     const next = (Math.max(0, ...numbers) + 1).toString().padStart(4, "0");
 
-    setNewLois((prev) => ({ ...prev, nom: `${prefix}_${next}` }));
-  }, [newLois.client, newLois.norme, newLois.masseEssaiKg, modalMode, lois]);
+    const generatedName = `${prefix}_${next}`;
+
+    setNewLois((prev) => ({
+      ...prev,
+      nom: generatedName,
+    }));
+  }, [
+    newLois.clientId,
+    newLois.norme,
+    newLois.masseEssaiKg,
+    activeClients,
+    lois,
+    modalMode,
+  ]);
 
   const fetchClients = async () => {
     try {
@@ -424,76 +449,69 @@ export function LoisDeRoute() {
       {/* Tableau des lois */}
       <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-sm text-left border-collapse">
+          <table className="w-full min-w-[1200px] table-fixed text-sm text-left border-collapse">
             {/* Header */}
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
-                <th className="px-8 py-3 font-semibold text-white whitespace-nowrap">
-                  {t("roadLaws.lawName")}{" "}
+                <th className="w-[20%] px-6 py-5 font-semibold text-white">
+                  {t("roadLaws.lawName")}
                 </th>
 
-                <th className="px-10 py-3 font-semibold text-white whitespace-nowrap">
+                <th className="w-[10%] px-5 py-5 font-semibold text-white">
                   {t("roadLaws.client")}
                 </th>
 
-                <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
+                <th className="w-[6%] px-4 py-5 font-semibold text-white">
                   {t("roadLaws.standard")}
                 </th>
-                <th className="px-4 py-3 font-semibold text-white whitespace-nowrap">
+
+                <th className="w-[10%] px-4 py-5 font-semibold text-white">
                   {t("roadLaws.drivingMode")}
                 </th>
 
-                <th className="px-2 py-3 font-semibold text-white text-center">
+                <th className="w-[9%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>{t("roadLaws.temperature")}</span>
-                    <span className="text-sm font-normal opacity-80">(°C)</span>
+                    <span>{t("roadLaws.temperature")}(°C)</span>
                   </div>
                 </th>
 
-                <th className="px-1 py-3 font-semibold text-white text-center">
+                <th className="w-[8%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>{t("roadLaws.inertia")}</span>
-                    <span className="text-sm font-normal opacity-80">(kg)</span>
+                    <span>{t("roadLaws.inertia")}(kg)</span>
                   </div>
                 </th>
 
-                <th className="px-2 py-3 font-semibold text-white text-center">
+                <th className="w-[11%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>{t("roadLaws.testMass")}</span>
-                    <span className="text-sm font-normal opacity-80">(kg)</span>
+                    <span>{t("roadLaws.testMass")}(kg)</span>
                   </div>
                 </th>
 
-                <th className="px-2 py-3 font-semibold text-white text-center">
+                <th className="w-[4%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>F0</span>
-                    <span className="text-sm font-normal opacity-80">(N)</span>
+                    <span>F0(N)</span>
                   </div>
                 </th>
 
-                <th className="px-2 py-3 font-semibold text-white text-center">
+                <th className="w-[6%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>F1</span>
-                    <span className="text-sm font-normal opacity-80">
-                      (N/km/h)
-                    </span>
+                    <span>F1(N/km/h)</span>
+                   
                   </div>
                 </th>
 
-                <th className="px-2 py-3 font-semibold text-white text-center">
+                <th className="w-[7%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
-                    <span>F2</span>
-                    <span className="text-sm font-normal opacity-80">
-                      (N/(km/h)²)
-                    </span>
+                    <span>F2(N/(km/h)²)</span>
                   </div>
                 </th>
 
-                <th className="px-6 py-3 font-semibold text-white whitespace-nowrap">
+                <th className="w-[9%] px-4 py-5 font-semibold text-white text-center">
                   {t("roadLaws.actions")}
                 </th>
               </tr>
             </thead>
+
             {/* Body */}
             <tbody>
               {filteredLois.map((loi) => (
@@ -501,83 +519,71 @@ export function LoisDeRoute() {
                   key={loi.id}
                   className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                 >
-                  {/* Nom - truncate pour éviter de casser la ligne si le nom est trop long */}
-                  <td className="px-5 py-3 text-muted-foreground-800 font-bold ">
+                  {/* Nom */}
+                  <td className="px-6 py-4 text-muted-foreground-800 font-bold">
                     {loi.nom}
                   </td>
-                  <td className="px-6 py-3 text-muted-foreground-800">
+
+                  {/* Client */}
+                  <td className="px-4 py-4 text-muted-foreground-800">
                     {loi.client?.nom}
                   </td>
 
-                  <td className="px-4 py-3S">
+                  {/* Norme */}
+                  <td className="px-4 py-4">
                     <span
-                      className={`px-2 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider ${getNormeStyle(loi.norme)}`}
+                      className={`px-3 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider ${getNormeStyle(
+                        loi.norme,
+                      )}`}
                     >
                       {loi.norme}
                     </span>
                   </td>
 
-                  <td className="px-4 py-3S">
+                  {/* Mode de conduite */}
+                  <td className="px-4 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
+                      className={`px-4 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
                         loi.modeConduite,
                       )}`}
                     >
-                      {" "}
                       {loi.modeConduite}
                     </span>
                   </td>
 
-                  <td className="px-9 py-3 text-muted-foreground-800">
+                  {/* Température */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.temperature}
                   </td>
 
-                  {/* Valeurs numériques - réduction des paddings pour gagner de la place */}
-                  <td className="px-10 py-3 text-muted-foreground-800">
+                  {/* Inertie */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.inertieKg}
                   </td>
-                  <td className="px-12 py-3 text-muted-foreground-800">
+
+                  {/* Masse essai */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.masseEssaiKg}
                   </td>
 
-                  <td className="px-6 py-3 text-muted-foreground-800">
+                  {/* F0 */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.f0}
                   </td>
-                  <td className="px-6 py-3 text-muted-foreground-800">
+
+                  {/* F1 */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.f1}
                   </td>
-                  <td className="px-8 py-3 text-muted-foreground-800">
+
+                  {/* F2 */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
                     {loi.f2}
                   </td>
 
                   {/* Actions */}
-                  <td className="px-2 py-3">
-                    <div className="flex items-center gap-2">
-                      {canEdit && (
-                        <>
-                          <button
-                            onClick={() => {
-                              setSelectedLois(loi);
-                              setNewLois(loi);
-                              setModalMode("edit");
-                              setShowModal(true);
-                            }}
-                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
-                          >
-                            <Edit className="w-4 h-4 text-green-700" />
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedLois(loi);
-                              setLoisToDelete(loi);
-                              setShowConfirmDelete(true);
-                            }}
-                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-700" />
-                          </button>
-                        </>
-                      )}
+                  <td className="px-4 py-4">
+                    <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => {
                           setSelectedLois(loi);
@@ -589,20 +595,70 @@ export function LoisDeRoute() {
                       >
                         <Eye className="w-4 h-4 text-blue-700" />
                       </button>
+
+                      {canEdit && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setSelectedLois(loi);
+                              setNewLois({
+                                nom: loi.nom ?? "",
+                                temperature: loi.temperature ?? 0,
+                                clientId: loi.clientId ?? loi.client?.id ?? 0,
+                                norme: loi.norme ?? "",
+                                inertieKg: loi.inertieKg ?? 0,
+                                masseEssaiKg: loi.masseEssaiKg ?? 0,
+                                modeConduite: loi.modeConduite ?? "",
+                                f0: loi.f0 ?? 0,
+                                f1: loi.f1 ?? 0,
+                                f2: loi.f2 ?? 0,
+                                description: loi.description ?? "",
+                              });
+                              setModalMode("edit");
+                              setShowModal(true);
+                            }}
+                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
+                          >
+                            <Edit className="w-4 h-4 text-green-700" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setNewLois({
+                                nom: loi.nom ?? "",
+                                temperature: loi.temperature ?? 0,
+                                clientId: loi.clientId ?? loi.client?.id ?? 0,
+                                norme: loi.norme ?? "",
+                                inertieKg: loi.inertieKg ?? 0,
+                                masseEssaiKg: loi.masseEssaiKg ?? 0,
+                                modeConduite: loi.modeConduite ?? "",
+                                f0: loi.f0 ?? 0,
+                                f1: loi.f1 ?? 0,
+                                f2: loi.f2 ?? 0,
+                                description: loi.description ?? "",
+                              });
+
+                              setLoisToDelete(loi);
+                              setShowConfirmDelete(true);
+                            }}
+                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-700" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
-
-                  {/* Actions */}
                 </tr>
               ))}
-              {/* Aucun résultat */}
+
               {filteredLois.length === 0 && (
                 <tr>
                   <td
-                    colSpan={9}
+                    colSpan={11}
                     className="text-center py-10 text-muted-foreground-400"
                   >
-                    {t("roadLaws.noLaw")}{" "}
+                    {t("roadLaws.noLaw")}
                   </td>
                 </tr>
               )}
@@ -616,15 +672,16 @@ export function LoisDeRoute() {
             <DialogHeader>
               <DialogTitle> {t("roadLaws.deleteConfirmation")}</DialogTitle>
             </DialogHeader>
-            <p className="py-4 text-muted-foreground-700">
+            <p className="py-4 text-muted-foreground-700 break-words">
               {t("roadLaws.deleteQuestion")}{" "}
-              <span className="font-bold">{selectedLois?.nom}</span> ?
+              <span className="font-bold break-words">{loisToDelete?.nom}</span>{" "}
+              ?
             </p>
 
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => setShowConfirmDelete(false)}
-                className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm"
               >
                 {t("common.no")}
               </button>
@@ -638,7 +695,7 @@ export function LoisDeRoute() {
                 }}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
               >
-                {t("roadLaws.confirmDeletion")}
+                {t("common.confirm")}
               </button>
             </div>
           </DialogContent>
@@ -728,24 +785,22 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                         {t("roadLaws.client")}
                         <span className="text-red-500 ml-1">*</span>
                       </label>
+
                       <select
                         name="client"
-                        value={newLois.client?.id ?? newLois.clientId ?? 0}
                         required
+                        value={newLois.clientId || ""}
                         disabled={modalMode === "view"}
-                        onChange={(e) => {
-                          const selectedClient = clients.find(
-                            (c) => c.id === Number(e.target.value),
-                          );
-
-                          handleChange("client", selectedClient || null);
-                        }}
+                        onChange={(e) =>
+                          handleChange(
+                            "clientId",
+                            e.target.value ? Number(e.target.value) : 0,
+                          )
+                        }
                         className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-focus:outline-none focus:ring-2 focus:ring-ring transition"
+      focus:outline-none focus:ring-2 focus:ring-ring transition"
                       >
-                        <option value={0} disabled>
-                          {t("roadLaws.selectClient")}
-                        </option>
+                        <option value="">{t("roadLaws.selectClient")}</option>
 
                         {activeClients.map((c) => (
                           <option key={c.id} value={c.id}>

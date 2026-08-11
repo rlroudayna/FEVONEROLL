@@ -358,33 +358,29 @@ export function Vehicules() {
             {/* Header */}
             <thead className="bg-[#B9032C] border-b border-border">
               <tr>
-                <th className="px-6 py-5 font-semibold text-white">
+                <th className="w-[12%] px-6 py-5 font-semibold text-white text-left">
                   {t("vehicles.vehicle")}
                 </th>
-                <th className="px-6 py-5  font-semibold text-white">
+                <th className="w-[14%] px-4 py-5 font-semibold text-white text-left">
                   {t("vehicles.identifier")}
                 </th>
-                <th className="px-6 py-5  font-semibold text-white">
+                <th className="w-[14%] px-4 py-5 font-semibold text-white text-left">
                   {t("vehicles.client")}
                 </th>
-
-                <th className="px-4 py-5 font-semibold text-white">
+                <th className="w-[18%] px-4 py-5 font-semibold text-white text-left">
                   {t("vehicles.registration")}
                 </th>
-                <th className="px-6 py-5 font-semibold text-white">
+                <th className="w-[14%] px-4 py-5 font-semibold text-white text-left">
                   {t("vehicles.brand")}
                 </th>
-
-                <th className="px-6 py-5 font-semibold text-white">
+                <th className="w-[16%] px-4 py-5 font-semibold text-white text-left">
                   {t("vehicles.location")}
                 </th>
-
-                <th className="px-6 py-5 font-semibold text-white">
+                <th className="w-[15%] px-8 py-5 font-semibold text-white text-center">
                   {t("vehicles.actions")}
                 </th>
               </tr>
             </thead>
-
             {/* Body */}
             <tbody>
               {filteredVehicles.map((v) => {
@@ -403,38 +399,49 @@ export function Vehicules() {
                     className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
                   >
                     {/* Véhicule */}
-                    <td className="px-4 py-4 font-bold text-muted-foreground-800">
+                    <td className="px-6 py-4 font-bold text-muted-foreground-800">
                       {v.nomAppliImmat}
                     </td>
 
                     {/* Identificateur  */}
-                    <td className="px-6 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {v.identificateur}
                     </td>
                     {/* Client  */}
-                    <td className="px-6 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {v.client?.nom}
                     </td>
 
                     {/* Immatriculation */}
-                    <td className="px-6 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {v.immatriculation}
                     </td>
                     {/* Marque  */}
-                    <td className="px-6 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {v.marque}
                     </td>
 
                     {/* Localisation */}
-                    <td className="px-6 py-4 text-muted-foreground-800">
+                    <td className="px-4 py-4 text-muted-foreground-800">
                       {v.localisation}
                     </td>
 
                     {/* Catalyseur */}
 
                     {/* Actions */}
-                    <td className="px-1 py-4">
+                    <td className="px-9 py-4">
                       <div className="flex items-center gap-2">
+                        {/* Voir détails : tout le monde */}
+                        <button
+                          onClick={() => {
+                            setSelectedVehicle(v);
+                            setModalMode("view");
+                            setShowModal(true);
+                          }}
+                          className="p-1 rounded-lg bg-blue-100 hover:bg-blue-300"
+                        >
+                          <Eye className="w-4 h-4 text-blue-700" />
+                        </button>
                         {/* Actions réservées */}
                         {canEdit && (
                           <>
@@ -468,17 +475,6 @@ export function Vehicules() {
                             </button>
                           </>
                         )}
-                        {/* Voir détails : tout le monde */}
-                        <button
-                          onClick={() => {
-                            setSelectedVehicle(v);
-                            setModalMode("view");
-                            setShowModal(true);
-                          }}
-                          className="p-1 rounded-lg bg-blue-100 hover:bg-blue-300"
-                        >
-                          <Eye className="w-4 h-4 text-blue-700" />
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -514,7 +510,7 @@ export function Vehicules() {
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm"
             >
               {t("common.no")}
             </button>
@@ -528,7 +524,7 @@ export function Vehicules() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              {t("vehicles.confirmDeletion")}
+              {t("common.confirm")}
             </button>
           </div>
         </DialogContent>
@@ -690,8 +686,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                          {t("vehicles.select")}
-
+                        {t("vehicles.select")}
                       </option>
 
                       {["ICE", "HEV", "PHEV", "BEV"].map((opt) => (
@@ -717,8 +712,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
                       <option value="" disabled>
-                          {t("vehicles.select")}
-
+                        {t("vehicles.select")}
                       </option>
 
                       {["ESSENCE", "DIESEL", "GNV"].map((opt) => (
@@ -867,8 +861,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     }}
                     className="px-8 py-2 border rounded-lg hover:bg-muted"
                   >
-                      {t("common.cancel")}
-
+                    {t("common.cancel")}
                   </button>
 
                   <button
@@ -876,8 +869,7 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
                     className="px-8 py-2 bg-[#E30613] text-white rounded-lg
             hover:brightness-110 transition shadow"
                   >
-                      {t("common.save")}
-
+                    {t("common.save")}
                   </button>
                 </div>
               )}

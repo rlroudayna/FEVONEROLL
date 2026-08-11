@@ -10,7 +10,8 @@
     "search": "Rechercher",
     "select": "Sélectionner",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "logout": "Déconnexion"
   },
 
   "vehicles": {
@@ -262,6 +263,7 @@
 
     "name": "Nom",
     "density": "Densité (kg/m³)",
+    "refTemperature" :"Température de réf (°C)",
     "referenceTemperature": "Température de référence (°C)",
     "composition": "Composition",
     "h2o": "H₂O (%)",
@@ -299,7 +301,7 @@
     "noFuel": "Aucun carburant trouvé",
 
     "deleteConfirmation": "Confirmation de suppression",
-    "deleteQuestion": "Voulez-vous vraiment supprimer ce carburant ?",
+    "deleteQuestion": "Voulez-vous vraiment supprimer ce carburant ",
     "confirmDeletion": "Confirmer la suppression",
 
     "createdSuccess": "Carburant ajouté avec succès !",
@@ -447,6 +449,20 @@
       "10": "Octobre",
       "11": "Novembre",
       "12": "Décembre"
+    },
+    "monthsShort": {
+      "1": "Jan",
+      "2": "Fév",
+      "3": "Mar",
+      "4": "Avr",
+      "5": "Mai",
+      "6": "Juin",
+      "7": "Juil",
+      "8": "Août",
+      "9": "Sep",
+      "10": "Oct",
+      "11": "Nov",
+      "12": "Déc"
     }
   },
   "planning": {
@@ -807,6 +823,19 @@
       "shift": "Shift",
       "actions": "Actions"
     },
+    "messages": {
+      "noRequestFound": "Aucune demande trouvée",
+      "deleteSuccess": "Demande supprimée avec succès",
+      "deleteConstraint": "Suppression impossible : cette demande est liée à d'autres données.",
+      "deleteError": "Erreur lors de la suppression de la demande.",
+      "duplicateSuccess": "Demande dupliquée avec succès",
+      "duplicateError": "Erreur lors de la duplication",
+      "updateSuccess": "Demande modifiée avec succès",
+      "createSuccess": "Demande créée avec succès",
+      "saveError": "Erreur lors de l'enregistrement",
+      "updateSuccessAlt": "Demande mise à jour avec succès !",
+      "updateError": "Erreur lors de la mise à jour"
+    },
     "deleteConfirmation": {
       "title": "Confirmation de suppression",
       "message": "Voulez-vous vraiment supprimer cette demande d'essai",
@@ -821,8 +850,13 @@
       "create": "Créer une demande d'essai"
     },
 
-    "tabs": {
-      "general": "Général"
+    "tab": {
+      "general": "Informations générales",
+      "vehicle": "Caractéristiques",
+      "gazDilues": "Gaz dilués",
+      "gazBruts": "Gaz bruts",
+      "inca": "Données INCA",
+      "mesuresAux": "Mesures auxiliaires"
     },
 
     "general": {
@@ -892,37 +926,98 @@
     "vehicleCharacteristics": "Caractéristiques du véhicule",
     "roadLawCharacteristics": "Caractéristiques de la loi de route",
     "calibrationCharacteristics": "Caractéristiques du calage",
-    "cycleCharacteristics": "Caractéristiques du cycle"
-  },
-  "rawGases": {
-    "title": "Configuration des gaz bruts",
-    "ftirLines": "Lignes FTIR",
-    "standardSamplingLines": "Lignes de prélèvement standard",
-    "specificAnalyses": "Analyses spécifiques",
-    "samplingPoint": "Point de prélèvement",
-    "select": "-- Sélectionner --",
-    "engineOutlet": "Sortie moteur",
-    "cataInlet": "Amont CATA",
-    "cataOutlet": "Aval CATA",
-    "cannula": "Canule",
-    "egrMeasurement": "Mesure EGR",
-    "line1": "Ligne 1",
-    "line2": "Ligne 2",
-    "ftir": "FTIR",
-    "microsoot": "Microsoot"
-  },
-"dilutedGases": {
-  "cvsPhasesConfiguration": "Configuration CVS & Phases",
-  "bagMeasurement": "Mesure des sacs",
-  "flowRatesByPhase": "Débits par phase (m³/min)",
-  "phase": "Phase",
-  "particleMeasurements": "Mesures particulaires (PN/PM)",
-  "pmWeighing": "Pesée PM (Masse)",
-  "samplingFlowRate": "Débit de prélèvement (L/min)",
-  "pn23nm": "PN 23 nm",
-  "pn10nm": "PN 10 nm",
-  "dilutionFactor": "Facteur de dilution (PNDF)",
-  "cvs": "CVS"
-}
+    "cycleCharacteristics": "Caractéristiques du cycle",
 
+    "rawGases": {
+      "title": "Configuration des gaz bruts",
+      "ftirLines": "Lignes FTIR",
+      "standardSamplingLines": "Lignes de prélèvement standard",
+      "specificAnalyses": "Analyses spécifiques",
+      "samplingPoint": "Point de prélèvement",
+      "select": "-- Sélectionner --",
+      "engineOutlet": "Sortie moteur",
+      "cataInlet": "Amont CATA",
+      "cataOutlet": "Aval CATA",
+      "cannula": "Canule",
+      "egrMeasurement": "Mesure EGR",
+      "line1": "Ligne 1",
+      "line2": "Ligne 2",
+      "ftir": "FTIR",
+      "microsoot": "Microsoot"
+    },
+    "dilutedGases": {
+      "cvsPhasesConfiguration": "Configuration CVS & Phases",
+      "bagMeasurement": "Mesure des sacs",
+      "flowRatesByPhase": "Débits par phase (m³/min)",
+      "phase": "Phase",
+      "particleMeasurements": "Mesures particulaires (PN/PM)",
+      "pmWeighing": "Pesée PM (Masse)",
+      "samplingFlowRate": "Débit de prélèvement (L/min)",
+      "pn23nm": "PN 23 nm",
+      "pn10nm": "PN 10 nm",
+      "dilutionFactor": "Facteur de dilution (PNDF)",
+      "cvs": "CVS"
+    },
+    "inca": {
+      "title": "Configuration INCA",
+      "xcu": "XCU",
+      "software": "Logiciel",
+      "calibration": "Calibration",
+      "experiment": "Expérience",
+      "currentFile": "Fichier actuel",
+      "acquisitionEobd": "Acquisition EOBD",
+      "acquisitionType": "Type d'acquisition",
+      "select": "-- Sélectionner --"
+    },
+    "auxiliaryMeasurements": {
+      "configuration": "Configuration des mesures sélectionnées",
+      "add": "+ Ajouter",
+      "index": "Indice",
+      "number": "Numéro",
+      "measurementType": "Type de mesure",
+      "select": "Sélectionner...",
+      "analog": "Analogique",
+      "can": "CAN",
+      "opticalFiber": "Fibre Optique",
+      "delete": "Supprimer",
+      "selectMeasurement": "Cochez une mesure pour configurer ses détails.",
+      "currentMeasurement": "Current Measurement",
+      "voltageMeasurement": "Voltage Measurement",
+      "thermocouples": "Thermocouples",
+      "lambdaProbeLA4": "Lambda Probe LA4"
+    },
+
+    "navigation": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "saveRequest": "Enregistrer la demande"
+    },
+    "benchConfiguration": {
+      "title": "Configuration physique du banc",
+      "hood": "Capot",
+      "select": "Sélectionner",
+      "closed": "Fermé",
+      "open": "Ouvert",
+      "blower": "Soufflante",
+      "maxSpeed": "Vmax",
+      "fixed": "Fixe",
+      "qcvs": "Q_CVS",
+      "enterValue": "Entrer la valeur",
+      "carflow": "Carflow"
+    }
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "clients": "Clients",
+    "vehicules": "Véhicules",
+    "loisDeRoute": "Lois de route",
+    "calages": "Calages",
+    "cycles": "Cycles",
+    "demandes": "Demandes d'essai",
+    "planning": "Planning",
+    "validation": "Validation",
+    "carburants": "Carburants",
+    "profile": "Profil"
+  }
 }

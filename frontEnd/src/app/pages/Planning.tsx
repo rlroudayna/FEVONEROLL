@@ -458,7 +458,6 @@ export function Planning() {
     }),
   }));
 
-  /* ── Render ── */
   return (
     <div className="space-y-6 p-3">
       <div>
@@ -495,7 +494,8 @@ export function Planning() {
           onClick={() => setWeekOffset(0)}
           className="h-12 px-6 bg-[#B9032C] text-white rounded-lg hover:bg-[#B9032C]/90 transition text-sm font-medium shrink-0 w-full lg:w-auto"
         >
-{t("planning.today")}        </button>
+          {t("planning.today")}{" "}
+        </button>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full flex-1">
           {" "}
           <input
@@ -509,7 +509,7 @@ export function Planning() {
             type="date"
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
-            className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
+            className=" h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full [color-scheme:light] dark:[color-scheme:dark] "
           />
           <select
             value={selectedTechnicienId}
@@ -542,7 +542,7 @@ export function Planning() {
         </div>
       </div>
 
-      {/* ✅ technicienMap passé en prop */}
+      {/* technicienMap passé en prop */}
       {viewMode === "calendar" ? (
         <CalendarView
           planning={filteredPlanning}

@@ -146,9 +146,12 @@ export function Dashboard() {
     if (!active || !payload || !payload.length) return null;
 
     return (
-      <div className="bg-card border border-border rounded-lg p-3 shadow">
-        <p className="font-semibold">{label}</p>
-
+      <div className="bg-card text-card-foreground border border-border rounded-lg p-3 shadow-lg">
+      {label && (
+        <p className="font-semibold text-foreground mb-1">
+          {label}
+        </p>
+      )}
         {payload.map((item: any) => (
           <p key={item.dataKey}>
             {item.name}: {item.value}
@@ -396,53 +399,79 @@ export function Dashboard() {
 
     fetchTotalEssais();
   }, [selectedClientId]);
-const shortMonth = (month: string): string => {
-  const normalized = month.trim().toLowerCase();
+const getMonthNumber = (month: unknown): number | null => {
+  const normalized = String(month).trim().toLowerCase();
 
-  const abbreviations: Record<string, string> = {
-    january: "Jan",
-    janvier: "Jan",
+  const monthMap: Record<string, number> = {
+    jan: 1,
+    janvier: 1,
+    january: 1,
 
-    february: "Fev",
-    février: "Fev",
-    fevrier: "Fev",
+    fev: 2,
+    fév: 2,
+    février: 2,
+    fevrier: 2,
+    feb: 2,
+    february: 2,
 
-    march: "Mar",
-    mars: "Mar",
+    mars: 3,
+    mar: 3,
+    march: 3,
 
-    april: "Apr",
-    avril: "Apr",
+    avr: 4,
+    avril: 4,
+    apr: 4,
+    april: 4,
 
-    may: "Mai",
-    mai: "Mai",
+    mai: 5,
+    may: 5,
 
-    june: "Juin",
-    juin: "Juin",
+    juin: 6,
+    jun: 6,
+    june: 6,
 
-    july: "Juil",
-    juillet: "Juil",
+    juil: 7,
+    juillet: 7,
+    jul: 7,
+    july: 7,
 
-    august: "Août",
-    août: "Août",
-    aout: "Août",
+    août: 8,
+    aout: 8,
+    aug: 8,
+    august: 8,
 
-    september: "Sep",
-    septembre: "Sep",
+    sep: 9,
+    septembre: 9,
+    sept: 9,
+    september: 9,
 
-    october: "Oct",
-    octobre: "Oct",
+    oct: 10,
+    octobre: 10,
+    october: 10,
 
-    november: "Nov",
-    novembre: "Nov",
+    nov: 11,
+    novembre: 11,
+    november: 11,
 
-    december: "Déc",
-    décembre: "Déc",
-    decembre: "Déc",
+    déc: 12,
+    dec: 12,
+    décembre: 12,
+    decembre: 12,
+    december: 12,
   };
 
-  return abbreviations[normalized] ?? month;
+  return monthMap[normalized] ?? null;
 };
-  const inventoryCards = [
+
+const shortMonth = (month: unknown): string => {
+  const monthNumber = getMonthNumber(month);
+
+  if (!monthNumber) {
+    return String(month);
+  }
+
+  return t(`dashboard.monthsShort.${monthNumber}`);
+};  const inventoryCards = [
     {
       icon: Car,
       bgColor: "#E3F2FD",
@@ -627,7 +656,7 @@ const shortMonth = (month: string): string => {
           });
 
           return {
-            month: month.label,
+  month: shortMonth(String(backendMonth?.month ?? month.label)),
             Fait: backendMonth?.Fait ?? 0,
             Pas_fait: backendMonth?.Pas_fait ?? 0,
             En_cours: backendMonth?.En_cours ?? 0,
@@ -789,7 +818,7 @@ const shortMonth = (month: string): string => {
                 setSelectedClientId(
                   e.target.value ? Number(e.target.value) : null,
                 );
-                setSelectedTechnicienId(null); // ✅ reset technicien quand client change
+                setSelectedTechnicienId(null); 
               }}
             >
               <option value=""> {t("dashboard.allClients")}</option>
@@ -834,7 +863,7 @@ const shortMonth = (month: string): string => {
               <div className="w-full">
                 <div className="text-muted-foreground">{card.subtitle}</div>
                 {card.detail && (
-                  <div className="text-sm text-gray-500">{card.detail}</div>
+                  <div className="text-sm text-muted-foreground">{card.detail}</div>
                 )}
               </div>
             </div>
@@ -869,7 +898,7 @@ const shortMonth = (month: string): string => {
                     <Cell key={`pie-cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -892,8 +921,8 @@ const shortMonth = (month: string): string => {
         </div>
 
         {/* Bar Chart - 2/3 */}
-        <div className="bg-card rounded-xl p-4 shadow-sm col-span-2">
-          <div className="flex justify-between items-center mb-4">
+        <div className="bg-card rounded-xl p-6 shadow-sm col-span-2">
+          <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-semibold">
               {t("dashboard.charts.testsEvolution12Months")}
             </h3>
@@ -901,14 +930,15 @@ const shortMonth = (month: string): string => {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
-<XAxis
-  dataKey="month"
-  interval={0}
-  angle={-35}
-  textAnchor="end"
-  height={70}
-  tickMargin={10}
-/>              <YAxis />
+              <XAxis
+                dataKey="month"
+                interval={0}
+                textAnchor="end"
+                height={70}
+                tickMargin={10}
+                tick={{ fill: "currentColor" }}
+              />{" "}
+              <YAxis tick={{ fill: "currentColor" }} />
               <Tooltip content={<CustomTooltip />} /> <Legend />
               <Bar
                 key="bar-ok"
@@ -967,7 +997,7 @@ const shortMonth = (month: string): string => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="week" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend />
 
                 <Bar
@@ -1042,7 +1072,7 @@ const shortMonth = (month: string): string => {
                         <Cell key={index} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip content={<CustomTooltip />} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -1106,7 +1136,7 @@ const shortMonth = (month: string): string => {
                         <Cell key={index} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip content={<CustomTooltip />} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>

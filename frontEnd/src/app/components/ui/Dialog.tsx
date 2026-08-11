@@ -34,8 +34,8 @@ export function DialogContent({
    fixed
     inset-0
     m-auto
-    w-[30vw]
-    h-[28vh]
+    w-[32vw]
+    h-[26vh]
     max-w-none
     max-h-none
     bg-card
@@ -48,7 +48,8 @@ export function DialogContent({
         {...props}
       >
         {children}
-        <DialogPrimitive.Close   className="
+        <DialogPrimitive.Close
+          className="
     absolute right-4 top-4 
     p-1 rounded-lg
     text-muted-foreground
@@ -56,7 +57,7 @@ export function DialogContent({
     hover:bg-transparent
     transition-colors
   "
->
+        >
           <X className="w-5 h-5" />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

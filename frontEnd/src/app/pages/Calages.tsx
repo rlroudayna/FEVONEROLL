@@ -31,8 +31,8 @@ export interface Calage {
   nom: string;
   client?: Client;
   modeConduite: ModeConduite | "";
-  clientId: number;
-  temperature: number;
+  clientId: number | "";
+  temperature: number | "";
   vehiculeId?: number;
   loiRouteId?: number;
   vehiculeAssocie?: Vehicule;
@@ -40,7 +40,7 @@ export interface Calage {
   a: number;
   b: number;
   c: number;
-  description: string;
+  commenatire: string;
 }
 
 export function Calages() {
@@ -90,29 +90,28 @@ export function Calages() {
   });
   const INITIAL_CALAGE: Calage = {
     nom: "",
-    clientId: 0,
-    temperature: 0,
+    clientId: "",
+    temperature: "",
     vehiculeAssocie: undefined,
     loiRouteAssocie: undefined,
     modeConduite: "",
     a: 0,
     b: 0,
     c: 0,
-    description: "",
+    commenatire: "",
   };
 
   const [newCalage, setNewCalage] = useState<Calage>({
     nom: "",
-    clientId: 0,
-    temperature: 0,
+    clientId: "",
+    temperature: "",
     vehiculeAssocie: undefined,
     loiRouteAssocie: undefined,
     modeConduite: "",
-
     a: 0,
     b: 0,
     c: 0,
-    description: "",
+    commenatire: "",
   });
   useEffect(() => {
     const fetchData = async () => {
@@ -185,7 +184,7 @@ export function Calages() {
         a: newCalage.a,
         b: newCalage.b,
         c: newCalage.c,
-        description: newCalage.description,
+        commenatire: newCalage.commenatire,
         modeConduite: newCalage.modeConduite,
         //  IMPORTANT : mapping correct vers backend
         vehiculeId: newCalage.vehiculeAssocie?.id,
@@ -349,7 +348,7 @@ export function Calages() {
               setModalMode("add");
               setNewCalage({
                 ...INITIAL_CALAGE,
-                clientId: 0,
+                clientId: "",
               });
               setSelectedCalage(null);
               setShowModal(true);
@@ -431,13 +430,13 @@ export function Calages() {
             <DialogTitle> {t("calages.deleteConfirmation")}</DialogTitle>
           </DialogHeader>
           <p className="py-4 text-muted-foreground-700">
-            {t("calages.deleteConfirmationMessage")}{" "}
+            {t("calages.deleteQuestion")}{" "}
             <span className="font-bold">{selectedCalage?.nom}</span> ?
           </p>
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm"
             >
               {t("common.no")}
             </button>
@@ -457,143 +456,129 @@ export function Calages() {
         </DialogContent>
       </Dialog>
       {/* Tableau des calages */}
-      <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
+
+      {/* Header */}
+      
+      <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-sm text-left border-collapse">
-            {/* Header */}
-            <thead className="bg-[#B9032C] border-b border-border">
+          <table className="w-full min-w-[1200px] text-sm border-collapse">
+            <thead className="bg-[#B9032C]">
               <tr>
-                <th className="px-8 py-5 font-semibold text-white">
+                <th className="px-6 py-5 text-left font-semibold text-white">
                   {t("calages.calageName")}
                 </th>
-                <th className="px-8 py-5 text-left font-semibold text-white">
+
+                <th className="px-2 py-5 text-left font-semibold text-white whitespace-nowrap">
                   {t("calages.client")}
                 </th>
-                <th className="px-3 py-5 font-semibold text-white">
-                  {" "}
+
+                <th className="px-2 py-5 text-left font-semibold text-white whitespace-nowrap">
                   {t("calages.vehicle")}
                 </th>
-                <th className="px-6 py-5 text-left font-semibold text-white">
+
+                <th className="px-6 py-5 text-left font-semibold text-white whitespace-nowrap">
                   {t("calages.roadLaw")}
                 </th>
-                <th className="px-2 py-3 font-semibold text-white whitespace-nowrap">
+
+                <th className="px-2 py-5 text-left font-semibold text-white whitespace-nowrap">
                   {t("calages.drivingMode")}
                 </th>
-                <th className="px-1 py-5 font-semibold text-white">
+
+                <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                   {t("calages.temperature")}
-
-                  <span className="text-sm font-normal opacity-80">(°C)</span>
+                  <span className="text-xs font-normal opacity-80"> (°C)</span>
                 </th>
 
-                <th className="px-2 py-5 font-semibold text-white">
-                  A<span className="text-sm font-normal opacity-80">(N)</span>
+                <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
+                  A<span className="text-xs font-normal opacity-80">(N)</span>
                 </th>
-                <th className="px-2 py5 font-semibold text-white">
+
+                <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                   B
-                  <span className="text-sm font-normal opacity-80">
+                  <span className="text-xs font-normal opacity-80">
                     (N/km/h)
                   </span>
                 </th>
-                <th className="px-2 py-5 font-semibold text-white">
+
+                <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                   C
-                  <span className="text-sm font-normal opacity-80">
+                  <span className="text-xs font-normal opacity-80">
                     (N/(km/h)²)
                   </span>
                 </th>
-                <th className="px-2 py-5 font-semibold text-white">
-                  {" "}
+
+                <th className="px-3 py-4 text-center font-semibold text-white whitespace-nowrap">
                   {t("calages.actions")}
                 </th>
               </tr>
             </thead>
 
-            {/* Body */}
             <tbody>
               {filteredCalages.map((calages) => (
                 <tr
                   key={calages.id}
                   className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
+                
                 >
-                  {/* Nom */}
-                  <td className="px-4 py-4 font-bold text-muted-foreground-800">
-                    {calages.nom}
-                  </td>
-                  {/* client */}
-                  <td className="px-8 py-4 text-muted-foreground-800">
-                    {calages.client?.nom || ""}{" "}
+                  {/* Nom : colonne principale */}
+                  <td className="px-6 py-4 font-semibold text-muted-foreground-500">
+                    <div
+                      className="max-w-[500px] break-words"
+                      title={calages.nom}
+                    >
+                      {calages.nom}
+                    </div>
                   </td>
 
-                  <td className="px-2 py-4 text-muted-foreground-800">
+                  {/* Client */}
+                  <td className="px-2 py-4 text-muted-foreground-500 whitespace-nowrap">
+                    {calages.client?.nom || ""}
+                  </td>
+
+                  {/* Véhicule */}
+                  <td className="px-2 py-4text-muted-foreground-500 whitespace-nowrap">
                     {calages.vehiculeAssocie?.identificateur}
                   </td>
 
-                  <td className="px-3 py-4 text-muted-foreground-800">
-                    {calages.loiRouteAssocie?.nom}{" "}
+                  {/* Loi Route */}
+                  <td className="px-4 py-4 text-muted-foreground-500 whitespace-nowrap">
+                    {calages.loiRouteAssocie?.nom}
                   </td>
-                  <td className="px-4 py-3S">
+
+                  {/* Mode conduite */}
+                  <td className="px-3 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${getModeConduiteStyle(
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide ${getModeConduiteStyle(
                         calages.modeConduite,
                       )}`}
                     >
-                      {" "}
                       {calages.modeConduite}
                     </span>
                   </td>
-                  {/* Mode */}
-                  <td className="px-10 py-4 text-muted-foreground-800">
+
+                  {/* Température */}
+                  <td className="px-2 py-4 text-center text-muted-foreground-500 font-medium">
                     {calages.temperature}
                   </td>
 
                   {/* A */}
-                  <td className="px-4 py-4 text-muted-foreground-800">
+                  <td className="px-2 py-4 text-center text-muted-foreground-500 font-medium">
                     {calages.a}
                   </td>
 
                   {/* B */}
-                  <td className="px-8 py-4 text-muted-foreground-800">
+                  <td className="px-2 py-4 text-center text-muted-foreground-500 font-medium">
                     {calages.b}
                   </td>
 
                   {/* C */}
-                  <td className="px-8 py-4 text-muted-foreground-800">
+                  <td className="px-2 py-4 text-center text-muted-foreground-500 font-medium">
                     {calages.c}
                   </td>
 
                   {/* Actions */}
-                  {/* Actions */}
-                  <td className="px-1 py-3 text-right">
-                    <div className="flex items-center gap-2">
-                      {/* Voir : tout le monde */}
-
-                      {/* Actions seulement ADMIN ou CHARGE_ESSAI */}
-                      {canEdit && (
-                        <>
-                          {/* Modifier */}
-                          <button
-                            onClick={() => {
-                              setSelectedCalage(calages);
-                              fillForm(calages);
-                              setModalMode("edit");
-                              setShowModal(true);
-                            }}
-                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
-                          >
-                            <Edit className="w-4 h-4 text-green-700" />
-                          </button>
-
-                          {/* Supprimer */}
-                          <button
-                            onClick={() => {
-                              setSelectedCalage(calages);
-                              setShowConfirmDelete(true);
-                            }}
-                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-700" />
-                          </button>
-                        </>
-                      )}
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => {
                           setSelectedCalage(calages);
@@ -601,23 +586,48 @@ export function Calages() {
                           setModalMode("view");
                           setShowModal(true);
                         }}
-                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200"
+                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
                       >
                         <Eye className="w-4 h-4 text-blue-700" />
                       </button>
+
+                      {canEdit && (
+                        <>
+                          <button
+                            onClick={() => {
+                              setSelectedCalage(calages);
+                              fillForm(calages);
+                              setModalMode("edit");
+                              setShowModal(true);
+                            }}
+                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                          >
+                            <Edit className="w-4 h-4 text-green-700" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setSelectedCalage(calages);
+                              setShowConfirmDelete(true);
+                            }}
+                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-700" />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
               ))}
 
-              {/* Aucun résultat */}
               {filteredCalages.length === 0 && (
                 <tr>
                   <td
-                    colSpan={8}
-                    className="text-center py-10 text-muted-foreground-400"
+                    colSpan={10}
+                    className="py-10 text-center text-muted-foreground-500"
                   >
-                    {t("calages.noCalage")}{" "}
+                    {t("calages.noCalage")}
                   </td>
                 </tr>
               )}
@@ -625,6 +635,7 @@ export function Calages() {
           </table>
         </div>
       </div>
+
       {/* Modal formulaire */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -701,13 +712,15 @@ export function Calages() {
                       required
                       disabled={modalMode === "view"}
                       onChange={(e) =>
-                        handleChange("clientId", Number(e.target.value))
+                        handleChange(
+                          "clientId",
+                          e.target.value === "" ? "" : Number(e.target.value),
+                        )
                       }
-                      className="h-11 px-3 rounded-lg border border-border bg-background text-foreground"
+                      className="h-11 px-4 rounded-lg border border-border bg-background text-foreground
+        focus:outline-none focus:ring-2 focus:ring-ring transition"
                     >
-                      <option value={0} disabled>
-                        {t("calages.selectClient")}
-                      </option>
+                      <option value="">{t("calages.selectClient")}</option>
 
                       {activeClients.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -906,8 +919,8 @@ focus:outline-none focus:ring-2 focus:ring-ring transition"
 
                 <textarea
                   placeholder={t("calages.commentPlaceholder")}
-                  value={newCalage.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
+                  value={newCalage.commenatire}
+                  onChange={(e) => handleChange("commenatire", e.target.value)}
                   disabled={modalMode === "view"}
                   className="w-full h-28 p-4 rounded-lg border border-border bg-background text-foreground
 focus:outline-none focus:ring-2 focus:ring-ring transition"

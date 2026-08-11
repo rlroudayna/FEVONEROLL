@@ -478,11 +478,12 @@ export function Validation() {
   transition
 "
                 value={clientFilter}
-onChange={(e) =>
-  setClientFilter(
-    e.target.value === "Tous" ? "Tous" : Number(e.target.value)
-  )
-}              >
+                onChange={(e) =>
+                  setClientFilter(
+                    e.target.value === "Tous" ? "Tous" : Number(e.target.value),
+                  )
+                }
+              >
                 <option value="Tous">
                   {" "}
                   {t("validation.filters.client")} (

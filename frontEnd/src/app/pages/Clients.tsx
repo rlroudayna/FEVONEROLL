@@ -103,7 +103,7 @@ export function Clients() {
           method: "POST",
           body: JSON.stringify(formData),
         });
-        toast.success(t("cycles.createdSuccess"));
+        toast.success(t("clients.createdSuccess"));
       } else if (modalMode === "edit" && selected?.id) {
         const updated = await authFetch(`/clients/${selected.id}`, {
           method: "PUT",
@@ -114,7 +114,7 @@ export function Clients() {
           prev.map((c) => (c.id === selected.id ? updated : c)),
         );
 
-        toast.success(t("cycles.updatedSuccess"));
+        toast.success(t("clients.updatedSuccess"));
       }
 
       setShowModal(false);
@@ -134,15 +134,15 @@ export function Clients() {
 
       setClients((prev) => prev.filter((c) => c.id !== id));
 
-      toast.success(t("cycles.deletedSuccess"));
+      toast.success(t("clients.deletedSuccess"));
     } catch (err: any) {
       console.error(err);
 
       const message =
         err?.message?.includes("constraint") ||
         err?.message?.includes("foreign key")
-          ? t("cycles.deleteConstraintError")
-          : t("cycles.deleteError");
+          ? t("clients.deleteConstraintError")
+          : t("clients.deleteError");
 
       toast.error(message);
     }
@@ -195,93 +195,131 @@ export function Clients() {
       </div>
 
       {/* TABLE */}
-      <div className="bg-card border rounded-xl overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-[#B9032C] text-white">
-            <tr>
-              <th className="p-4 text-left">{t("clients.name")}</th>
-              <th className="p-2 text-left">{t("clients.country")}</th>
-              <th className="p-4 text-left">{t("clients.city")}</th>
-              <th className="p-4 text-left">{t("clients.email")}</th>
-              <th className="p-4 text-left">{t("clients.status")}</th>
-              <th className="text-right p-4">{t("clients.actions")}</th>
-            </tr>
-          </thead>
+     <div className="overflow-x-auto rounded-xl border border-border shadow-sm">
+  <table className="w-full min-w-[1000px] text-sm text-left border-collapse">
+    <thead className="bg-[#B9032C] text-white">
+      <tr>
+        <th className="w-[25%] px-6 py-5 font-semibold">
+          {t("clients.name")}
+        </th>
 
-          <tbody>
-            {filtered.map((c) => (
-              <tr
-                key={c.id}
+        <th className="w-[18%] px-6 py-5 font-semibold">
+          {t("clients.country")}
+        </th>
+
+        <th className="w-[18%] px-6 py-5 font-semibold">
+          {t("clients.city")}
+        </th>
+
+        <th className="w-[18%] px-6 py-5 font-semibold">
+          {t("clients.email")}
+        </th>
+
+        <th className="w-[12%] px-10 py-5 font-semibold">
+          {t("clients.status")}
+        </th>
+
+        <th className="w-[16%] px-16 py-5 text-right font-semibold">
+          {t("clients.actions")}
+        </th>
+      </tr>
+    </thead>
+
+    <tbody className="bg-card">
+      {filtered.map((c) => (
+        <tr
+          key={c.id}
                 className="border-b border-boreder hover:bg-[#E30613]/3 transition-colors"
+        >
+          {/* Nom */}
+          <td className="px-6 py-4 font-semibold text-muted-foreground-900">
+            {c.nom}
+          </td>
+
+          {/* Pays */}
+          <td className="px-6 py-4 text-muted-foreground-700">
+            {c.pays}
+          </td>
+
+          {/* Ville */}
+          <td className="px-6 py-4 text-muted-foreground--700">
+            {c.ville}
+          </td>
+
+          {/* Email */}
+          <td className="px-6 py-4 text-muted-foreground--700">
+            <span className="truncate block">
+              {c.contactEmail || "—"}
+            </span>
+          </td>
+
+          {/* Statut */}
+          <td className="px-10 py-4">
+            <span
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
+                c.actif
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {c.actif ? (
+                <CheckCircle className="w-3 h-3" />
+              ) : (
+                <XCircle className="w-3 h-3" />
+              )}
+              {c.actif
+                ? t("clients.active")
+                : t("clients.inactive")}
+            </span>
+          </td>
+
+          {/* Actions */}
+          <td className="px-9 py-4">
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => {
+                  setSelected(c);
+                  setFormData(c);
+                  setModalMode("view");
+                  setShowModal(true);
+                }}
+                className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
               >
-                <td className="p-4 font-semibold">{c.nom}</td>
-                <td>{c.pays}</td>
-                <td>{c.ville}</td>
-                <td>{c.contactEmail || "-"}</td>
+                <Eye className="w-4 h-4 text-blue-700" />
+              </button>
 
-                <td>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 w-fit ${
-                      c.actif
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {c.actif ? (
-                      <CheckCircle className="w-3 h-3" />
-                    ) : (
-                      <XCircle className="w-3 h-3" />
-                    )}
-                    {c.actif ? t("clients.active") : t("clients.inactive")}{" "}
-                  </span>
-                </td>
+              <button
+                onClick={() => {
+                  setSelected(c);
+                  setFormData(c);
+                  setModalMode("edit");
+                  setShowModal(true);
+                }}
+                className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+              >
+                <Edit className="w-4 h-4 text-green-700" />
+              </button>
 
-                <td className="p-3">
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => {
-                        setSelected(c);
-                        setFormData(c);
-                        setModalMode("view");
-                        setShowModal(true);
-                      }}
-                      className="p-1 bg-blue-100 rounded-lg"
-                    >
-                      <Eye className="w-4 h-4 text-blue-600" />
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setSelected(c);
-                        setFormData(c);
-                        setModalMode("edit");
-                        setShowModal(true);
-                      }}
-                      className="p-1 bg-green-100 rounded-lg"
-                    >
-                      <Edit className="w-4 h-4 text-green-600" />
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setSelected(c);
-                        setShowConfirmDelete(true);
-                      }}
-                      className="p-1 bg-red-100 rounded-lg"
-                    >
-                      <Trash2 className="w-4 h-4 text-red-600" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <button
+                onClick={() => {
+                  setSelected(c);
+                  setShowConfirmDelete(true);
+                }}
+                className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+              >
+                <Trash2 className="w-4 h-4 text-red-700" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 
         {filtered.length === 0 && (
-          <div className="p-10 text-center text-gray-500">
+          <div className=" bg-card p-10 text-center text-sm text-muted-foreground-500">
             {t("clients.noClient")}
-          </div>
+          </div> 
         )}
       </div>
 
@@ -298,8 +336,7 @@ export function Clients() {
           <div className="flex justify-end gap-4 mt-4">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
+className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm"            >
               {t("common.no")}
             </button>
             <button
@@ -312,7 +349,7 @@ export function Clients() {
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm"
             >
-              {t("clients.confirmDeletion")}
+              {t("common.confirm")}
             </button>
           </div>
         </DialogContent>
@@ -359,13 +396,14 @@ export function Clients() {
                 </label>
                 <select
                   value={formData.pays}
+                  required
                   onChange={(e) =>
                     setFormData({ ...formData, pays: e.target.value })
                   }
                   className="h-11 px-2 rounded-lg border border-border bg-background text-foreground
         focus:outline-none focus:ring-2 focus:ring-ring transition"
                 >
-                  <option value=""> Sélectionner un pays</option>
+                  <option value="">  {t("common.select")}</option>
 
                   {countryList.map((c) => (
                     <option key={c.code} value={c.name}>

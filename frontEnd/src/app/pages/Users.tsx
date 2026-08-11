@@ -328,171 +328,166 @@ export function Users() {
         </select>
       </div>
       {/* Tableau des utilisateurs */}
-      <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-sm text-left border-collapse">
-            {/* Header */}
-            <thead className="bg-[#B9032C] border-b border-border">
-              <tr>
-                <th className="px-8 py-5 font-semibold text-white">
-                  {t("users.user")}
-                </th>
-                <th className="px-9 py-5 font-semibold text-white">
-                  {" "}
-                  {t("users.role")}
-                </th>
-                <th className="px-4 py-5 font-semibold text-white">
-                  {" "}
-                  {t("users.client")}
-                </th>
-                <th className="px-8 py-5 font-semibold text-white">
-                  {" "}
-                  {t("users.email")}
-                </th>
-                <th className="px-10 py-5 font-semibold text-white">
-                  {t("users.phone")}
-                </th>
-                <th className="px-8 py-5 text-right font-semibold text-white">
-                  {t("users.actions")}
-                </th>
-              </tr>
-            </thead>
+              <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
 
-            {/* Body */}
-            <tbody>
-              {filteredUsers.map((user) => (
-                <tr
-                  key={user.id}
+  <table className="w-full min-w-[1100px] text-sm text-left border-collapse">
+    {/* Header */}
+    <thead className="bg-[#B9032C]">
+      <tr>
+        <th className="w-[22%] px-6 py-5 font-semibold text-white">
+          {t("users.user")}
+        </th>
+
+        <th className="w-[15%] px-8 py-5 font-semibold text-white">
+          {t("users.role")}
+        </th>
+
+        <th className="w-[15%] px-6 py-5 font-semibold text-white">
+          {t("users.client")}
+        </th>
+
+        <th className="w-[21%] px-8 py-5 font-semibold text-white">
+          {t("users.email")}
+        </th>
+
+        <th className="w-[20%] px-8 py-5 font-semibold text-white">
+          {t("users.phone")}
+        </th>
+
+        <th className="w-[12%] px-14 py-5 text-right font-semibold text-white">
+          {t("users.actions")}
+        </th>
+      </tr>
+    </thead>
+
+    {/* Body */}
+    <tbody className="bg-card">
+      {filteredUsers.map((user) => (
+        <tr
+          key={user.id}
                   className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
+        >
+          {/* Utilisateur */}
+          <td className="px-6 py-4">
+            <div className="flex items-center gap-3">
+              <div>
+                <div className="font-semibold text-muted-foreground-900">
+                  {user.prenom} {user.nom}
+                </div>
+              </div>
+            </div>
+          </td>
+
+          {/* Role */}
+          <td className="px-6 py-4">
+            <span
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                roleColors[user.role] ||
+                "bg-gray-100 text-muted-foreground-800"
+              }`}
+            >
+              {user.role}
+            </span>
+          </td>
+
+          {/* Client */}
+          <td className="px-6 py-4 text-muted-foreground-500">
+            {user.client?.nom || "—"}
+          </td>
+
+          {/* Email */}
+          <td className="px-6 py-4 text-muted-foreground-700">
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <span className="truncate">{user.email}</span>
+            </div>
+          </td>
+
+          {/* Téléphone */}
+          <td className="px-6 py-4 text-muted-foreground-700">
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-red-400 flex-shrink-0" />
+              {user.numeroTelephone
+                ? user.numeroTelephone.replace(
+                    /(\+\d{1,3})(\d+)/,
+                    "$1 $2"
+                  )
+                : "—"}
+            </div>
+          </td>
+
+          {/* Actions */}
+          <td className="px-8 py-4">
+            <div className="flex items-center justify-end gap-3">
+              {isAdmin && (
+                <Button
+                  className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setFormData({
+                      nom: user.nom,
+                      prenom: user.prenom,
+                      email: user.email,
+                      role: user.role,
+                      clientId: user.client?.id
+                        ? String(user.client.id)
+                        : "",
+                      numeroTelephone: user.numeroTelephone ?? "",
+                      motDePasse: "",
+                    });
+                    setModalMode("view");
+                    setShowModal(true);
+                  }}
                 >
-                  {/* Colonne Identité avec Avatar */}
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div className="font-bold  text-muted-foreground-800">
-                          {user.prenom} {user.nom}
-                        </div>
-                        <div className="text-xs text-muted-foreground font-normal"></div>
-                      </div>
-                    </div>
-                  </td>
+                  <Eye className="w-4 h-4 text-blue-700" />
+                </Button>
+              )}
 
-                  {/* Colonne Rôle avec Badge */}
-                  <td className="px-5 py-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        roleColors[user.role] ||
-                        "bg-gray-100  text-muted-foreground-800"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-                  {/* Colonne client */}
-                  <td className="px-5 py-3  text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      {user.client?.nom || "—"}
-                    </div>
-                  </td>
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setFormData({
+                      nom: user.nom,
+                      prenom: user.prenom,
+                      email: user.email,
+                      role: user.role,
+                      clientId: user.client?.id
+                        ? String(user.client.id)
+                        : "",
+                      numeroTelephone: user.numeroTelephone ?? "",
+                      motDePasse: "",
+                    });
+                    setModalMode("edit");
+                    setShowModal(true);
+                  }}
+                  className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                >
+                  <Edit className="w-4 h-4 text-green-700" />
+                </button>
+              )}
 
-                  {/* Colonne Email */}
-                  <td className="px-5 py-3 text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-red-300" />
-                      {user.email}
-                    </div>
-                  </td>
-
-                  {/* Colonne Téléphone */}
-                  <td className="px-8 py-3  text-muted-foreground-800">
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-red-300" />
-                      {user.numeroTelephone
-                        ? user.numeroTelephone.replace(
-                            /(\+\d{1,3})(\d+)/,
-                            "$1 $2",
-                          )
-                        : "—"}
-                    </div>
-                  </td>
-
-                  {/* Colonne Actions */}
-                  {/* Actions */}
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      {isAdmin && (
-                        <Button
-                          className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200"
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setFormData({
-                              nom: user.nom,
-                              prenom: user.prenom,
-                              email: user.email,
-                              role: user.role,
-                              clientId: user.client?.id
-                                ? String(user.client.id)
-                                : "",
-                              numeroTelephone: user.numeroTelephone ?? "",
-                              motDePasse: "",
-                            });
-                            setModalMode("view");
-                            setShowModal(true);
-                          }}
-                        >
-                          <Eye className="w-4 h-4 text-blue-700" />
-                        </Button>
-                      )}
-
-                      {isAdmin && (
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setFormData({
-                              nom: user.nom,
-                              prenom: user.prenom,
-                              email: user.email,
-                              role: user.role,
-                              clientId: user.client?.id
-                                ? String(user.client.id)
-                                : "",
-
-                              numeroTelephone: user.numeroTelephone ?? "",
-                              motDePasse: "",
-                            });
-                            setModalMode("edit");
-                            setShowModal(true);
-                          }}
-                          className="p-1.5 rounded-lg 
-             bg-green-100 
-             hover:bg-green-200 
-             "
-                        >
-                          <Edit className="w-4 h-4 text-green-700" />
-                        </button>
-                      )}
-                      {isAdmin && (
-                        <button
-                          onClick={() => {
-                            setSelectedUser(user);
-                            setShowConfirmDelete(true);
-                          }}
-                          className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
-                        >
-                          <Trash2 className="w-4 h-4 text-red-700" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+              {isAdmin && (
+                <button
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setShowConfirmDelete(true);
+                  }}
+                  className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4 text-red-700" />
+                </button>
+              )}
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+         
         {/* Message si aucun résultat */}
         {filteredUsers.length === 0 && (
-          <div className="p-10 text-center text-muted-foreground-500">
+          <div className="p-10 text-center text-sm text-muted-foreground-500">
             {t("users.noUser")}
           </div>
         )}
@@ -513,8 +508,9 @@ export function Users() {
           <div className="flex justify-end gap-4 mt-2">
             <button
               onClick={() => setShowConfirmDelete(false)}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
-            >
+className="px-4 py-2 border rounded-lg 
+           hover:bg-gray-100 dark:hover:bg-gray-500 
+           transition-colors shadow-sm"            >
               {t("common.no")}
             </button>
             <button
@@ -661,7 +657,7 @@ export function Users() {
                   className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
       focus:outline-none focus:ring-2 focus:ring-ring transition"
                 >
-                  <option value="">Choisir un rôle</option>
+                  <option value="">{t("common.select")}</option>
                   {roles.map((r) => (
                     <option key={r.value} value={r.value}>
                       {r.label}

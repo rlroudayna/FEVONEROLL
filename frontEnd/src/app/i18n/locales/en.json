@@ -10,7 +10,8 @@
     "search": "Search",
     "select": "Select",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "logout": "Logout"
   },
   "vehicles": {
     "title": "Vehicle Management",
@@ -119,7 +120,7 @@
     "details": "Calibration details",
     "searchName": "Search by name",
     "allClients": "Client (All)",
-    "allVehicles": "All vehicles",
+    "allVehicles": "vehicles (All)",
     "allRoadLaws": "Road laws (All)",
     "calageName": "Calibration name",
     "client": "Client",
@@ -213,6 +214,7 @@
     "allStatuses": "All statuses",
     "name": "Name",
     "density": "Density (kg/m³)",
+    "refTemperature" : "Ref temperature (°C)",
     "referenceTemperature": "Reference temperature (°C)",
     "composition": "Composition",
     "h2o": "H₂O (%)",
@@ -242,7 +244,7 @@
     },
     "noFuel": "No fuel found",
     "deleteConfirmation": "Delete confirmation",
-    "deleteQuestion": "Do you really want to delete this fuel?",
+    "deleteQuestion": "Do you really want to delete this fuel",
     "confirmDeletion": "Confirm deletion",
     "createdSuccess": "Fuel added successfully!",
     "updatedSuccess": "Fuel updated successfully!",
@@ -286,7 +288,7 @@
     "edit": "Edit User",
     "details": "User Details",
     "searchPlaceholder": "Search by name, email",
-    "allClients": "All Clients",
+    "allClients": "Clients (All)",
     "allRoles": "Role (All)",
     "user": "User",
     "role": "Role",
@@ -363,6 +365,20 @@
       "10": "October",
       "11": "November",
       "12": "December"
+    },
+    "monthsShort": {
+      "1": "Jan",
+      "2": "Feb",
+      "3": "Mar",
+      "4": "Apr",
+      "5": "May",
+      "6": "Jun",
+      "7": "Jul",
+      "8": "Aug",
+      "9": "Sep",
+      "10": "Oct",
+      "11": "Nov",
+      "12": "Dec"
     }
   },
   "planning": {
@@ -488,11 +504,12 @@
       "back": "Back"
     }
   },
+
   "validationCharge": {
     "title": "Test Manager Validation",
     "table": {
       "requestName": "Request Name",
-      "projectNumber": "Project No.",
+      "projectNumber": "Project No",
       "client": "Client",
       "requester": "Requester",
       "status": "Status",
@@ -552,7 +569,7 @@
     "title": "Test Technician Validation",
     "table": {
       "name": "Name",
-      "project": "Project No.",
+      "project": "Project No",
       "client": "Client",
       "requester": "Requester",
       "status": "Status",
@@ -649,7 +666,7 @@
     "messages": {
       "photoUpdated": "Image updated successfully",
       "photoUploadError": "Server error while uploading",
-      "phoneUpdated": "Phone number updated!",
+      "phoneUpdated": "Phone number updated successfully",
       "phoneUpdateError": "Error while updating",
       "requiredFields": "All fields are required",
       "passwordMinimum": "Minimum 8 characters",
@@ -658,19 +675,6 @@
       "passwordChangeError": "Error while changing password",
       "invalidOldPassword": "Incorrect current password"
     }
-  },
-  "title": "Test Request Management",
-  "subtitle": "Manage your test requests",
-  "add": "Add a request",
-  "filters": {
-    "searchName": "Test request name...",
-    "client": "Client",
-    "all": "All",
-    "requester": "Requester name...",
-    "projectNumber": "Project No...",
-    "status": "Status",
-    "allStatuses": "All",
-    "date": "Date"
   },
 
   "demandesEssai": {
@@ -683,14 +687,14 @@
       "client": "Client",
       "all": "All",
       "requester": "Requester name...",
-      "projectNumber": "Project No...",
+      "projectNumber": "Project No",
       "status": "Status",
       "allStatuses": "All",
       "date": "Date"
     },
     "table": {
       "requestName": "Test Request Name",
-      "projectNumber": "Project No.",
+      "projectNumber": "Project No",
       "client": "Client",
       "requester": "Requester",
       "status": "Status",
@@ -698,22 +702,41 @@
       "shift": "Shift",
       "actions": "Actions"
     },
+    "messages": {
+      "noRequestFound": "No request found",
+      "deleteSuccess": "Test request deleted successfully",
+      "deleteConstraint": "Deletion impossible: this request is linked to other data.",
+      "deleteError": "Error while deleting the request.",
+      "duplicateSuccess": "Test request duplicated successfully",
+      "duplicateError": "Error while duplicating the request",
+      "updateSuccess": "Test request modified successfully",
+      "createSuccess": "Test request created successfully",
+      "saveError": "Error while saving",
+      "updateSuccessAlt": "Test request updated successfully!",
+      "updateError": "Error while updating the request"
+    },
     "deleteConfirmation": {
       "title": "Delete Confirmation",
-      "message": "Are you sure you want to delete this test request",
+      "message": "Do you really want to delete this test request",
       "cancel": "No",
       "confirm": "Confirm Deletion"
     },
     "loading": "Loading test requests...",
     "noResults": "No test requests found",
+
     "modal": {
       "view": "View a test request",
       "edit": "Edit a test request",
       "create": "Create a test request"
     },
 
-    "tabs": {
-      "general": "General"
+    "tab": {
+      "general": "General Information",
+      "vehicle": " Characteristics",
+      "gazDilues": "Diluted Gases",
+      "gazBruts": "Raw Gases",
+      "inca": "INCA Data",
+      "mesuresAux": "Auxiliary Measurements"
     },
 
     "general": {
@@ -736,7 +759,7 @@
       "selectClient": "Select a client",
       "testTechnician": "Test Technician",
       "selectTechnician": "Select technician",
-      "projectNumber": "Project No.",
+      "projectNumber": "Project No",
       "bench": "Bench",
       "oneBenchAvailable": "Only one bench is currently available",
       "fuelType": "Fuel Type",
@@ -783,37 +806,99 @@
     "vehicleCharacteristics": "Vehicle Characteristics",
     "roadLawCharacteristics": "Road Law Characteristics",
     "calibrationCharacteristics": "Calibration Characteristics",
-    "cycleCharacteristics": "Cycle Characteristics"
-  },
-  "rawGases": {
-    "title": "Raw Gas Configuration",
-    "ftirLines": "FTIR Lines",
-    "standardSamplingLines": "Standard Sampling Lines",
-    "specificAnalyses": "Specific Analyses",
-    "samplingPoint": "Sampling Point",
-    "select": "-- Select --",
-    "engineOutlet": "Engine Outlet",
-    "cataInlet": "CATA Inlet",
-    "cataOutlet": "CATA Outlet",
-    "cannula": "Cannula",
-    "egrMeasurement": "EGR Measurement",
-    "line1": "Line 1",
-    "line2": "Line 2",
-    "ftir": "FTIR",
-    "microsoot": "Microsoot"
-  },
-"dilutedGases": {
-  "cvsPhasesConfiguration": "CVS & Phase Configuration",
-  "bagMeasurement": "Bag Measurement",
-  "flowRatesByPhase": "Flow Rates by Phase (m³/min)",
-  "phase": "Phase",
-  "particleMeasurements": "Particle Measurements (PN/PM)",
-  "pmWeighing": "PM Weighing (Mass)",
-  "samplingFlowRate": "Sampling Flow Rate (L/min)",
-  "pn23nm": "PN 23 nm",
-  "pn10nm": "PN 10 nm",
-  "dilutionFactor": "Dilution Factor (PNDF)",
-  "cvs": "CVS"
-}
+    "cycleCharacteristics": "Cycle Characteristics",
+    "rawGases": {
+      "title": "Raw Gas Configuration",
+      "ftirLines": "FTIR Lines",
+      "standardSamplingLines": "Standard Sampling Lines",
+      "specificAnalyses": "Specific Analyses",
+      "samplingPoint": "Sampling Point",
+      "select": "-- Select --",
+      "engineOutlet": "Engine Outlet",
+      "cataInlet": "CATA Inlet",
+      "cataOutlet": "CATA Outlet",
+      "cannula": "Cannula",
+      "egrMeasurement": "EGR Measurement",
+      "line1": "Line 1",
+      "line2": "Line 2",
+      "ftir": "FTIR",
+      "microsoot": "Microsoot"
+    },
+    "dilutedGases": {
+      "cvsPhasesConfiguration": "CVS & Phase Configuration",
+      "bagMeasurement": "Bag Measurement",
+      "flowRatesByPhase": "Flow Rates by Phase (m³/min)",
+      "phase": "Phase",
+      "particleMeasurements": "Particle Measurements (PN/PM)",
+      "pmWeighing": "PM Weighing (Mass)",
+      "samplingFlowRate": "Sampling Flow Rate (L/min)",
+      "pn23nm": "PN 23 nm",
+      "pn10nm": "PN 10 nm",
+      "dilutionFactor": "Dilution Factor (PNDF)",
+      "cvs": "CVS"
+    },
 
+    "inca": {
+      "title": "INCA Configuration",
+      "xcu": "XCU",
+      "software": "Software",
+      "calibration": "Calibration",
+      "experiment": "Experiment",
+      "currentFile": "Current File",
+      "acquisitionEobd": "EOBD Acquisition",
+      "acquisitionType": "Acquisition Type",
+      "select": "-- Select --"
+    },
+
+    "auxiliaryMeasurements": {
+      "configuration": "Selected Measurements Configuration",
+      "add": "+ Add",
+      "index": "Index",
+      "number": "Number",
+      "measurementType": "Measurement Type",
+      "select": "Select...",
+      "analog": "Analog",
+      "can": "CAN",
+      "opticalFiber": "Optical Fiber",
+      "delete": "Delete",
+      "selectMeasurement": "Check a measurement to configure its details.",
+      "currentMeasurement": "Current Measurement",
+      "voltageMeasurement": "Voltage Measurement",
+      "thermocouples": "Thermocouples",
+      "lambdaProbeLA4": "Lambda Probe LA4"
+    },
+
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "saveRequest": "Save Request"
+    },
+    "benchConfiguration": {
+      "title": "Bench Physical Configuration",
+      "hood": "Hood",
+      "select": "Select",
+      "closed": "Closed",
+      "open": "Open",
+      "blower": "Blower",
+      "maxSpeed": "Vmax",
+      "fixed": "Fixed",
+      "qcvs": "Q_CVS",
+      "enterValue": "Enter value",
+      "carflow": "Carflow"
+    }
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "clients": "Clients",
+    "vehicules": "Vehicles",
+    "loisDeRoute": "Road Laws",
+    "calages": "Calibration",
+    "cycles": "Cycles",
+    "demandes": "Test Requests",
+    "planning": "Planning",
+    "validation": "Validation",
+    "carburants": "Fuels",
+    "profile": "Profile"
+  }
 }

@@ -189,11 +189,12 @@ export function Carburants() {
       });
 
       setCarburants((prev) => [...prev, created]);
-toast.success(t("carburants.createdSuccess"));
+      toast.success(t("carburants.createdSuccess"));
       setShowModal(false);
       resetForm();
     } catch {
-toast.error(t("carburants.createError"));    }
+      toast.error(t("carburants.createError"));
+    }
   };
 
   const updateCarburant = async () => {
@@ -224,17 +225,21 @@ toast.error(t("carburants.createError"));    }
       setCarburants((prev) =>
         prev.map((c) => (c.id === selectedCarburant.id ? updated : c)),
       );
-toast.success(t("carburants.updatedSuccess"));      setShowModal(false);
+      toast.success(t("carburants.updatedSuccess"));
+      setShowModal(false);
     } catch {
-toast.error(t("carburants.updateError"));    }
+      toast.error(t("carburants.updateError"));
+    }
   };
 
   const deleteCarburant = async (id: number) => {
     try {
       await authFetch(`/carburants/${id}`, { method: "DELETE" });
       setCarburants((prev) => prev.filter((c) => c.id !== id));
-toast.success(t("carburants.deletedSuccess"));    } catch {
-toast.error(t("carburants.deleteError"));    }
+      toast.success(t("carburants.deletedSuccess"));
+    } catch {
+      toast.error(t("carburants.deleteError"));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -344,14 +349,14 @@ toast.error(t("carburants.deleteError"));    }
             </DialogHeader>
             <p className="py-4">
               {t("carburants.deleteQuestion")}{" "}
-              <span className="font-bold">{selected?.nom}</span> ?
+              <span className="font-bold">{selectedCarburant?.nom}</span> ?
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setShowConfirmDelete(false)}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-500 transition-colors shadow-sm"
               >
-                {t("common.cancel")}
+                {t("common.no")}
               </button>
               <button
                 className="px-4 py-2 bg-red-600 text-white rounded-lg"
@@ -362,7 +367,7 @@ toast.error(t("carburants.deleteError"));    }
                   setShowConfirmDelete(false);
                 }}
               >
-                {t("common.delete")}
+                {t("common.confirm")}
               </button>
             </div>
           </DialogContent>
@@ -371,84 +376,124 @@ toast.error(t("carburants.deleteError"));    }
 
       {/* ================= TABLE ================= */}
       <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full table-fixed text-sm">
           <thead className="bg-[#B9032C]">
             <tr>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+              <th className="px-6 py-5 text-left font-semibold text-white">
                 {t("carburants.name")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
+              <th className="px-6 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.density")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {t("carburants.referenceTemperature")}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
+                {t("carburants.refTemperature")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.composition")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.h2o")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.co2")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.ethanol")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.nhv")}
               </th>
-              <th className="px-5 py-4 text-white text-left">
-                {" "}
+
+              <th className="px-2 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.status")}
               </th>
-              <th className="px-5 py-4 text-white text-center">
-                {" "}
+
+              <th className="px-3 py-5 text-center font-semibold text-white whitespace-nowrap">
                 {t("carburants.actions")}
               </th>
             </tr>
           </thead>
+
           <tbody>
             {filteredCarburants.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
-                  className="py-6 text-center text-muted-foreground"
+                  colSpan={10}
+                  className="text-center py-10 text-muted-foreground-500 font-medium"
                 >
-                  Aucun carburant trouvé
+                  {t("carburants.noFuel")}
                 </td>
               </tr>
             ) : (
-              filteredCarburants.map((c) => (
+              filteredCarburants.map((c, index) => (
                 <tr key={c.id} className="border-b hover:bg-[#E30613]/5">
-                  <td className="px-5 py-4">{c.nom}</td>
-                  <td className="px-14 py-4">{c.density}</td>
+                  {/* Nom */}
+                  <td className="px-6 py-4 font-semibold text-muted-foreground-800">
+                    <div className="max-w-[400px] break-words" title={c.nom}>
+                      {c.nom}
+                    </div>
+                  </td>
 
-                  <td className="px-14 py-4">{c.referenceTemperature}</td>
+                  {/* Density */}
+                  <td className="px-6 py-4 text-center text-muted-foreground-800">
+                    {c.density}
+                  </td>
 
-                  <td className="px-5 py-4">
-                    {" "}
+                  {/* Reference Temperature */}
+                  <td className="px-4 py-4 text-center text-muted-foreground-800">
+                    {c.referenceTemperature}
+                  </td>
+
+                  {/* Composition */}
+                  <td className="px-6 py-4 text-center text-muted-foreground-800">
                     <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">
-                      {c.composition}{" "}
+                      {c.composition}
                     </span>
                   </td>
-                  <td className="px-8 py-4">{c.h2oContent}</td>
-                  <td className="px-8 py-4">{c.co2Content}</td>
-                  <td className="px-10 py-4">{c.ethanolContent}</td>
-                  <td className="px-8 py-4">{c.nhv}</td>
 
-                  <td className="px-5 py-4">
+                  {/* H2O */}
+                  <td className="px-2 py-4 text-center text-muted-foreground-800">
+                    {c.h2oContent}
+                  </td>
+
+                  {/* CO2 */}
+                  <td className="px-2 py-4 text-center text-muted-foreground-800">
+                    {c.co2Content}
+                  </td>
+
+                  {/* Ethanol */}
+                  <td className="px-2 py-4 text-center text-muted-foreground-800">
+                    {c.ethanolContent}
+                  </td>
+
+                  {/* NHV */}
+                  <td className="px-2 py-4 text-center text-muted-foreground-800">
+                    {c.nhv}
+                  </td>
+
+                  {/* Status */}
+                  <td className="px-12 py-4 text-muted-foreground-800r">
                     <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
                       {c.status}
                     </span>
                   </td>
-                  <td className="px-5 py-4">
-                    <div className="flex justify-center gap-2">
+
+                  {/* Actions */}
+                  <td className="px-3 py-4">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => openModal("view", c)}
+                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
+                      >
+                        <Eye className="w-4 h-4 text-blue-700" />
+                      </button>
+
                       {canEdit && (
                         <>
                           <button
@@ -457,6 +502,7 @@ toast.error(t("carburants.deleteError"));    }
                           >
                             <Edit className="w-4 h-4 text-green-700" />
                           </button>
+
                           <button
                             onClick={() => {
                               setSelectedCarburant(c);
@@ -468,12 +514,6 @@ toast.error(t("carburants.deleteError"));    }
                           </button>
                         </>
                       )}
-                      <button
-                        onClick={() => openModal("view", c)}
-                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
-                      >
-                        <Eye className="w-4 h-4 text-blue-700" />
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -527,7 +567,6 @@ toast.error(t("carburants.deleteError"));    }
                       disabled={modalMode === "view"}
                       onChange={(e) => handleInputChange("nom", e.target.value)}
                       className="w-full h-11 border rounded-lg px-3 bg-background"
-                      placeholder="Ex : Diesel B7"
                     />
                   </div>
                   <div>
@@ -608,6 +647,7 @@ toast.error(t("carburants.deleteError"));    }
                     <div key={field}>
                       <label className="block text-sm font-medium mb-1 capitalize">
                         {labels[field]}
+                        <span className="text-red-500 ml-1">*</span>
                       </label>
                       <input
                         type="number"
@@ -644,6 +684,7 @@ toast.error(t("carburants.deleteError"));    }
                         {field === "co2Content" && t("carburants.co2")}
                         {field === "ethanolContent" && t("carburants.ethanol")}
                         {field === "nhv" && t("carburants.nhv")}
+                        <span className="text-red-500 ml-1">*</span>
                       </label>
                       <input
                         type="number"
@@ -663,8 +704,8 @@ toast.error(t("carburants.deleteError"));    }
               {/* ================= STATUS ================= */}
               <section>
                 <h3 className="block text-sm font-medium mb-1">
-                  {" "}
                   {t("carburants.state")}
+                  <span className="text-red-500 ml-1">*</span>
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

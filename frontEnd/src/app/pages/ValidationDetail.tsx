@@ -140,7 +140,7 @@ export function ValidationDetail() {
     }
   };
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
+    <div className="w-7/8 mx-auto space-y-4">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold text-muted-foreground-600 text-left mb-2">
@@ -156,31 +156,31 @@ export function ValidationDetail() {
           <table className="w-full text-sm">
             <thead className="bg-[#B9032C] text-white">
               <tr>
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.name")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.project")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.client")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.requester")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.date")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.shift")}
                 </th>
 
-                <th className="px-4 py-4 text-left">
+                <th className="px-4 py-5 text-left">
                   {t("validationDetail.table.status")}
                 </th>
               </tr>
@@ -188,13 +188,13 @@ export function ValidationDetail() {
 
             <tbody>
               <tr className="border-b border-border">
-                <td className="px-4 py-4">{demande?.nomAuto}</td>
-                <td className="px-4 py-4">{demande?.numeroProjet}</td>
-                <td className="px-4 py-4">{demande?.client?.nom}</td>
-                <td className="px-4 py-4">{demande?.demandeur}</td>
-                <td className="px-4 py-4">{demande?.datePlanification}</td>
-                <td className="px-4 py-4">{demande?.shift}</td>
-                <td className="px-4 py-4">
+                <td className="px-4 py-5">{demande?.nomAuto}</td>
+                <td className="px-4 py-5">{demande?.numeroProjet}</td>
+                <td className="px-4 py-5">{demande?.client?.nom}</td>
+                <td className="px-5 py-5">{demande?.demandeur}</td>
+                <td className="px-4 py-5">{demande?.datePlanification}</td>
+                <td className="px-4 py-5">{demande?.shift}</td>
+                <td className="px-4 py-5">
                   {" "}
                   {translateStatus(demande?.statutGlobal)}
                 </td>
@@ -261,7 +261,7 @@ export function ValidationDetail() {
             <p className="text-lg text-muted-foreground-500">
               {demande?.validationCharge?.charge
                 ? `${demande.validationCharge.charge.prenom ?? ""} ${demande.validationCharge.charge.nom ?? ""}`.trim()
-                : "Non renseigné"}
+                : t("validationDetail.messages.notProvided")}{" "}
             </p>
           </div>
 
@@ -313,7 +313,8 @@ export function ValidationDetail() {
 
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierINCA ||t("validationDetail.files.noFile")}
+                {demande?.validationCharge?.fichierINCA ||
+                  t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierINCA && (
@@ -335,12 +336,15 @@ export function ValidationDetail() {
             <div className="flex items-center gap-4">
               <FileText className="w-7 h-7 text-green-600 mb-3" />
 
-              <h3 className="font-medium mb-1">{t("validationDetail.files.bar")}</h3>
+              <h3 className="font-medium mb-1">
+                {t("validationDetail.files.bar")}
+              </h3>
             </div>
 
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierBaR ||   t("validationDetail.files.noFile")}
+                {demande?.validationCharge?.fichierBaR ||
+                  t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierBaR && (
@@ -362,11 +366,14 @@ export function ValidationDetail() {
             <div className="flex items-center gap-4">
               <FileText className="w-7 h-7 text-orange-600 mb-3" />
 
-              <h3 className="font-medium mb-1">{t("validationDetail.files.checklist")}</h3>
+              <h3 className="font-medium mb-1">
+                {t("validationDetail.files.checklist")}
+              </h3>
             </div>
             <div className="flex items-center justify-between gap-4">
               <p className="text-sm text-muted-foreground-500">
-                {demande?.validationCharge?.fichierChecklist ||   t("validationDetail.files.noFile")}
+                {demande?.validationCharge?.fichierChecklist ||
+                  t("validationDetail.files.noFile")}
               </p>
 
               {demande?.validationCharge?.fichierChecklist && (

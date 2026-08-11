@@ -29,6 +29,7 @@ import logo from "../../assets/images/logo3.png";
 import { authFetch } from "../api";
 import { DoorOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
 export enum Client {
   RENAULT = "RENAULT",
   STELLANTIS = "STELLANTIS",
@@ -52,40 +53,65 @@ interface User {
   image?: string;
 }
 const navigation = [
-  { name: "Tableau de bord", path: "/app", icon: Home, end: true },
-
   {
-    name: "Utilisateurs",
+    name: "navigation.dashboard",
+    path: "/app",
+    icon: Home,
+    end: true,
+  },
+  {
+    name: "navigation.users",
     path: "/app/users",
     icon: Users,
     roles: [Role.ADMIN],
   },
   {
-    name: "Clients",
+    name: "navigation.clients",
     path: "/app/clients",
     icon: Building2,
     roles: [Role.ADMIN],
   },
-
-  { name: "Véhicules", path: "/app/vehicules", icon: Car },
-
-  { name: "Lois de route", path: "/app/lois-de-route", icon: BarChart3 },
-
-  { name: "Calages", path: "/app/calages", icon: Settings },
-
-  { name: "Cycles", path: "/app/cycles", icon: Repeat },
   {
-    name: "Carburants",
+    name: "navigation.vehicules",
+    path: "/app/vehicules",
+    icon: Car,
+  },
+  {
+    name: "navigation.loisDeRoute",
+    path: "/app/lois-de-route",
+    icon: BarChart3,
+  },
+  {
+    name: "navigation.calages",
+    path: "/app/calages",
+    icon: Settings,
+  },
+  {
+    name: "navigation.cycles",
+    path: "/app/cycles",
+    icon: Repeat,
+  },
+  {
+    name: "navigation.carburants",
     path: "/app/carburants",
     icon: Fuel,
     roles: [Role.ADMIN, Role.CHARGE_ESSAI],
   },
-
-  { name: "Demandes", path: "/app/demandes", icon: FileText },
-
-  { name: "Planning", path: "/app/planning", icon: Calendar },
-
-  { name: "Validation", path: "/app/validation", icon: CheckCircle },
+  {
+    name: "navigation.demandes",
+    path: "/app/demandes",
+    icon: FileText,
+  },
+  {
+    name: "navigation.planning",
+    path: "/app/planning",
+    icon: Calendar,
+  },
+  {
+    name: "navigation.validation",
+    path: "/app/validation",
+    icon: CheckCircle,
+  },
 ];
 
 export function Layout() {
@@ -125,7 +151,7 @@ export function Layout() {
       {/* Sidebar avec largeur dynamique */}
       <aside
         className={`${
-          isCollapsed ? "w-24" : "w-56"
+          isCollapsed ? "w-24" : "w-60"
         } bg-[#B3002B] text-white flex flex-col transition-all duration-300 ease-in-out`}
       >
         {/* Header de la Sidebar avec le bouton Toggle */}
@@ -161,7 +187,7 @@ export function Layout() {
 
                     {!isCollapsed && (
                       <span className="whitespace-nowrap overflow-hidden">
-                        {item.name}
+                        {t(item.name)}{" "}
                       </span>
                     )}
                   </>
@@ -242,7 +268,10 @@ export function Layout() {
              transition-colors"
             >
               <Power className="w-5 h-5 text-red-600" />
-              <span className="text-sm text-red-600">Déconnexion</span>
+              <span className="text-sm text-red-600">
+                {" "}
+                {t("common.logout")}
+              </span>
             </button>
           </div>
         </header>

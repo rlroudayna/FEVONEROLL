@@ -110,7 +110,6 @@ export function Profile() {
         },
       );
 
-      // ❌ si backend renvoie erreur
       if (!res.ok) {
         const errorText = await res.text();
         toast.error(errorText || t("profile.photo.uploadError"));
@@ -180,7 +179,7 @@ export function Profile() {
     }
   };
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+<div className="w-5/6 mx-auto h-[60vh] space-y-6">      {" "}
       {/* TITLE */}
       <div>
         <h1 className="text-2xl font-bold"> {t("profile.title")}</h1>
@@ -188,7 +187,6 @@ export function Profile() {
           {t("profile.subtitle")}
         </p>
       </div>
-
       {/* CARD */}
       <div className="bg-card rounded-2xl shadow-sm border overflow-hidden">
         {/* HEADER PROFILE */}
@@ -252,9 +250,19 @@ export function Profile() {
 
                     {isEditingPhone ? (
                       <input
+                        type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         className="border border-border rounded px-2 py-1 text-sm bg-background text-foreground outline-none focus:ring-2 focus:ring-ring/40"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // Ne rien écrire si le caractère n'est pas un chiffre
+                          if (/^\d*$/.test(value)) {
+                            setPhone(value);
+                          }
+                        }}
                       />
                     ) : (
                       <p className="text-sm font-medium">{phone}</p>
@@ -287,7 +295,7 @@ export function Profile() {
                           setPhone(updatedUser.numeroTelephone);
                           setIsEditingPhone(false);
 
-                          toast.success(t("profile.messages.phoneUpdate"));
+                          toast.success(t("profile.messages.phoneUpdated"));
                         } catch (err) {
                           toast.error(t("profile.phoneUpdate.error"));
                         }
@@ -336,7 +344,6 @@ export function Profile() {
           </div>
         </div>
       </div>
-
       {/* PASSWORD MODAL */}
       {isChangingPassword && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -448,11 +455,10 @@ export function Profile() {
           </div>
         </div>
       )}
-
       {/* PHOTO MODAL */}
       {isEditingPhoto && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-card p-4 rounded-xl border space-y-3 w-[400px]">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-7 z-50">
+          <div className="bg-card p-5 rounded-xl border space-y-5 w-[500px]">
             <h2 className="font-bold text-lg"> {t("profile.photo.change")}</h2>
 
             <label className="bg-card cursor-pointer flex items-center justify-center w-full border  p-2 rounded  hover:bg-card-100">
