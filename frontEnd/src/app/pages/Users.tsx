@@ -11,7 +11,6 @@ import {
   Phone,
   ShieldCheck,
   EyeOff,
-
 } from "lucide-react";
 import {
   Dialog,
@@ -728,51 +727,49 @@ export function Users() {
                     <span className="text-red-500 ml-1">*</span>
                   </label>
 
-                 <div className="relative">
-  <input
-    type={showPassword ? "text" : "password"}
-    value={formData.motDePasse}
-    onChange={(e) => {
-      const password = e.target.value;
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={formData.motDePasse}
+                      onChange={(e) => {
+                        const password = e.target.value;
 
-      setFormData({
-        ...formData,
-        motDePasse: password,
-      });
+                        setFormData({
+                          ...formData,
+                          motDePasse: password,
+                        });
 
-      if (isStrongPassword(password)) {
-        setPasswordError("");
-      }
-    }}
-    className={`w-full h-11 px-3 pr-11 rounded-lg border bg-background text-foreground
+                        if (isStrongPassword(password)) {
+                          setPasswordError("");
+                        }
+                      }}
+                      className={`w-full h-11 px-3 pr-11 rounded-lg border bg-background text-foreground
       focus:outline-none focus:ring-2 focus:ring-ring transition
       ${
-        passwordError
-          ? "border-red-500 focus:border-red-500"
-          : "border-border"
+        passwordError ? "border-red-500 focus:border-red-500" : "border-border"
       }`}
-    required
-  />
+                      required
+                    />
 
-  <button
-    type="button"
-    onClick={() => setShowPassword((prev) => !prev)}
-    className="absolute right-3 top-1/2 -translate-y-1/2
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2
       text-muted-foreground hover:text-foreground
       transition-colors"
-    aria-label={
-      showPassword
-        ? "Masquer le mot de passe"
-        : "Afficher le mot de passe"
-    }
-  >
-    {showPassword ? (
-      <EyeOff className="w-5 h-5" />
-    ) : (
-      <Eye className="w-5 h-5" />
-    )}
-  </button>
-</div>
+                      aria-label={
+                        showPassword
+                          ? "Masquer le mot de passe"
+                          : "Afficher le mot de passe"
+                      }
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
 
                   {passwordError && (
                     <p className="text-sm text-red-500 mt-1">{passwordError}</p>

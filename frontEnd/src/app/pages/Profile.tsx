@@ -135,6 +135,7 @@ export function Profile() {
 
       toast.success(t("profile.messages.photoUpdated"));
       setIsEditingPhoto(false);
+      window.location.reload();
     } catch (err) {
       console.error("Erreur update photo", err);
       toast.error(t("profile.messages.photoUploadError"));
