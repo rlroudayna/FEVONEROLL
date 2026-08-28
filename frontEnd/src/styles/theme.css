@@ -251,9 +251,9 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 /* ================= CALENDRIER ================= */
 
-/* ================= CALENDRIER ================= */
+//* ================= CALENDRIER ================= */
 
- input[type="date"] {
+input[type="date"] {
   color-scheme: light;
 }
 
@@ -267,9 +267,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0.7;
 }
 
-/* Icône en mode sombre */
+/* Mode sombre */
 .dark input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   opacity: 0.9;
-  filter: invert(1);
+  /* PAS de filter: invert(1) */
 }

@@ -458,47 +458,45 @@ export function Demandes() {
     thermocouples: false,
     sondeLambdaLA4: false,
   });
-  const buildMesuresRows = (
-  mesures: MesureDTO[] = [],
-): MesuresRowsState => {
-  return {
-    mesureCourant: mesures
-      .filter((m) => m.type === TypeMesureAux.COURANT)
-      .map((m) => ({
-        id: m.id,
-        indice: String(m.indice ?? ""),
-        numero: String(m.numero ?? ""),
-        type: m.sousType ?? "",
-      })),
+  const buildMesuresRows = (mesures: MesureDTO[] = []): MesuresRowsState => {
+    return {
+      mesureCourant: mesures
+        .filter((m) => m.type === TypeMesureAux.COURANT)
+        .map((m) => ({
+          id: m.id,
+          indice: String(m.indice ?? ""),
+          numero: String(m.numero ?? ""),
+          type: m.sousType ?? "",
+        })),
 
-    mesureTension: mesures
-      .filter((m) => m.type === TypeMesureAux.TENSION)
-      .map((m) => ({
-        id: m.id,
-        indice: String(m.indice ?? ""),
-        numero: String(m.numero ?? ""),
-        type: m.sousType ?? "",
-      })),
+      mesureTension: mesures
+        .filter((m) => m.type === TypeMesureAux.TENSION)
+        .map((m) => ({
+          id: m.id,
+          indice: String(m.indice ?? ""),
+          numero: String(m.numero ?? ""),
+          type: m.sousType ?? "",
+        })),
 
-    thermocouples: mesures
-      .filter((m) => m.type === TypeMesureAux.THERMOCOUPLE)
-      .map((m) => ({
-        id: m.id,
-        indice: String(m.indice ?? ""),
-        numero: String(m.numero ?? ""),
-        type: m.sousType ?? "",
-      })),
+      thermocouples: mesures
+        .filter((m) => m.type === TypeMesureAux.THERMOCOUPLE)
+        .map((m) => ({
+          id: m.id,
+          indice: String(m.indice ?? ""),
+          numero: String(m.numero ?? ""),
+          type: m.sousType ?? "",
+        })),
 
-    sondeLambdaLA4: mesures
-      .filter((m) => m.type === TypeMesureAux.SONDE_LAMBDA)
-      .map((m) => ({
-        id: m.id,
-        indice: String(m.indice ?? ""),
-        numero: String(m.numero ?? ""),
-        type: m.sousType ?? "",
-      })),
+      sondeLambdaLA4: mesures
+        .filter((m) => m.type === TypeMesureAux.SONDE_LAMBDA)
+        .map((m) => ({
+          id: m.id,
+          indice: String(m.indice ?? ""),
+          numero: String(m.numero ?? ""),
+          type: m.sousType ?? "",
+        })),
+    };
   };
-};
   const openModal = (mode: ModalMode, demande?: DemandeEssai) => {
     setModalMode(mode);
     setActiveTab("general");
@@ -1515,11 +1513,12 @@ export function Demandes() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 bg-card p-4 rounded-xl shadow-md">
         {/* Recherche par nom */}
-        <div className="flex items-center bg-background border border-border rounded-lg px-3 py-2 gap-2 text-sm text-foreground outline-none focus:ring-ring transition">
+        <div className="flex items-center h-12 bg-background border border-border rounded-lg px-3 gap-2 text-sm text-foreground focus-within:ring-2 focus-within:ring-ring transition">
           <Search size={16} className="text-muted-foreground-400" />
+
           <input
             placeholder={t("demandesEssai.filters.searchName")}
-            className="outline-none w-full text-sm text-muted-foreground-700"
+            className="outline-none w-full h-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -1565,8 +1564,8 @@ export function Demandes() {
             {t("demandesEssai.filters.status")} (
             {t("demandesEssai.filters.all")})
           </option>
-          <option value={StatutDemande.En_cours}>En cours</option>
-          <option value={StatutDemande.Fait}>Fait</option>
+          <option value={StatutDemande.En_cours}>{t("demandesEssai.general.inProgress")}</option>
+          <option value={StatutDemande.Fait}>{t("demandesEssai.general.done")}</option>
         </select>
 
         {/* Filtre Date */}

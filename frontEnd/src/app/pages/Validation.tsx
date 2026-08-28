@@ -502,8 +502,8 @@ export function Validation() {
             <select
               value={filterVehicule}
               onChange={(e) => setFilterVehicule(e.target.value)}
-              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
-            >
+              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm ocus:outline-none focus:ring-2 focus:ring-ring">
+
               <option value="Tous">
                 {" "}
                 {t("validation.filters.allVehicles")}
@@ -521,7 +521,7 @@ export function Validation() {
               placeholder={t("validation.filters.projectNumber")}
               value={filterProjet}
               onChange={(e) => setFilterProjet(e.target.value)}
-              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
+              className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
             {/* Filtre date */}
             {/* Filtre date */}
@@ -547,11 +547,10 @@ export function Validation() {
                     <button
                       type="button"
                       onClick={() => setFilterDate("")}
-                      className="flex items-center justify-center w-7 h-7 shrink-0 rounded-md text-muted-foreground hover:text-red-500 hover:bg-muted transition"
+                      className="date-input w-full h-full bg-transparent text-foreground text-sm outline-none
+             dark:[color-scheme:dark] [color-scheme:light]"
                       title={t("validation.filters.resetDate")}
-                    >
-                      
-                    </button>
+                    ></button>
                   )}
                 </div>
               </div>

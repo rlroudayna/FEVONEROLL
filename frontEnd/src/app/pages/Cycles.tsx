@@ -359,8 +359,11 @@ export function Cycles() {
             {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) =>
               role?.includes(r),
             ) && (
+                <>
+
               <select
-                className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
+                className="w-full sm:w-60 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground outline-none focus:ring-2 focus:ring-ring appearance-none transition"
+        
                 value={clientFilter}
                 onChange={(e) =>
                   setClientFilter(
@@ -374,7 +377,25 @@ export function Cycles() {
                     {c.nom}
                   </option>
                 ))}
+                
               </select>
+               {/* AJOUTER CETTE FLÈCHE */}
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground-400">
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </div>
+      </>
             )}
           </div>
           {/* Filtre famille */}

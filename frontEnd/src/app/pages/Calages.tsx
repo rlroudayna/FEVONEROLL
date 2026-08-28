@@ -376,7 +376,7 @@ export function Calages() {
 
         {["ADMIN", "CHARGE", "TECHNICIEN"].some((r) => role?.includes(r)) && (
           <select
-            className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground"
+            className="w-full sm:w-70 h-12 px-4 bg-background border border-border rounded-lg shadow-sm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition"
             value={clientFilter}
             onChange={(e) =>
               setClientFilter(
