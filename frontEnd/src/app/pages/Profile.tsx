@@ -264,7 +264,7 @@ export function Profile() {
                       <input
                         type="tel"
                         inputMode="numeric"
-                        pattern="[0-9]*"
+                        
                         className="border border-border rounded px-2 py-1 text-sm bg-background text-foreground outline-none focus:ring-2 focus:ring-ring/40"
                         value={phone}
                         onChange={(e) => {

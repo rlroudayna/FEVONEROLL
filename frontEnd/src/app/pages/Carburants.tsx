@@ -342,8 +342,8 @@ export function Carburants() {
 
       {/* ================= CONFIRM DELETE ================= */}
       {showConfirmDelete && (
-        <Dialog open={showConfirmDelete}>
-          <DialogContent className="max-w-md">
+        <Dialog open={showConfirmDelete} onOpenChange={setShowConfirmDelete}>
+          <DialogContent className="max-w-md" hideOverlay={true}>
             <DialogHeader>
               <DialogTitle> {t("carburants.deleteConfirmation")}</DialogTitle>
             </DialogHeader>

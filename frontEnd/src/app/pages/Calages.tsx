@@ -690,7 +690,7 @@ export function Calages() {
 
                     <input
                       type="text"
-                      placeholder="ClioV_WLTP_01"
+                      placeholder="Auto-generated"
                       value={newCalage.nom}
                       required
                       onChange={(e) => handleChange("nom", e.target.value)}

@@ -496,7 +496,6 @@ export function LoisDeRoute() {
                 <th className="w-[6%] px-4 py-5 font-semibold text-white text-center">
                   <div className="flex flex-col leading-tight">
                     <span>F1(N/km/h)</span>
-                   
                   </div>
                 </th>
 
@@ -587,7 +586,21 @@ export function LoisDeRoute() {
                       <button
                         onClick={() => {
                           setSelectedLois(loi);
-                          setNewLois(loi);
+
+                          setNewLois({
+                            nom: loi.nom ?? "",
+                            temperature: loi.temperature ?? 0,
+                            clientId: loi.clientId ?? loi.client?.id ?? 0,
+                            norme: loi.norme ?? "",
+                            inertieKg: loi.inertieKg ?? 0,
+                            masseEssaiKg: loi.masseEssaiKg ?? 0,
+                            modeConduite: loi.modeConduite ?? "",
+                            f0: loi.f0 ?? 0,
+                            f1: loi.f1 ?? 0,
+                            f2: loi.f2 ?? 0,
+                            description: loi.description ?? "",
+                          });
+
                           setModalMode("view");
                           setShowModal(true);
                         }}

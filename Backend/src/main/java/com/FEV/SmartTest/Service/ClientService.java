@@ -17,8 +17,9 @@ public class ClientService {
     }
 
     public Client create(Client client) {
-        client.setActif(true);
-        return clientRepository.save(client);
+        if (client.getActif() == null) {
+            client.setActif(true);
+        }        return clientRepository.save(client);
     }
     public List<Client> findAll() {
         return clientRepository.findAll();

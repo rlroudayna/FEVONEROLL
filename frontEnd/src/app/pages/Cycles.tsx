@@ -765,7 +765,7 @@ export function Cycles() {
                     />
                   </div>
                   <div className="md:col-span-4">
-                    <h4 className="text-sm font-medium text-muted-foreground-900 mb-2 ">
+                    <h4 className="text-sm font-medium text-muted-foreground-900 mb-2 mt-4">
                       {t("cycles.traceData")}
                       <span className="text-red-500 ml-1">*</span>
                     </h4>

@@ -211,8 +211,8 @@
     "edit": "Modifier le carburant",
     "details": "Détails du carburant",
     "searchPlaceholder": "Rechercher...",
-    "allCompositions": "Toutes les compositions",
-    "allStatuses": "Tous les statuts",
+    "allCompositions": "compositions(Toutes)",
+    "allStatuses": "status(Tous)",
     "name": "Nom",
     "density": "Densité (kg/m³)",
     "refTemperature": "Température de réf (°C)",
@@ -389,7 +389,7 @@
     "today": "Aujourd'hui",
     "filters": {
       "technician": "Technicien",
-      "allTechnicians": "Tous les techniciens",
+      "allTechnicians": "Techniciens (Tous)",
       "projectNumber": "Numéro de projet",
       "projectNumberPlaceholder": "Rechercher par numéro de projet",
       "date": "Date"
@@ -421,7 +421,7 @@
       "client": "Client",
       "allClients": "Tous",
       "vehicle": "Véhicule",
-      "allVehicles": "Tous les véhicules",
+      "allVehicles": "Véhicules (Tous)",
       "projectNumber": "N° de projet",
       "date": "Date",
       "resetDate": "Réinitialiser la date"
