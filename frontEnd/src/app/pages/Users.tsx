@@ -82,7 +82,16 @@ export function Users() {
     [],
   );
   const { t } = useTranslation();
-
+  const [passwordError, setPasswordError] = useState("");
+  const isStrongPassword = (password: string) => {
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password) &&
+      /[^A-Za-z0-9]/.test(password)
+    );
+  };
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -178,6 +187,14 @@ export function Users() {
       toast.error("Veuillez remplir les champs obligatoires");
       return;
     }
+    if (modalMode === "add" && !isStrongPassword(formData.motDePasse)) {
+      setPasswordError(
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      );
+      return;
+    }
+
+    setPasswordError("");
 
     try {
       if (modalMode === "add") {
@@ -328,163 +345,162 @@ export function Users() {
         </select>
       </div>
       {/* Tableau des utilisateurs */}
-              <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
+      <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
+        <table className="w-full min-w-[1100px] text-sm text-left border-collapse">
+          {/* Header */}
+          <thead className="bg-[#B9032C]">
+            <tr>
+              <th className="w-[22%] px-6 py-5 font-semibold text-white">
+                {t("users.user")}
+              </th>
 
-  <table className="w-full min-w-[1100px] text-sm text-left border-collapse">
-    {/* Header */}
-    <thead className="bg-[#B9032C]">
-      <tr>
-        <th className="w-[22%] px-6 py-5 font-semibold text-white">
-          {t("users.user")}
-        </th>
+              <th className="w-[15%] px-8 py-5 font-semibold text-white">
+                {t("users.role")}
+              </th>
 
-        <th className="w-[15%] px-8 py-5 font-semibold text-white">
-          {t("users.role")}
-        </th>
+              <th className="w-[15%] px-6 py-5 font-semibold text-white">
+                {t("users.client")}
+              </th>
 
-        <th className="w-[15%] px-6 py-5 font-semibold text-white">
-          {t("users.client")}
-        </th>
+              <th className="w-[21%] px-8 py-5 font-semibold text-white">
+                {t("users.email")}
+              </th>
 
-        <th className="w-[21%] px-8 py-5 font-semibold text-white">
-          {t("users.email")}
-        </th>
+              <th className="w-[20%] px-8 py-5 font-semibold text-white">
+                {t("users.phone")}
+              </th>
 
-        <th className="w-[20%] px-8 py-5 font-semibold text-white">
-          {t("users.phone")}
-        </th>
+              <th className="w-[12%] px-14 py-5 text-right font-semibold text-white">
+                {t("users.actions")}
+              </th>
+            </tr>
+          </thead>
 
-        <th className="w-[12%] px-14 py-5 text-right font-semibold text-white">
-          {t("users.actions")}
-        </th>
-      </tr>
-    </thead>
+          {/* Body */}
+          <tbody className="bg-card">
+            {filteredUsers.map((user) => (
+              <tr
+                key={user.id}
+                className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
+              >
+                {/* Utilisateur */}
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <div className="font-semibold text-muted-foreground-900">
+                        {user.prenom} {user.nom}
+                      </div>
+                    </div>
+                  </div>
+                </td>
 
-    {/* Body */}
-    <tbody className="bg-card">
-      {filteredUsers.map((user) => (
-        <tr
-          key={user.id}
-                  className="border-b border-border hover:bg-[#E30613]/3 transition-colors"
-        >
-          {/* Utilisateur */}
-          <td className="px-6 py-4">
-            <div className="flex items-center gap-3">
-              <div>
-                <div className="font-semibold text-muted-foreground-900">
-                  {user.prenom} {user.nom}
-                </div>
-              </div>
-            </div>
-          </td>
+                {/* Role */}
+                <td className="px-6 py-4">
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                      roleColors[user.role] ||
+                      "bg-gray-100 text-muted-foreground-800"
+                    }`}
+                  >
+                    {user.role}
+                  </span>
+                </td>
 
-          {/* Role */}
-          <td className="px-6 py-4">
-            <span
-              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                roleColors[user.role] ||
-                "bg-gray-100 text-muted-foreground-800"
-              }`}
-            >
-              {user.role}
-            </span>
-          </td>
+                {/* Client */}
+                <td className="px-6 py-4 text-muted-foreground-500">
+                  {user.client?.nom || "—"}
+                </td>
 
-          {/* Client */}
-          <td className="px-6 py-4 text-muted-foreground-500">
-            {user.client?.nom || "—"}
-          </td>
+                {/* Email */}
+                <td className="px-6 py-4 text-muted-foreground-700">
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span className="truncate">{user.email}</span>
+                  </div>
+                </td>
 
-          {/* Email */}
-          <td className="px-6 py-4 text-muted-foreground-700">
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-red-400 flex-shrink-0" />
-              <span className="truncate">{user.email}</span>
-            </div>
-          </td>
+                {/* Téléphone */}
+                <td className="px-6 py-4 text-muted-foreground-700">
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    {user.numeroTelephone
+                      ? user.numeroTelephone.replace(
+                          /(\+\d{1,3})(\d+)/,
+                          "$1 $2",
+                        )
+                      : "—"}
+                  </div>
+                </td>
 
-          {/* Téléphone */}
-          <td className="px-6 py-4 text-muted-foreground-700">
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-red-400 flex-shrink-0" />
-              {user.numeroTelephone
-                ? user.numeroTelephone.replace(
-                    /(\+\d{1,3})(\d+)/,
-                    "$1 $2"
-                  )
-                : "—"}
-            </div>
-          </td>
+                {/* Actions */}
+                <td className="px-8 py-4">
+                  <div className="flex items-center justify-end gap-3">
+                    {isAdmin && (
+                      <Button
+                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setFormData({
+                            nom: user.nom,
+                            prenom: user.prenom,
+                            email: user.email,
+                            role: user.role,
+                            clientId: user.client?.id
+                              ? String(user.client.id)
+                              : "",
+                            numeroTelephone: user.numeroTelephone ?? "",
+                            motDePasse: "",
+                          });
+                          setModalMode("view");
+                          setShowModal(true);
+                        }}
+                      >
+                        <Eye className="w-4 h-4 text-blue-700" />
+                      </Button>
+                    )}
 
-          {/* Actions */}
-          <td className="px-8 py-4">
-            <div className="flex items-center justify-end gap-3">
-              {isAdmin && (
-                <Button
-                  className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors"
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setFormData({
-                      nom: user.nom,
-                      prenom: user.prenom,
-                      email: user.email,
-                      role: user.role,
-                      clientId: user.client?.id
-                        ? String(user.client.id)
-                        : "",
-                      numeroTelephone: user.numeroTelephone ?? "",
-                      motDePasse: "",
-                    });
-                    setModalMode("view");
-                    setShowModal(true);
-                  }}
-                >
-                  <Eye className="w-4 h-4 text-blue-700" />
-                </Button>
-              )}
+                    {isAdmin && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setFormData({
+                            nom: user.nom,
+                            prenom: user.prenom,
+                            email: user.email,
+                            role: user.role,
+                            clientId: user.client?.id
+                              ? String(user.client.id)
+                              : "",
+                            numeroTelephone: user.numeroTelephone ?? "",
+                            motDePasse: "",
+                          });
+                          setModalMode("edit");
+                          setShowModal(true);
+                        }}
+                        className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
+                      >
+                        <Edit className="w-4 h-4 text-green-700" />
+                      </button>
+                    )}
 
-              {isAdmin && (
-                <button
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setFormData({
-                      nom: user.nom,
-                      prenom: user.prenom,
-                      email: user.email,
-                      role: user.role,
-                      clientId: user.client?.id
-                        ? String(user.client.id)
-                        : "",
-                      numeroTelephone: user.numeroTelephone ?? "",
-                      motDePasse: "",
-                    });
-                    setModalMode("edit");
-                    setShowModal(true);
-                  }}
-                  className="p-1 rounded-lg bg-green-100 hover:bg-green-200 transition-colors"
-                >
-                  <Edit className="w-4 h-4 text-green-700" />
-                </button>
-              )}
+                    {isAdmin && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setShowConfirmDelete(true);
+                        }}
+                        className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-700" />
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-              {isAdmin && (
-                <button
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setShowConfirmDelete(true);
-                  }}
-                  className="p-1 rounded-lg bg-red-100 hover:bg-red-200 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4 text-red-700" />
-                </button>
-              )}
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-         
         {/* Message si aucun résultat */}
         {filteredUsers.length === 0 && (
           <div className="p-10 text-center text-sm text-muted-foreground-500">
@@ -508,9 +524,10 @@ export function Users() {
           <div className="flex justify-end gap-4 mt-2">
             <button
               onClick={() => setShowConfirmDelete(false)}
-className="px-4 py-2 border rounded-lg 
+              className="px-4 py-2 border rounded-lg 
            hover:bg-gray-100 dark:hover:bg-gray-500 
-           transition-colors shadow-sm"            >
+           transition-colors shadow-sm"
+            >
               {t("common.no")}
             </button>
             <button
@@ -702,21 +719,39 @@ className="px-4 py-2 border rounded-lg
             {/* PASSWORD */}
             {modalMode === "add" && (
               <div className="grid grid-cols-3 gap-8 mt-4">
-                <div className="flex flex-col gap-1.5 ">
+                <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium">
                     {t("users.password")}{" "}
                     <span className="text-red-500 ml-1">*</span>
                   </label>
+
                   <input
                     type="password"
                     value={formData.motDePasse}
-                    onChange={(e) =>
-                      setFormData({ ...formData, motDePasse: e.target.value })
-                    }
-                    className="h-11 px-3 rounded-lg border border-border bg-background text-foreground
-      focus:outline-none focus:ring-2 focus:ring-ring transition"
+                    onChange={(e) => {
+                      const password = e.target.value;
+
+                      setFormData({
+                        ...formData,
+                        motDePasse: password,
+                      });
+
+                      // Effacer l'erreur dès que le mot de passe devient valide
+                      if (isStrongPassword(password)) {
+                        setPasswordError("");
+                      }
+                    }}
+                    className={`h-11 px-3 rounded-lg border bg-background text-foreground
+      focus:outline-none focus:ring-2 focus:ring-ring transition
+      ${
+        passwordError ? "border-red-500 focus:border-red-500" : "border-border"
+      }`}
                     required
                   />
+
+                  {passwordError && (
+                    <p className="text-sm text-red-500 mt-1">{passwordError}</p>
+                  )}
                 </div>
               </div>
             )}

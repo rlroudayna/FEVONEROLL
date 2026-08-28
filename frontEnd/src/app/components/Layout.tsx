@@ -24,12 +24,10 @@ import {
 import { toggleTheme } from "../../styles/theme";
 import { Moon, Sun } from "lucide-react";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
-import { images } from "../../assets";
-import logo from "../../assets/images/logo3.png";
 import { authFetch } from "../api";
 import { DoorOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
+import { images } from "../../assets/images";
 export enum Client {
   RENAULT = "RENAULT",
   STELLANTIS = "STELLANTIS",
@@ -203,7 +201,11 @@ export function Layout() {
         {/* Header */}
         <header className="h-14  border-b bg-header border-header-border px-8 flex items-center justify-between">
           <div className="flex items-center gap-3 flex-1">
-            <img src={logo} alt="Logo" className="h-14 w-auto object-contain" />
+            <img
+              src={images.logo3}
+              alt="FevOneRoll Logo"
+              className="h-18 w-23 object-contain"
+            />
             <span className="font-semibold text-lg text-foreground">
               FevOneRoll
             </span>

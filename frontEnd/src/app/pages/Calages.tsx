@@ -124,7 +124,7 @@ export function Calages() {
         setVehicules(vehiculesData ?? []);
         setLoisRoutes(loisData ?? []);
       } catch (err) {
-        toast.error(t("calages.updatedSuccess"));
+        toast.error(t("calages.fetchError"));
       }
     };
 
@@ -153,7 +153,7 @@ export function Calages() {
       const calagesData = await authFetch("/calages");
       setCalages(calagesData ?? []);
     } catch (err) {
-      toast.error("Erreur lors du chargement des calages");
+      toast.error(t("calages.fetchError"));
     }
   };
   const fillForm = (calage: Calage) => {
@@ -218,7 +218,7 @@ export function Calages() {
       setNewCalage(INITIAL_CALAGE);
     } catch (err) {
       console.error(err);
-      toast.error("Erreur !");
+      toast.error(t("calages.saveError"));
     }
   };
 

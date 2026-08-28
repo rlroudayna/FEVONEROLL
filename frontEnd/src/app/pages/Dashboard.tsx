@@ -519,9 +519,7 @@ const shortMonth = (month: unknown): string => {
       try {
         const params = new URLSearchParams();
 
-        if (selectedClientId !== null) {
-          params.append("client", selectedClientId);
-        }
+        
         if (selectedClientId !== null) {
           params.append("clientId", String(selectedClientId));
         }
@@ -862,9 +860,7 @@ const shortMonth = (month: unknown): string => {
               {/* Texte sur la ligne suivante */}
               <div className="w-full">
                 <div className="text-muted-foreground">{card.subtitle}</div>
-                {card.detail && (
-                  <div className="text-sm text-muted-foreground">{card.detail}</div>
-                )}
+                
               </div>
             </div>
           );

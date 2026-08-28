@@ -10,7 +10,7 @@ import com.FEV.SmartTest.Entity.Client;
 
 import com.FEV.SmartTest.Enum.*;
 import com.FEV.SmartTest.Repository.*;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -149,7 +149,7 @@ public class DemandeEssaiService {
 
         demande.setXcu1(dto.getXcu1());
         demande.setXcu2(dto.getXcu2());
-        demande.setXcu2(dto.getXcu2());
+        demande.setXcu3(dto.getXcu3());
 
 
 
@@ -237,18 +237,21 @@ public class DemandeEssaiService {
     }
     // ------------------ READ ALL ------------------
     public List<DemandeEssai> getAllDemandes() {
-        return demandRepository.findAll();
+        return demandRepository.findAllWithMesures();
     }
 
     // ------------------ READ ONE ------------------
+    @Transactional(readOnly = true)
     public DemandeEssai getById(Long id) {
-        return demandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Demande non trouvée avec id : " + id));
+        return demandRepository.findByIdWithMesures(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Demande non trouvée avec id : " + id)
+                );
     }
 
     // ------------------ UPDATE ------------------
 
-
+    @Transactional
     public DemandeEssai updateDemande(
             Long id,
             DemandeEssaiRequest updated,
@@ -516,36 +519,50 @@ public class DemandeEssaiService {
             file.delete();
         }
     }
+    @Transactional
     public DemandeEssai duplicateDemande(Long id) {
 
-        DemandeEssai original = demandRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Demande introuvable"));
+        // IMPORTANT : charge DemandeEssai + mesures dans la même requête
+        DemandeEssai original = demandRepository.findByIdWithMesures(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Demande introuvable avec id : " + id)
+                );
 
         DemandeEssai copy = new DemandeEssai();
 
-        BeanUtils.copyProperties(original, copy, "id", "mesures");
+        // Copier les propriétés sauf id et mesures
+        BeanUtils.copyProperties(
+                original,
+                copy,
+                "id",
+                "mesures"
+        );
 
+        // Une duplication doit avoir un nouveau statut
         copy.setStatutGlobal(StatutGlobal.PAS_FAIT);
 
-        // 🔥 IMPORTANT : nouvelle liste indépendante
+        // Créer de NOUVELLES mesures
+        List<Mesure> newMesures = new ArrayList<>();
+
         if (original.getMesures() != null) {
 
-            List<Mesure> newMesures = original.getMesures().stream()
-                    .map(m -> {
-                        Mesure nm = new Mesure();
-                        nm.setType(m.getType());
-                        nm.setIndice(m.getIndice());
-                        nm.setNumero(m.getNumero());
-                        nm.setSousType(m.getSousType());
-                        nm.setDemande(copy);
-                        return nm;
-                    })
-                    .toList();
+            for (Mesure m : original.getMesures()) {
 
-            copy.setMesures(new ArrayList<>(newMesures));
-        } else {
-            copy.setMesures(new ArrayList<>());
+                Mesure nouvelleMesure = new Mesure();
+
+                nouvelleMesure.setType(m.getType());
+                nouvelleMesure.setIndice(m.getIndice());
+                nouvelleMesure.setNumero(m.getNumero());
+                nouvelleMesure.setSousType(m.getSousType());
+
+                // La nouvelle mesure appartient à la nouvelle demande
+                nouvelleMesure.setDemande(copy);
+
+                newMesures.add(nouvelleMesure);
+            }
         }
+
+        copy.setMesures(newMesures);
 
         return demandRepository.save(copy);
     }
@@ -762,7 +779,7 @@ public class DemandeEssaiService {
         if (currentUser.getRole() == Role.ADMIN
                 || currentUser.getRole() == Role.CHARGE_ESSAI
                 || currentUser.getRole() == Role.TECHNICIEN_ESSAI) {
-            return demandRepository.findAll();
+            return demandRepository.findAllWithMesures();
         }
 
         // EXTERNE → uniquement son client

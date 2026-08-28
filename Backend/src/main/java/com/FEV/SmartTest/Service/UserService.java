@@ -167,12 +167,15 @@ public class UserService {
 
             userRepository.save(user);
 
-            String link = "http://192.168.1.107:5173/reset-password?token=" + token;
+            String link = "http://192.168.1.15:5173/reset-password?token=" + token;
 
             emailService.sendResetEmail(user.getEmail(), link);
         }
+        else {
 
-        // IMPORTANT: toujours "OK" même si email n'existe pas
+            throw new RuntimeException("Aucun compte associé à cet email");
+    }
+
     }
 
     public void resetPassword(String token, String newPassword) {

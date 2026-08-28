@@ -249,63 +249,27 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   background: var(--surface-hover) !important;
 }
 
-/* React Select - style identique aux inputs Tailwind */
-.select__control {
-  width: 100% !important;
-  min-height: 42px !important;
-  margin-top: 0.25rem !important;
-  padding: 0 !important;
-  border: 1px solid var(--border) !important;
-  background-color: var(--background) !important;
-  border-radius: 0.5rem !important;
-  transition: all 0.3s ease !important;
-  box-shadow: none !important;
+/* ================= CALENDRIER ================= */
+
+/* ================= CALENDRIER ================= */
+
+ input[type="date"] {
+  color-scheme: light;
 }
 
-.select__control:hover {
-  border-color: var(--border) !important;
+.dark input[type="date"] {
+  color-scheme: dark;
 }
 
-.select__control--is-focused {
-  border-color: var(--ring) !important;
-  box-shadow: 0 0 0 2px var(--ring) !important;
+/* Icône calendrier */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
 }
 
-.select__value-container {
-  padding: 0.5rem !important;
-}
-
-.select__single-value {
-  color: var(--foreground) !important;
-  font-size: 0.875rem !important;
-}
-
-.select__placeholder {
-  color: var(--muted-foreground) !important;
-  font-size: 0.875rem !important;
-}
-
-.select__menu {
-  background-color: var(--background) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 0.5rem !important;
-  overflow: hidden !important;
-  z-index: 100 !important;
-}
-
-.select__option {
-  padding: 0.5rem !important;
-  font-size: 0.875rem !important;
-  color: var(--foreground) !important;
-  background-color: var(--background) !important;
-}
-
-.select__option--is-focused {
-  background-color: var(--accent) !important;
-  color: var(--accent-foreground) !important;
-}
-
-.select__option--is-selected {
-  background-color: var(--primary) !important;
-  color: var(--primary-foreground) !important;
+/* Icône en mode sombre */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.9;
+  filter: invert(1);
 }

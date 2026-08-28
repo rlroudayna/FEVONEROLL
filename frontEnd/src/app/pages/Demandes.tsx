@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/ui/Dialog";
+import type { HTMLAttributes } from "react";
 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -457,6 +458,47 @@ export function Demandes() {
     thermocouples: false,
     sondeLambdaLA4: false,
   });
+  const buildMesuresRows = (
+  mesures: MesureDTO[] = [],
+): MesuresRowsState => {
+  return {
+    mesureCourant: mesures
+      .filter((m) => m.type === TypeMesureAux.COURANT)
+      .map((m) => ({
+        id: m.id,
+        indice: String(m.indice ?? ""),
+        numero: String(m.numero ?? ""),
+        type: m.sousType ?? "",
+      })),
+
+    mesureTension: mesures
+      .filter((m) => m.type === TypeMesureAux.TENSION)
+      .map((m) => ({
+        id: m.id,
+        indice: String(m.indice ?? ""),
+        numero: String(m.numero ?? ""),
+        type: m.sousType ?? "",
+      })),
+
+    thermocouples: mesures
+      .filter((m) => m.type === TypeMesureAux.THERMOCOUPLE)
+      .map((m) => ({
+        id: m.id,
+        indice: String(m.indice ?? ""),
+        numero: String(m.numero ?? ""),
+        type: m.sousType ?? "",
+      })),
+
+    sondeLambdaLA4: mesures
+      .filter((m) => m.type === TypeMesureAux.SONDE_LAMBDA)
+      .map((m) => ({
+        id: m.id,
+        indice: String(m.indice ?? ""),
+        numero: String(m.numero ?? ""),
+        type: m.sousType ?? "",
+      })),
+  };
+};
   const openModal = (mode: ModalMode, demande?: DemandeEssai) => {
     setModalMode(mode);
     setActiveTab("general");
@@ -629,6 +671,8 @@ export function Demandes() {
 
       setShowModal(true);
     }
+    console.log("Demande reçue :", demande);
+    console.log("Mesures reçues :", demande?.mesures);
   };
   const removeRow = (type: MesureKey, index: number) => {
     setMesuresRows((prev) => ({
@@ -985,9 +1029,13 @@ export function Demandes() {
     let max = 0;
     demandesSimilaires.forEach((d) => {
       const dernier = d.nomAuto?.split("_").pop();
-      const numero = parseInt(dernier, 10);
-      if (!isNaN(numero) && numero > max) {
-        max = numero;
+
+      if (dernier) {
+        const numero = parseInt(dernier, 10);
+
+        if (!isNaN(numero) && numero > max) {
+          max = numero;
+        }
       }
     });
 
@@ -1443,7 +1491,8 @@ export function Demandes() {
     }
   }, [showModal, form.client]);
   return (
-    <div className="p-3 space-y-5 bg-gray-10 min-h-screen">
+    <div className="p-3 space-y-5 bg-gray-10 min-h-[calc(100vh-58px)]">
+      {" "}
       <div className="flex items-center justify-between">
         {/* Titre + description */}
         <div>
@@ -1464,7 +1513,6 @@ export function Demandes() {
           </button>
         )}
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 bg-card p-4 rounded-xl shadow-md">
         {/* Recherche par nom */}
         <div className="flex items-center bg-background border border-border rounded-lg px-3 py-2 gap-2 text-sm text-foreground outline-none focus:ring-ring transition">
@@ -1480,7 +1528,10 @@ export function Demandes() {
           <select
             className="bg-background border border-border rounded-lg px-3 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring transition"
             value={clientFilter}
-            onChange={(e) => setClientFilter(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setClientFilter(value === "Tous" ? "Tous" : Number(value));
+            }}
           >
             <option value="Tous">
               {" "}
@@ -1520,25 +1571,26 @@ export function Demandes() {
 
         {/* Filtre Date */}
         <div className="flex items-center bg-background border border-border rounded-lg px-3 py-3 gap-2 focus-within:ring-2 focus-within:ring-ring transition">
-          <Calendar size={16} className="text-muted-foreground" />
+          <Calendar size={16} className="text-muted-foreground shrink-0" />
+
           <input
             type="date"
-            className="
-      outline-none w-full text-sm
-      text-foreground
-      bg-transparent
-      [color-scheme:light]
-      dark:[color-scheme:dark]
-    "
             value={filterDate}
             onChange={(e) => setFilterDate(e.target.value)}
+            className="
+      date-input
+      outline-none
+      w-full
+      text-sm
+      text-foreground
+      bg-transparent
+    "
           />
         </div>
       </div>
-
       {/* --- TABLEAU --- */}
-      <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
-        <table className="w-full min-w-[800px] table-fixed text-sm text-left border-collapse">
+      <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto ">
+        <table className="w-full min-w-[800px] table-fixed text-sm text-left border-collapse overflow-y-hidden">
           <thead className="bg-[#B9032C] border-b border-border">
             <tr>
               <th className="w-[26%] px-4 py-5 font-semibold text-white">
@@ -2611,11 +2663,14 @@ export function Demandes() {
                                           className="w-4 h-4 accent-red-600 rounded cursor-pointer"
                                         />
                                         <label
-  htmlFor={`checkPhase${num}`}
-  className="text-[10px] font-bold text-muted-foreground-400 uppercase cursor-pointer"
->
-  {t("demandesEssai.dilutedGases.phase")} {num}
-</label>
+                                          htmlFor={`checkPhase${num}`}
+                                          className="text-[10px] font-bold text-muted-foreground-400 uppercase cursor-pointer"
+                                        >
+                                          {t(
+                                            "demandesEssai.dilutedGases.phase",
+                                          )}{" "}
+                                          {num}
+                                        </label>
                                       </div>
 
                                       <div className="relative">
@@ -3387,7 +3442,7 @@ export function Demandes() {
 
                       {/* XCU 2 & 3 */}
                       {([2, 3] as const).map((num) => {
-                        const xcuKey = `xcu${num}` as keyof DemandeEssai;
+                        const xcuKey = `xcu${num}` as keyof DemandeEssaiForm;
                         const softwareKey =
                           `software${num}` as keyof typeof files;
                         const calibKey =

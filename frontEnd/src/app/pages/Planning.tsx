@@ -30,6 +30,8 @@ interface DemandeEssai {
 
   demandeur?: string;
   technicien?: string;
+  technicienId?: number | null;
+
 
   banc?: string;
   datePlanification?: string;
@@ -506,11 +508,27 @@ export function Planning() {
             className="h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full"
           />
           <input
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-            className=" h-12 px-4 bg-background text-foreground border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring transition w-full [color-scheme:light] dark:[color-scheme:dark] "
-          />
+  type="date"
+  value={filterDate}
+  onChange={(e) => setFilterDate(e.target.value)}
+  className="
+    h-12
+    px-4
+    bg-background
+    text-foreground
+    border
+    border-border
+    rounded-lg
+    text-sm
+    focus:outline-none
+    focus:ring-2
+    focus:ring-ring
+    transition
+    w-full
+    [color-scheme:light]
+    dark:[color-scheme:dark]
+  "
+/>
           <select
             value={selectedTechnicienId}
             onChange={(e) =>

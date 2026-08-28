@@ -62,11 +62,25 @@ public class UserController {
     public List<User> getChargeEssaiByClient() {
         return userService.getTechniciens();
     }
-    @PostMapping("/forgot-password")
-    public void forgot(@RequestBody Map<String, String> request) {
-        userService.forgotPassword(request.get("email"));
-    }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, String>> forgot(
+            @RequestBody Map<String, String> request) {
+
+        try {
+            userService.forgotPassword(request.get("email"));
+
+            return ResponseEntity.ok(
+                    Map.of("message", "Email envoyé avec succès")
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("message", e.getMessage()));
+        }
+    }
     @PostMapping("/reset-password")
     public void reset(@RequestParam String token,
                       @RequestParam String password) {

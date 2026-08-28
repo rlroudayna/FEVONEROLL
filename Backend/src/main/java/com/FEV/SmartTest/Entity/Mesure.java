@@ -2,6 +2,7 @@ package com.FEV.SmartTest.Entity;
 
 import com.FEV.SmartTest.Enum.TypeMesureAux;
 import com.FEV.SmartTest.Enum.TypeMusure;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,6 +26,6 @@ public class Mesure {
 
     @ManyToOne
     @JoinColumn(name = "demande_id")
-    @JsonIgnore
+    @JsonBackReference
     private DemandeEssai demande;
 }

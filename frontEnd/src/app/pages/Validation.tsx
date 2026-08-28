@@ -9,6 +9,7 @@ import {
   Eye,
   Plus,
   Search,
+  Calendar,
 } from "lucide-react";
 import { authFetch } from "../api";
 import { useTranslation } from "react-i18next";
@@ -523,24 +524,37 @@ export function Validation() {
               className="w-full sm:w-50 h-12 px-4 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
             />
             {/* Filtre date */}
+            {/* Filtre date */}
             <div className="relative w-full sm:w-48">
-              <input
-                type="date"
-                value={filterDate}
-                onChange={(e) => setFilterDate(e.target.value)}
-                className="w-full h-12 px-4 pr-10 bg-background text-foreground border border-border rounded-lg shadow-sm text-sm outline-none focus:ring-2 focus:ring-muted transition"
-              />
+              {/* Filtre date */}
+              <div className="relative w-full sm:w-48">
+                <div className="flex items-center bg-background border border-border rounded-lg px-3 gap-2 h-12 focus-within:ring-2 focus-within:ring-ring transition">
+                  {/* Icône personnalisée */}
+                  <Calendar
+                    size={17}
+                    strokeWidth={2}
+                    className="text-muted-foreground shrink-0"
+                  />
 
-              {filterDate && (
-                <button
-                  type="button"
-                  onClick={() => setFilterDate("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground-400 hover:text-red-500"
-                  title={t("validation.filters.resetDate")}
-                >
-                  ✕
-                </button>
-              )}
+                  <input
+                    type="date"
+                    value={filterDate}
+                    onChange={(e) => setFilterDate(e.target.value)}
+                    className="date-input w-full h-full bg-transparent text-foreground text-sm outline-none"
+                  />
+
+                  {filterDate && (
+                    <button
+                      type="button"
+                      onClick={() => setFilterDate("")}
+                      className="flex items-center justify-center w-7 h-7 shrink-0 rounded-md text-muted-foreground hover:text-red-500 hover:bg-muted transition"
+                      title={t("validation.filters.resetDate")}
+                    >
+                      
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

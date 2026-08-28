@@ -25,8 +25,9 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:5173")
-
+@CrossOrigin(origins = {
+        "http://localhost:5173",
+})
 public class AuthController {
     private final UserRepository userRepository;
     private final UserService userService;

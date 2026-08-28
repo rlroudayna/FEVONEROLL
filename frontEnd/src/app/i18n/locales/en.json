@@ -156,7 +156,8 @@
     "updateError": "Error while updating the calibration!",
     "deleteError": "Error while deleting the calibration.",
     "deleteConstraintError": "Deletion impossible: this calibration is used in other data.",
-    "saveError": "Error while saving!"
+    "saveError": "Error while saving!",
+    "fetchError": "Error while fetching data!"
   },
   "cycles": {
     "title": "Cycle Management",
@@ -214,7 +215,7 @@
     "allStatuses": "All statuses",
     "name": "Name",
     "density": "Density (kg/m³)",
-    "refTemperature" : "Ref temperature (°C)",
+    "refTemperature": "Ref temperature (°C)",
     "referenceTemperature": "Reference temperature (°C)",
     "composition": "Composition",
     "h2o": "H₂O (%)",
@@ -504,7 +505,6 @@
       "back": "Back"
     }
   },
-
   "validationCharge": {
     "title": "Test Manager Validation",
     "table": {
@@ -650,6 +650,7 @@
       "confirm": "Confirm new password",
       "update": "Update",
       "minimum": "At least 8 characters required",
+      "strength": "The password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.",
       "mismatch": "Passwords do not match"
     },
     "photo": {
@@ -676,12 +677,10 @@
       "invalidOldPassword": "Incorrect current password"
     }
   },
-
   "demandesEssai": {
     "title": "Test Request Management",
     "subtitle": "Manage your test requests",
     "add": "Add a request",
-
     "filters": {
       "searchName": "Test request name...",
       "client": "Client",
@@ -723,13 +722,11 @@
     },
     "loading": "Loading test requests...",
     "noResults": "No test requests found",
-
     "modal": {
       "view": "View a test request",
       "edit": "Edit a test request",
       "create": "Create a test request"
     },
-
     "tab": {
       "general": "General Information",
       "vehicle": " Characteristics",
@@ -738,7 +735,6 @@
       "inca": "INCA Data",
       "mesuresAux": "Auxiliary Measurements"
     },
-
     "general": {
       "vehicle": "Vehicle",
       "selectVehicle": "Select a vehicle",
@@ -765,7 +761,6 @@
       "fuelType": "Fuel Type",
       "selectFuel": "Select a fuel type"
     },
-
     "planning": {
       "title": "Scheduling",
       "testDate": "Test Date",
@@ -775,7 +770,6 @@
       "afternoon": "Afternoon",
       "night": "Night"
     },
-
     "testConditions": {
       "title": "Test Conditions",
       "maceration": "Maceration Required",
@@ -796,13 +790,11 @@
       "coastDownVerification": "Coast Down Verification",
       "decelerationCount": "Number of Decelerations"
     },
-
     "comments": {
       "label": "Comment",
       "optional": "Optional",
       "placeholder": "Specific comments for the test driver..."
     },
-
     "vehicleCharacteristics": "Vehicle Characteristics",
     "roadLawCharacteristics": "Road Law Characteristics",
     "calibrationCharacteristics": "Calibration Characteristics",
@@ -837,7 +829,6 @@
       "dilutionFactor": "Dilution Factor (PNDF)",
       "cvs": "CVS"
     },
-
     "inca": {
       "title": "INCA Configuration",
       "xcu": "XCU",
@@ -849,7 +840,6 @@
       "acquisitionType": "Acquisition Type",
       "select": "-- Select --"
     },
-
     "auxiliaryMeasurements": {
       "configuration": "Selected Measurements Configuration",
       "add": "+ Add",
@@ -867,7 +857,6 @@
       "thermocouples": "Thermocouples",
       "lambdaProbeLA4": "Lambda Probe LA4"
     },
-
     "navigation": {
       "previous": "Previous",
       "next": "Next",
@@ -900,5 +889,38 @@
     "validation": "Validation",
     "carburants": "Fuels",
     "profile": "Profile"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Choose a new secure password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "loading": "Loading...",
+    "submit": "Confirm",
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "passwordTooShort": "Password must contain at least 8 characters",
+      "invalidToken": "Invalid token",
+      "serverError": "Server error"
+    },
+    "messages": {
+      "success": "Password successfully changed!"
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "description": "Enter your email address. We will send you a link to reset your password.",
+    "email": "Email",
+    "emailPlaceholder": "your.email@example.com",
+    "sendLink": "Send reset link",
+    "successTitle": "Email sent!",
+    "successMessage": "If an account exists for {{email}}, you will receive an email shortly.",
+    "resend": "Resend email",
+    "backToLogin": "Back to login",
+    "errors": {
+      "sendError": "Error while sending the email"
+    }
   }
 }

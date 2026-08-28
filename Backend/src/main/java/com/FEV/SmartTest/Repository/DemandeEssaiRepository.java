@@ -8,7 +8,9 @@ import com.FEV.SmartTest.Enum.StatutGlobal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.Optional;
 import java.util.List;
 
 public interface DemandeEssaiRepository extends JpaRepository<DemandeEssai, Long> {
@@ -16,6 +18,7 @@ public interface DemandeEssaiRepository extends JpaRepository<DemandeEssai, Long
     long countByClient(Client client);
     long countByStatutGlobal(StatutGlobal statutGlobal);
     long countByStatutGlobalAndClient(StatutGlobal statutGlobal ,Client client) ;
+
 
     @Query("""
     SELECT MONTH(d.datePlanification), d.statutGlobal, COUNT(d)
@@ -129,5 +132,26 @@ GROUP BY
             @Param("chargeId") Long chargeId
     );
 
+    @Query("""
+    SELECT DISTINCT d
+    FROM DemandeEssai d
+    LEFT JOIN FETCH d.mesures
+    WHERE d.id = :id
+""")
+    Optional<DemandeEssai> findByIdWithMesures(@Param("id") Long id);
 
+    @Query("""
+    SELECT DISTINCT d
+    FROM DemandeEssai d
+    LEFT JOIN FETCH d.mesures
+""")
+    List<DemandeEssai> findAllWithMesures();
+
+    @Query("""
+    SELECT DISTINCT d
+    FROM DemandeEssai d
+    LEFT JOIN FETCH d.mesures
+    WHERE d.client = :client
+""")
+    List<DemandeEssai> findByClientWithMesures(@Param("client") Client client);
 }

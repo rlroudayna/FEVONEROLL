@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import bg from "../../assets/images/image1.png";
+import { images } from "../../assets/images";
 import { useTranslation } from "react-i18next";
 
 export function Welcome() {
@@ -7,7 +7,7 @@ export function Welcome() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center  relative"
-      style={{ backgroundImage: `url(${bg})` }}
+      style={{ backgroundImage: `url(${images.image1})` }}
     >
       {/*Overlay pour lisibilité */}
       <div className="absolute inset-0 bg-cover bg-center blur-md"></div>

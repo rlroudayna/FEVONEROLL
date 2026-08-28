@@ -1,13 +1,15 @@
 package com.FEV.SmartTest.Entity;
 
 import com.FEV.SmartTest.Enum.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,9 +163,9 @@ public class DemandeEssai {
 
 
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Mesure> mesures = new ArrayList<>();
     private Boolean mesureCourant;
-
 
     @Enumerated(EnumType.STRING)
     private CapotListe capot;

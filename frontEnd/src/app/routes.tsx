@@ -15,7 +15,7 @@ import {
   Demandes,
   Planning,
   Validation,
-  ValidationConducteur,
+  ValidationTechnicien,
   ValidationCharge,
   ValidationDetail,
   Profile,
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-  
+
   {
     path: "/forgot-password",
     element: <ForgotPassword />,
@@ -69,7 +69,7 @@ export const router = createBrowserRouter([
           { path: "validation", element: <Validation /> },
           {
             path: "validation/conducteur/:id",
-            element: <ValidationConducteur />,
+            element: <ValidationTechnicien />,
           },
           {
             path: "validation/charge/:id",
@@ -85,7 +85,6 @@ export const router = createBrowserRouter([
             element: (
               <ProtectedRoute allowedRoles={["ADMIN", "CHARGE_ESSAI"]} />
             ),
-           
           },
           { path: "carburants", element: <Carburants /> },
           { path: "profile", element: <Profile /> },

@@ -11,7 +11,7 @@ export { Cycles } from "./Cycles";
 export { Demandes } from "./Demandes";
 export { Planning } from "./Planning";
 export { Validation } from "./Validation";
-export { ValidationConducteur } from "./ValidationConducteur";
+export { ValidationTechnicien } from "./ValidationTechnicien";
 export { ValidationCharge } from "./ValidationCharge";
 export { ValidationDetail } from "./ValidationDetail";
 export { Profile } from "./Profile";

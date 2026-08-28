@@ -29,6 +29,7 @@ export function Profile() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loadingPwd, setLoadingPwd] = useState(false);
   const [oldPasswordError, setOldPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -47,6 +48,15 @@ export function Profile() {
     client: "",
     image: "",
   });
+  const isStrongPassword = (password: string) => {
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /\d/.test(password) &&
+      /[^A-Za-z0-9]/.test(password)
+    );
+  };
 
   useEffect(() => {
     async function loadProfile() {
@@ -138,8 +148,9 @@ export function Profile() {
       toast.error(t("profile.password.required"));
       return;
     }
-    if (newPassword.length < 8) {
-      toast.error(t("profile.password.minimum"));
+
+    if (!isStrongPassword(newPassword)) {
+      setNewPasswordError(t("profile.password.strength"));
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -158,7 +169,7 @@ export function Profile() {
         }),
       });
 
-      toast.success(t("profile.password.updated"));
+      toast.success(t("profile.messages.passwordUpdated"));
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -167,7 +178,7 @@ export function Profile() {
     } catch (err: any) {
       console.error("Password error:", err);
 
-      const message = err.message || t("profile.password.changeError");
+      const message = err.message || t("profile.messages.passwordChangeError");
 
       if (message.includes("Ancien mot de passe")) {
         setOldPasswordError(message);
@@ -179,7 +190,8 @@ export function Profile() {
     }
   };
   return (
-<div className="w-5/6 mx-auto h-[60vh] space-y-6">      {" "}
+    <div className="w-5/6 mx-auto h-[60vh] space-y-6">
+      {" "}
       {/* TITLE */}
       <div>
         <h1 className="text-2xl font-bold"> {t("profile.title")}</h1>
@@ -415,9 +427,9 @@ export function Profile() {
             </div>
 
             {/* erreurs */}
-            {newPassword && newPassword.length < 8 && (
+            {newPassword && !isStrongPassword(newPassword) && (
               <p className="text-red-500 text-sm">
-                {t("profile.password.minimum")}
+                {t("profile.password.strength")}
               </p>
             )}
 

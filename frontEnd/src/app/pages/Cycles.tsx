@@ -448,152 +448,152 @@ export function Cycles() {
       </div>
       {/* Tableau des cycles */}
       <div className="bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
-          <table className="w-full table-fixed text-sm">
-            {/* Header */}
-            <thead className="bg-[#B9032C] border-b border-border">
+        <table className="w-full table-fixed text-sm">
+          {/* Header */}
+          <thead className="bg-[#B9032C] border-b border-border">
+            <tr>
+              <th className="w-[18%] px-6 py-5 text-left font-semibold text-white">
+                {t("cycles.cycleName")}
+              </th>
+
+              <th className="w-[16%] px-6 py-5 text-left font-semibold text-white">
+                {t("cycles.client")}
+              </th>
+
+              <th className="w-[20%] px-6 py-5 text-left font-semibold text-white">
+                {t("cycles.family")}
+              </th>
+
+              <th className="w-[12%] px-6 py-5 text-left font-semibold text-white">
+                {t("cycles.duration")}
+              </th>
+
+              <th className="w-[14%] px-6 py-5 text-left font-semibold text-white">
+                {t("cycles.numberOfPhases")}
+              </th>
+
+              <th className="w-[10%] px-8 py-5 text-left font-semibold text-white">
+                {t("cycles.trace")}
+              </th>
+
+              <th className="w-[10%] px-2 py-5 text-center font-semibold text-white">
+                {t("cycles.actions")}
+              </th>
+            </tr>
+          </thead>
+
+          {/* Body */}
+          <tbody>
+            {filteredCycles.length === 0 ? (
               <tr>
-                <th className="w-[18%] px-6 py-5 text-left font-semibold text-white">
-                  {t("cycles.cycleName")}
-                </th>
-
-                <th className="w-[16%] px-6 py-5 text-left font-semibold text-white">
-                  {t("cycles.client")}
-                </th>
-
-                <th className="w-[20%] px-6 py-5 text-left font-semibold text-white">
-                  {t("cycles.family")}
-                </th>
-
-                <th className="w-[12%] px-6 py-5 text-left font-semibold text-white">
-                  {t("cycles.duration")}
-                </th>
-
-                <th className="w-[14%] px-6 py-5 text-left font-semibold text-white">
-                  {t("cycles.numberOfPhases")}
-                </th>
-
-                <th className="w-[10%] px-8 py-5 text-left font-semibold text-white">
-                  {t("cycles.trace")}
-                </th>
-
-                <th className="w-[10%] px-2 py-5 text-center font-semibold text-white">
-                  {t("cycles.actions")}
-                </th>
+                <td
+                  colSpan={7}
+                  className="text-center py-8 text-muted-foreground-500 font-medium"
+                >
+                  {t("cycles.noCycle")}
+                </td>
               </tr>
-            </thead>
+            ) : (
+              filteredCycles.map((c) => (
+                <tr
+                  key={c.id}
+                  className="border-b border-border hover:bg-[#E30613]/3 transition-colors "
+                >
+                  {/* Nom */}
+                  <td className="px-6 py-4 font-bold text-muted-foreground-800">
+                    {c.nom}
+                  </td>
 
-            {/* Body */}
-            <tbody>
-              {filteredCycles.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={7}
-                    className="text-center py-8 text-muted-foreground-500 font-medium"
-                  >
-                    {t("cycles.noCycle")}
+                  {/* Client */}
+                  <td className="px-4 py-4 text-muted-foreground-800">
+                    {c.client?.nom}
+                  </td>
+
+                  {/* Famille */}
+                  <td className="px-2 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider ${
+                        familleColors[c.familleTest]
+                      }`}
+                    >
+                      {c.familleTest}
+                    </span>
+                  </td>
+
+                  {/* Durée */}
+                  <td className="px-12 py-4 text-muted-foreground-800">
+                    {c.duree}
+                  </td>
+
+                  {/* Nombre de phases */}
+                  <td className="px-16 py-4 text-muted-foreground-800">
+                    {c.nombrePhase}
+                  </td>
+
+                  {/* Trace */}
+                  <td className="px-6 py-4">
+                    {c.traceFilePath ? (
+                      <div className="flex items-center gap-2 text-muted-foreground-800">
+                        <FileSpreadsheet className="w-4 h-4 flex-shrink-0" />
+
+                        <a
+                          href={`http://localhost:8080/uploads/${c.traceFilePath}`}
+                          className="text-blue-600 hover:text-blue-800 underline text-sm"
+                        >
+                          {t("cycles.viewFile")}
+                        </a>
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground-400">—</span>
+                    )}
+                  </td>
+
+                  {/* Actions */}
+                  <td className="px-14 py-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={() => {
+                          openModal("view", c);
+                          setSelectedCycle(c);
+                          setShowModal(true);
+                        }}
+                        className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200"
+                      >
+                        <Eye className="w-4 h-4 text-blue-700" />
+                      </button>
+
+                      {canEdit && (
+                        <>
+                          <button
+                            onClick={() => {
+                              openModal("edit", c);
+                              setSelectedCycle(c);
+                              setShowModal(true);
+                            }}
+                            className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
+                          >
+                            <Edit className="w-4 h-4 text-green-700" />
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setSelectedCycle(c);
+                              setShowConfirmDelete(true);
+                            }}
+                            className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-700" />
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                filteredCycles.map((c) => (
-                  <tr
-                    key={c.id}
-                    className="border-b border-border hover:bg-[#E30613]/3 transition-colors "
-                  >
-                    {/* Nom */}
-                    <td className="px-6 py-4 font-bold text-muted-foreground-800">
-                      {c.nom}
-                    </td>
-
-                    {/* Client */}
-                    <td className="px-4 py-4 text-muted-foreground-800">
-                      {c.client?.nom}
-                    </td>
-
-                    {/* Famille */}
-                    <td className="px-2 py-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-[12px] font-bold uppercase tracking-wider ${
-                          familleColors[c.familleTest]
-                        }`}
-                      >
-                        {c.familleTest}
-                      </span>
-                    </td>
-
-                    {/* Durée */}
-                    <td className="px-12 py-4 text-muted-foreground-800">
-                      {c.duree}
-                    </td>
-
-                    {/* Nombre de phases */}
-                    <td className="px-16 py-4 text-muted-foreground-800">
-                      {c.nombrePhase}
-                    </td>
-
-                    {/* Trace */}
-                    <td className="px-6 py-4">
-                      {c.traceFilePath ? (
-                        <div className="flex items-center gap-2 text-muted-foreground-800">
-                          <FileSpreadsheet className="w-4 h-4 flex-shrink-0" />
-
-                          <a
-                            href={`http://localhost:8080/uploads/${c.traceFilePath}`}
-                            className="text-blue-600 hover:text-blue-800 underline text-sm"
-                          >
-                            {t("cycles.viewFile")}
-                          </a>
-                        </div>
-                      ) : (
-                        <span className="text-muted-foreground-400">—</span>
-                      )}
-                    </td>
-
-                    {/* Actions */}
-                    <td className="px-14 py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => {
-                            openModal("view", c);
-                            setSelectedCycle(c);
-                            setShowModal(true);
-                          }}
-                          className="p-1 rounded-lg bg-blue-100 hover:bg-blue-200"
-                        >
-                          <Eye className="w-4 h-4 text-blue-700" />
-                        </button>
-
-                        {canEdit && (
-                          <>
-                            <button
-                              onClick={() => {
-                                openModal("edit", c);
-                                setSelectedCycle(c);
-                                setShowModal(true);
-                              }}
-                              className="p-1 rounded-lg bg-green-100 hover:bg-green-200"
-                            >
-                              <Edit className="w-4 h-4 text-green-700" />
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                setSelectedCycle(c);
-                                setShowConfirmDelete(true);
-                              }}
-                              className="p-1 rounded-lg bg-red-100 hover:bg-red-200"
-                            >
-                              <Trash2 className="w-4 h-4 text-red-700" />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       {/* MODAL OPTIMISÉ */}
       {showModal && (
         <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center z-50 p-4">

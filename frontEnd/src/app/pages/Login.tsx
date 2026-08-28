@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import logo from "../../assets/images/logo3.png";
+import { images } from "../../assets/images";
 import { useTranslation } from "react-i18next";
 
 export function Login() {
@@ -74,7 +74,11 @@ export function Login() {
           ${startAnimation ? "opacity-100" : "opacity-0"}
         `}
         >
-          <img src={logo} alt="Logo" className="w-[450px] max-w-[80%] h-auto" />
+          <img
+            src={images.logo3}
+            alt="Logo"
+            className="w-[450px] max-w-[80%] h-auto"
+          />
         </div>
 
         {/* Partie Formulaire (50%) */}
@@ -145,7 +149,7 @@ export function Login() {
                     to="/forgot-password"
                     className="text-xs hover:text-[#E30613]"
                   >
-                   {t("login.forgotPassword")}
+                    {t("login.forgotPassword")}
                   </Link>
                 </div>
 
@@ -181,7 +185,7 @@ export function Login() {
         {!startAnimation && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-background">
             <img
-              src={logo}
+              src={images.logo3}
               alt="Logo"
               className="w-[450px] max-w-[80%] h-auto"
             />

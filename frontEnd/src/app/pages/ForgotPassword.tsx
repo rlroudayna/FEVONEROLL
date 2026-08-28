@@ -2,10 +2,12 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,22 +29,21 @@ export function ForgotPassword() {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-xl">
         <div className="bg-card rounded-xl shadow-sm p-8">
           {!isSubmitted ? (
             <>
               <h2 className="text-2xl font-bold text-foreground mb-2">
-                Mot de passe oublié ?
+                {t("forgotPassword.title")}
               </h2>
               <p className="text-muted-foreground-600 mb-6 text-sm">
-                Entrez votre adresse email. Nous vous enverrons un lien pour
-                réinitialiser votre mot de passe.
+                {t("forgotPassword.description")}
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Email
+                    {t("forgotPassword.email")}
                   </label>
                   <div className="relative">
                     <input
@@ -52,7 +53,7 @@ export function ForgotPassword() {
                       required
                       className="w-full h-11 px-4 border border-border bg-background text-foreground rounded-lg
 focus:outline-none focus:ring-2 focus:ring-ring"
-                      placeholder="votre.email@exemple.com"
+                      placeholder={t("forgotPassword.emailPlaceholder")}
                     />
                   </div>
                 </div>
@@ -61,7 +62,7 @@ focus:outline-none focus:ring-2 focus:ring-ring"
                   type="submit"
                   className="w-full h-12 bg-[#E30613] text-white rounded-lg  hover:bg-[#E30613] active:scale-[0.98] transition-all shadow-lg mt-1 transition-colors font-medium"
                 >
-                  Envoyer le lien
+                  {t("forgotPassword.sendLink")}
                 </button>
               </form>
             </>
@@ -71,17 +72,17 @@ focus:outline-none focus:ring-2 focus:ring-ring"
                 <CheckCircle className="w-12 h-12 text-green-500" />
               </div>
               <h2 className="text-xl font-bold text-foreground mb-2">
-                Email envoyé !
+                {t("forgotPassword.successTitle")}
               </h2>
               <p className="text-muted-foreground-600 mb-6 text-sm">
-                Si un compte existe pour <strong>{email}</strong>, vous recevrez
-                un email sous peu.
+               
+                {t("forgotPassword.successMessage", { email })}
               </p>
               <button
                 onClick={() => setIsSubmitted(false)}
-                className="text-foreground text-sm hover:underline"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground-600 hover:text-[#E30613] transition-colors"
               >
-                Renvoyer l'email
+                {t("forgotPassword.resend")}
               </button>
             </div>
           )}
@@ -91,7 +92,7 @@ focus:outline-none focus:ring-2 focus:ring-ring"
               to="/login"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground-600 hover:text-[#E30613] transition-colors"
             >
-              <ArrowLeft size={16} /> Retour à la connexion
+              <ArrowLeft size={16} /> {t("forgotPassword.backToLogin")}
             </Link>
           </div>
         </div>

@@ -411,16 +411,16 @@ export function ValidationCharge() {
           <table className="w-full text-sm">
             <thead className="bg-[#B9032C] text-white">
               <tr className="text-xs uppercase tracking-wider text-white">
-                <th className="px-2 py-4 font-semibold text-white">
+                <th className="px-1 py-4 font-semibold text-white">
                   {t("validationCharge.table.requestName")}
                 </th>
-                <th className="px-5 py-4 font-semibold text-white">
+                <th className="px-2 py-4 font-semibold text-white">
                   {t("validationCharge.table.projectNumber")}
                 </th>
                 <th className="px-2 py-4 font-semibold text-white">
                   {t("validationCharge.table.client")}
                 </th>
-                <th className="px-4 py-4 font-semibold text-white">
+                <th className="px-2 py-4 font-semibold text-white">
                   {t("validationCharge.table.requester")}
                 </th>
                 <th className="px-3 py-4 font-semibold text-white">
@@ -445,11 +445,11 @@ export function ValidationCharge() {
                     {demande.nomAuto}
                   </td>
 
-                  <td className="px-5 py-4 text-muted-foreground-600">
+                  <td className="px-6 py-4 text-muted-foreground-600">
                     {demande.numeroProjet}
                   </td>
 
-                  <td className="px-2 py-4 text-muted-foreground-600">
+                  <td className="px-4 py-4 text-muted-foreground-600">
                     {demande?.client?.nom}
                   </td>
 
@@ -458,12 +458,12 @@ export function ValidationCharge() {
                   </td>
 
                   <td>
-                    <span className="px-2 py-1 text-muted-foreground-600 rounded text-xs">
+                    <span className="px-4 py-1 text-muted-foreground-600 rounded text-xs">
                       {demande.statutGlobal}
                     </span>
                   </td>
 
-                  <td className="px-5 py-4 text-muted-foreground-600">
+                  <td className="px-4 py-4 text-muted-foreground-600">
                     {demande.statutDemande}
                   </td>
 
@@ -471,7 +471,7 @@ export function ValidationCharge() {
                     {demande.datePlanification}
                   </td>
 
-                  <td className="px-5 py-4 text-muted-foreground-600">
+                  <td className="px-6 py-4 text-muted-foreground-600">
                     {demande.shift}
                   </td>
                 </tr>
@@ -492,11 +492,11 @@ export function ValidationCharge() {
             onClick={() => !isReadOnly && setSelectedStatus("OK")}
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedStatus === "OK"
-                ? "bg-[#E8F5E9] border-[#2E7D32]"
-                : "bg-card border-[#E0E0E0] hover:border-[#2E7D32]"
+                ? "bg-[#E8F5E9] dark:bg-[#1B3A20] border-[#2E7D32] dark:border-[#4CAF50]"
+                : "bg-card border-border hover:border-[#2E7D32] dark:hover:border-[#4CAF50]"
             }`}
           >
-            <CheckCircle className="w-8 h-8 text-[#2E7D32] mx-auto mb-2" />
+            <CheckCircle className="w-8 h-8 text-[#2E7D32] dark:text-[#4CAF50] mx-auto mb-2" />{" "}
             <div className="font-medium">
               {" "}
               {t("validationCharge.validation.ok")}
@@ -508,11 +508,11 @@ export function ValidationCharge() {
             onClick={() => !isReadOnly && setSelectedStatus("NOK")}
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedStatus === "NOK"
-                ? "bg-[#FFEBEE] border-[#C62828]"
-                : "bg-card border-[#E0E0E0] hover:border-[#C62828]"
+                ? "bg-[#FFEBEE] dark:bg-[#3A1B1B] border-[#C62828] dark:border-[#EF5350]"
+                : "bg-card border-border hover:border-[#C62828] dark:hover:border-[#71343B]"
             }`}
           >
-            <XCircle className="w-8 h-8 text-[#C62828] mx-auto mb-2" />
+            <XCircle className="w-8 h-8 text-[#C62828] dark:text-[#EF5350] mx-auto mb-2" />{" "}
             <div className="font-medium">
               {" "}
               {t("validationCharge.validation.nok")}
@@ -524,11 +524,11 @@ export function ValidationCharge() {
             onClick={() => !isReadOnly && setSelectedStatus("OK_SOUS_RESERVE")}
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedStatus === "OK_SOUS_RESERVE"
-                ? "bg-[#FFF3E0] border-[#ED6C02]"
-                : "bg-card border-[#E0E0E0] hover:border-[#ED6C02]"
+                ? "bg-[#FFF3E0] dark:bg-[#3A2A18] border-[#ED6C02] dark:border-[#FF9800]"
+                : "bg-card border-border hover:border-[#ED6C02] dark:hover:border-[#FF9800]"
             }`}
           >
-            <AlertTriangle className="w-8 h-8 text-[#ED6C02] mx-auto mb-2" />
+            <AlertTriangle className="w-8 h-8 text-[#ED6C02] dark:text-[#FF9800] mx-auto mb-2" />{" "}
             <div className="font-medium">
               {" "}
               {t("validationCharge.validation.okUnderReservation")}
@@ -558,7 +558,7 @@ export function ValidationCharge() {
 
         <div className="grid grid-cols-3 gap-3">
           {/* INCA */}
-          <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
+          <label className="border border-border rounded-lg p-3 text-center hover:border-muted-foreground transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
             <div className="text-xs font-medium mb-1">
               {" "}
@@ -574,8 +574,7 @@ export function ValidationCharge() {
                   e.preventDefault();
                   viewFile(demande.validationCharge!.fichierINCAPath!);
                 }}
-                className="text-[10px] mt-2 text-[#E30613] underline block w-full"
-              >
+className="text-[10px] mt-2 text-foreground underline block w-full hover:text-muted-foreground transition-colors"              >
                 📄 {demande.validationCharge.fichierINCA}
               </button>
             )}
@@ -597,7 +596,7 @@ export function ValidationCharge() {
 
           {/* BaR */}
           {/* BaR */}
-          <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
+          <label className="border border-border rounded-lg p-3 text-center hover:border-muted-foreground transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
             <div className="text-xs font-medium mb-1">
               {" "}
@@ -612,8 +611,8 @@ export function ValidationCharge() {
                   e.preventDefault();
                   viewFile(demande.validationCharge!.fichierBaRPath!);
                 }}
-                className="text-[10px] mt-2 text-[#E30613] underline block w-full"
-              >
+className="text-[10px] mt-2 text-foreground underline block w-full hover:text-muted-foreground transition-colors"              >
+              
                 📄 {demande.validationCharge.fichierBaR}
               </button>
             )}
@@ -636,7 +635,7 @@ export function ValidationCharge() {
 
           {/* Checklist */}
           {/* Checklist */}
-          <label className="border border-border rounded-lg p-3 text-center hover:border-[#E30613] transition-colors cursor-pointer">
+          <label className="border border-border rounded-lg p-3 text-center hover:border-muted-foreground transition-colors cursor-pointer">
             <Upload className="w-6 h-6 text-gray-400 mx-auto mb-1" />
             <div className="text-xs font-medium mb-1">
               {" "}
@@ -651,8 +650,8 @@ export function ValidationCharge() {
                   e.preventDefault();
                   viewFile(demande.validationCharge!.fichierChecklistPath!);
                 }}
-                className="text-[10px] mt-2 text-[#E30613] underline block w-full"
-              >
+className="text-[10px] mt-2 text-foreground underline block w-full hover:text-muted-foreground transition-colors"              >
+              
                 📄 {demande.validationCharge.fichierChecklist}
               </button>
             )}
@@ -694,8 +693,7 @@ export function ValidationCharge() {
           onClick={() => navigate("/app/validation")}
           className="px-8 py-2.5 bg-card border-2 border-border text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
         >
-            {t("validationCharge.actions.cancel")}
-
+          {t("validationCharge.actions.cancel")}
         </button>
 
         {!isReadOnly && (
@@ -703,7 +701,7 @@ export function ValidationCharge() {
             onClick={handleSubmit}
             className="px-10 py-2.5 bg-card border-2 border-border text-[#E30613] font-semibold rounded-lg transition-all shadow-sm"
           >
-  {t("validationCharge.actions.validate")}
+            {t("validationCharge.actions.validate")}
           </button>
         )}
       </div>
